@@ -73,7 +73,7 @@ class Group(WorkspaceObject):
         self.add_length_description_category()
 
     def add_length_description_category(self):
-        #check whether or not to add length description category
+        # check whether or not to add length description category
         probability = self.lengthDescriptionProbability()
         if random.random() < probability:
             length = len(self.objectList)
@@ -207,11 +207,11 @@ class Group(WorkspaceObject):
         count = 0
         for objekt in self.string.objects:
             if isinstance(objekt, Group):
-                if  (objekt.rightIndex < self.leftIndex or
-                     objekt.leftIndex > self.rightIndex):
-                    if  (objekt.groupCategory == self.groupCategory and
-                         objekt.directionCategory == self.directionCategory):
-                        count += 1
+                if (objekt.rightIndex < self.leftIndex or
+                        objekt.leftIndex > self.rightIndex and
+                        objekt.groupCategory == self.groupCategory and
+                        objekt.directionCategory == self.directionCategory):
+                    count += 1
         return count
 
     def localDensity(self):

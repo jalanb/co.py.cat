@@ -46,29 +46,25 @@ class SlipNet(object):
                 node.clampHigh()
 
     def update(self):
+        def _update(node):
+            node.addBuffer()
+            node.jump()
+            node.buffer = 0.0
+
         logging.debug('slipnet.update()')
         self.numberOfUpdates += 1
         if self.numberOfUpdates == 50:
             _ = [node.unclamp() for node in self.initiallyClampedSlipnodes]
         _ = [node.update() for node in self.slipnodes]
-        for node in self.slipnodes:
-            node.spread_activation()
-        for node in self.slipnodes:
-            node.addBuffer()
-            node.jump()
-            node.buffer = 0.0
+        _ = [node.spread_activation() for node in self.slipnodes]
+        _ = [_update(node) for node in self.slipnodes]
 
     def __addInitialNodes(self):
         # pylint: disable=too-many-statements
         self.slipnodes = []
-        self.letters = []
-        for c in 'abcdefghijklmnopqrstuvwxyz':
-            slipnode = self.__addNode(c, 10.0)
-            self.letters += [slipnode]
-        self.numbers = []
-        for c in '12345':
-            slipnode = self.__addNode(c, 30.0)
-            self.numbers += [slipnode]
+        self.letters = [
+            self.__addNode(c, 10.0) for c in 'abcdefghijklmnopqrstuvwxyz']
+        self.numbers = [self.__addNode(c, 30.0) for c in '12345']
 
         # string positions
         self.leftmost = self.__addNode('leftmost', 40.0)
@@ -244,19 +240,19 @@ class SlipNet(object):
         self.__addNonSlipLink(destination, source, length=length)
 
     def __addCategoryLink(self, source, destination, length):
-        #noinspection PyArgumentEqualDefault
+        # noinspection PyArgumentEqualDefault
         link = self.__addLink(source, destination, None, length)
         source.categoryLinks += [link]
 
     def __addInstanceLink(self, source, destination, length=100.0):
         categoryLength = source.conceptualDepth - destination.conceptualDepth
         self.__addCategoryLink(destination, source, categoryLength)
-        #noinspection PyArgumentEqualDefault
+        # noinspection PyArgumentEqualDefault
         link = self.__addLink(source, destination, None, length)
         source.instanceLinks += [link]
 
     def __addPropertyLink(self, source, destination, length):
-        #noinspection PyArgumentEqualDefault
+        # noinspection PyArgumentEqualDefault
         link = self.__addLink(source, destination, None, length)
         source.propertyLinks += [link]
 

@@ -91,8 +91,8 @@ class Rule(WorkspaceStructure):
         if correspondence.objectFromInitial != changed:
             return False
         # it is incompatible if the rule descriptor is not in the mapping list
-        return bool([m for m in correspondence.conceptMappings
-                     if m.initialDescriptor == self.descriptor])
+        return bool(m for m in correspondence.conceptMappings
+                    if m.initialDescriptor == self.descriptor)
 
     def __changeString(self, string):
         # applies the changes to self string ie. successor
@@ -106,11 +106,11 @@ class Rule(WorkspaceStructure):
         if self.relation == slipnet.predecessor:
             if 'a' in string:
                 return None
-            return ''.join([chr(ord(c) - 1) for c in string])
+            return ''.join(chr(ord(c) - 1) for c in string)
         elif self.relation == slipnet.successor:
             if 'z' in string:
                 return None
-            return ''.join([chr(ord(c) + 1) for c in string])
+            return ''.join(chr(ord(c) + 1) for c in string)
         else:
             return self.relation.name.lower()
 

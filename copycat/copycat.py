@@ -44,8 +44,10 @@ def runTrial(answers):
         answer = None
     finalTemperature = temperature.value
     finalTime = coderack.codeletsRun
-    print 'Answered %s (time %d, final temperature %.1f)' % (answer, finalTime, finalTemperature)
-    answers[answer] = answers.get(answer, {'count': 0, 'tempsum': 0, 'timesum': 0})
+    print 'Answered %s (time %d, final temperature %.1f)' % (
+        answer, finalTime, finalTemperature)
+    answers[answer] = answers.get(
+        answer, {'count': 0, 'tempsum': 0, 'timesum': 0})
     answers[answer]['count'] += 1
     answers[answer]['tempsum'] += finalTemperature
     answers[answer]['timesum'] += finalTime
@@ -54,9 +56,9 @@ def runTrial(answers):
 def run(initial, modified, target, iterations):
     workspace.setStrings(initial, modified, target)
     answers = {}
-    for i in xrange(iterations):
+    for _ in xrange(iterations):
         runTrial(answers)
-    for answer, d in answers.iteritems():
+    for _, d in answers.iteritems():
         d['avgtemp'] = d.pop('tempsum') / d['count']
         d['avgtime'] = d.pop('timesum') / d['count']
     return answers
