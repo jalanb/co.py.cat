@@ -25,7 +25,6 @@ def getUrgencyBin(urgency):
 
 class CodeRack(object):
     def __init__(self):
-        #logging.debug('coderack.__init__()')
         self.speedUpBonds = False
         self.removeBreakerCodelets = False
         self.removeTerracedScan = False
@@ -40,7 +39,6 @@ class CodeRack(object):
         self.postings = {}
 
     def reset(self):
-        #logging.debug('coderack.reset()')
         from temperature import temperature
 
         self.codelets = []
@@ -63,10 +61,10 @@ class CodeRack(object):
 
     def postTopDownCodelets(self):
         for node in slipnet.slipnodes:
-            #logging.info('Trying slipnode: %s' % node.get_name())
+            logging.info('Trying slipnode: %s', node.get_name())
             if node.activation != 100.0:
                 continue
-            #logging.info('using slipnode: %s' % node.get_name())
+            logging.info('using slipnode: %s', node.get_name())
             for codeletName in node.codelets:
                 probability = workspaceFormulas.probabilityOfPosting(
                     codeletName)
@@ -98,8 +96,6 @@ class CodeRack(object):
     def __postBottomUpCodelets(self, codeletName):
         probability = workspaceFormulas.probabilityOfPosting(codeletName)
         howMany = workspaceFormulas.howManyToPost(codeletName)
-        #if codeletName == 'bottom-up-bond-scout':
-        #   print 'post --> %f:%d' % (probability,howMany)
         if self.speedUpBonds:
             if 'bond' in codeletName or 'group' in codeletName:
                 howMany *= 3
@@ -118,7 +114,7 @@ class CodeRack(object):
         self.pressures.removeCodelet(codelet)
 
     def newCodelet(self, name, oldCodelet, strength, arguments=None):
-        #logging.debug('Posting new codelet called %s' % name)
+        logging.debug('Posting new codelet called %s', name)
         urgency = getUrgencyBin(strength)
         newCodelet = Codelet(name, urgency, self.codeletsRun)
         if arguments:
@@ -159,7 +155,7 @@ class CodeRack(object):
             mapping.targetDescriptionType.buffer = 100.0
             mapping.targetDescriptor.buffer = 100.0
         mappings = correspondence.distinguishingConceptMappings()
-        urgency = sum([mapping.strength() for mapping in mappings])
+        urgency = sum(mapping.strength() for mapping in mappings)
         numberOfMappings = len(mappings)
         if urgency:
             urgency /= numberOfMappings
@@ -328,17 +324,8 @@ class CodeRack(object):
         self.codeletsRun += 1
         self.runCodelets[methodName] = self.runCodelets.get(methodName, 0) + 1
 
-        #if self.codeletsRun > 2000:
-        #import sys
-        #print "running too many codelets"
-        #for name,count in self.postings.iteritems():
-        #print '%d:%s' % (count,name)
-        #raise ValueError
-        #else:
-        #   print 'running %d' % self.codeletsRun
         if not self.codeletMethodsDir:
             self.getCodeletmethods()
-        #if not self.codeletMethodsDir:
         method = self.methods[methodName]
         if not method:
             raise ValueError('Found %s in codeletMethods, but cannot get it',
@@ -346,8 +333,6 @@ class CodeRack(object):
         if not callable(method):
             raise RuntimeError('Cannot call %s()' % methodName)
         args, _varargs, _varkw, _defaults = inspect.getargspec(method)
-        #global codeletsUsed
-        #codeletsUsed[methodName] = codeletsUsed.get(methodName,0) + 1
         try:
             if 'codelet' in args:
                 method(codelet)

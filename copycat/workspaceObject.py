@@ -161,7 +161,7 @@ class WorkspaceObject(WorkspaceStructure):
         return False
 
     def described(self, slipnode):
-        return bool([d for d in self.descriptions if d.descriptor == slipnode])
+        return bool(d for d in self.descriptions if d.descriptor == slipnode)
 
     def middleObject(self):
         # only works if string is 3 chars long
