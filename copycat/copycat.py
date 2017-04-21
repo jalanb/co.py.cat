@@ -1,7 +1,4 @@
 import logging
-logging.basicConfig(level=logging.INFO, format='%(message)s',
-                    filename='./copycat.log', filemode='w')
-
 
 from workspace import workspace
 from workspaceFormulas import workspaceFormulas
@@ -33,9 +30,8 @@ def mainLoop(lastUpdate):
     return result
 
 
-def runTrial():
+def runTrial(answers):
     """Run a trial of the copycat algorithm"""
-    answers = {}
     slipnet.reset()
     workspace.reset()
     coderack.reset()
@@ -46,13 +42,21 @@ def runTrial():
         answer = workspace.rule.finalAnswer
     else:
         answer = None
-    print '%d: %s' % (coderack.codeletsRun, answer)
-    answers[answer] = answers.get(answer, 0) + 1
-    logging.debug('codelets used:')
-    for answer, count in answers.iteritems():
-        print '%s:%d' % (answer, count)
+    finalTemperature = temperature.value
+    finalTime = coderack.codeletsRun
+    print 'Answered %s (time %d, final temperature %.1f)' % (answer, finalTime, finalTemperature)
+    answers[answer] = answers.get(answer, {'count': 0, 'tempsum': 0, 'timesum': 0})
+    answers[answer]['count'] += 1
+    answers[answer]['tempsum'] += finalTemperature
+    answers[answer]['timesum'] += finalTime
 
 
-def run(initial, modified, target):
+def run(initial, modified, target, iterations):
     workspace.setStrings(initial, modified, target)
-    runTrial()
+    answers = {}
+    for i in xrange(iterations):
+        runTrial(answers)
+    for answer, d in answers.iteritems():
+        d['avgtemp'] = d.pop('tempsum') / d['count']
+        d['avgtime'] = d.pop('timesum') / d['count']
+    return answers
