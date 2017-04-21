@@ -1,0 +1,3 @@
+jalanb: J Alan Brogan, github@al-got-rhythm.net
+jtauber: James Tauber, jtauber@jtauber.com
+Quuxplusone: Arthur O'Dwyer,  arthur.j.odwyer@gmail.com 
