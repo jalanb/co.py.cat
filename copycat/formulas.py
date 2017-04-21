@@ -9,10 +9,10 @@ actualTemperature = Temperature = 100.0
 
 def selectListPosition(probabilities):
     total = sum(probabilities)
-    #logging.info('total: %s' % total)
+    logging.info('total: %s', total)
     r = random.random()
     stopPosition = total * r
-    #logging.info('stopPosition: %s' % stopPosition)
+    logging.info('stopPosition: %s', stopPosition)
     total = 0
     i = 0
     for probability in probabilities:
@@ -35,8 +35,8 @@ def weightedAverage(values):
 
 
 def temperatureAdjustedValue(value):
-    #logging.info('Temperature: %s' % Temperature)
-    #logging.info('actualTemperature: %s' % actualTemperature)
+    logging.info('Temperature: %s', Temperature)
+    logging.info('actualTemperature: %s', actualTemperature)
     return value ** (((100.0 - Temperature) / 30.0) + 0.5)
 
 
@@ -119,10 +119,10 @@ def __relevantDirection(objekt, slipnode):
 
 def __localRelevance(string, slipnode, relevance):
     numberOfObjectsNotSpanning = numberOfMatches = 0.0
-    #logging.info("find relevance for a string: %s" % string);
+    logging.info("find relevance for a string: %s", string)
     for objekt in string.objects:
         if not objekt.spansString():
-            #logging.info('non spanner: %s' % objekt)
+            logging.info('non spanner: %s', objekt)
             numberOfObjectsNotSpanning += 1.0
             if relevance(objekt, slipnode):
                 numberOfMatches += 1.0
@@ -148,8 +148,8 @@ def getMappings(objectFromInitial, objectFromTarget,
     for initial in initialDescriptions:
         for target in targetDescriptions:
             if initial.descriptionType == target.descriptionType:
-                if  (initial.descriptor == target.descriptor or
-                     initial.descriptor.slipLinked(target.descriptor)):
+                if (initial.descriptor == target.descriptor or
+                        initial.descriptor.slipLinked(target.descriptor)):
                     mapping = ConceptMapping(
                         initial.descriptionType,
                         target.descriptionType,

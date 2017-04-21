@@ -31,7 +31,6 @@ def __showWhichStringObjectIsFrom(structure):
         whence = 'target'
         if structure.string == workspace.initial:
             whence = 'initial'
-    #print 'object chosen = %s from %s string' % (structure, whence)
 
 
 def __getScoutSource(slipnode, relevanceMethod, typeName):
@@ -225,7 +224,6 @@ def bottom_up_bond_scout(codelet):
 def rule_scout(codelet):
     assert workspace.numberOfUnreplacedObjects() == 0
     changedObjects = [o for o in workspace.initial.objects if o.changed]
-    #assert len(changedObjects) < 2
     # if there are no changed objects, propose a rule with no changes
     if not changedObjects:
         return coderack.proposeRule(None, None, None, None, codelet)
@@ -419,8 +417,6 @@ def bond_builder(codelet):
             if incompatibleCorrespondences:
                 logging.info("trying to break incompatible correspondences")
                 assert __fight(bond, 2.0, incompatibleCorrespondences, 3.0)
-            #assert __fightIncompatibles(incompatibleCorrespondences,
-            #                            bond, 'correspondences', 2.0, 3.0)
     for incompatible in incompatibleBonds:
         incompatible.break_the_structure()
     for incompatible in incompatibleGroups:
@@ -605,7 +601,7 @@ def top_down_group_scout__direction(codelet):
                           direction, bondFacet, codelet)
 
 
-#noinspection PyStringFormat
+# noinspection PyStringFormat
 def group_scout__whole_string(codelet):
     string = workspace.initial
     if random.random() > 0.5:
@@ -664,7 +660,6 @@ def group_strength_tester(codelet):
 def group_builder(codelet):
     # update strength value of the group
     group = codelet.arguments[0]
-    #print '%s' % group
     __showWhichStringObjectIsFrom(group)
     equivalent = group.string.equivalentGroup(group)
     if equivalent:
@@ -680,7 +675,6 @@ def group_builder(codelet):
     if len(group.objectList) > 1:
         previous = group.objectList[0]
         for objekt in group.objectList[1:]:
-            #print 770
             leftBond = objekt.leftBond
             if leftBond:
                 if leftBond.leftObject == previous:
@@ -711,7 +705,6 @@ def group_builder(codelet):
     # create new bonds
     group.bondList = []
     for i in range(1, len(group.objectList)):
-        #print 803
         object1 = group.objectList[i - 1]
         object2 = group.objectList[i]
         if not object1.rightBond:
@@ -801,7 +794,7 @@ def bottom_up_correspondence_scout(codelet):
         objectFromInitial.relevantDescriptions(),
         objectFromTarget.relevantDescriptions())
     assert conceptMappings and __slippability(conceptMappings)
-    #find out if any are distinguishing
+    # find out if any are distinguishing
     distinguishingMappings = [m for m in conceptMappings if m.distinguishing()]
     assert distinguishingMappings
     # if both objects span the strings, check to see if the
@@ -851,7 +844,7 @@ def important_object_correspondence_scout(codelet):
         objectFromInitial.relevantDescriptions(),
         objectFromTarget.relevantDescriptions())
     assert conceptMappings and __slippability(conceptMappings)
-    #find out if any are distinguishing
+    # find out if any are distinguishing
     distinguishingMappings = [m for m in conceptMappings if m.distinguishing()]
     assert distinguishingMappings
     # if both objects span the strings, check to see if the
