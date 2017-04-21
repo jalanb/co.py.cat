@@ -82,8 +82,8 @@ def __chooseLeftNeighbor(source):
 
 def __chooseRightNeighbor(source):
     objects = [o for o in workspace.objects
-               if o.string == source.string
-               and o.leftIndex == source.rightIndex + 1]
+               if o.string == source.string and
+               o.leftIndex == source.rightIndex + 1]
     return formulas.chooseObjectFromList(objects, 'intraStringSalience')
 
 

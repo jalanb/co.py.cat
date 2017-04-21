@@ -25,13 +25,12 @@ from workspaceFormulas import chooseBondFacet
 # some methods common to the codelets
 def __showWhichStringObjectIsFrom(structure):
     if not structure:
-        return
-    whence = 'other'
+        return 'unstructured'
     if isinstance(structure, WorkspaceObject):
-        whence = 'target'
-        if structure.string == workspace.initial:
-            whence = 'initial'
-    #print 'object chosen = %s from %s string' % (structure, whence)
+        return 'target'
+    if structure.string == workspace.initial:
+        return 'initial'
+    return 'other'
 
 
 def __getScoutSource(slipnode, relevanceMethod, typeName):
@@ -115,7 +114,7 @@ def __fightIncompatibles(incompatibles, structure, name,
 
 def __slippability(conceptMappings):
     for mapping in conceptMappings:
-        slippiness = mapping.slipability() / 100.0
+        slippiness = mapping.slippability() / 100.0
         probabilityOfSlippage = formulas.temperatureAdjustedProbability(
             slippiness)
         if formulas.coinFlip(probabilityOfSlippage):
@@ -225,7 +224,6 @@ def bottom_up_bond_scout(codelet):
 def rule_scout(codelet):
     assert workspace.numberOfUnreplacedObjects() == 0
     changedObjects = [o for o in workspace.initial.objects if o.changed]
-    #assert len(changedObjects) < 2
     # if there are no changed objects, propose a rule with no changes
     if not changedObjects:
         return coderack.proposeRule(None, None, None, None, codelet)
@@ -240,8 +238,8 @@ def rule_scout(codelet):
         objectList += [position]
     letter = changed.getDescriptor(slipnet.letterCategory)
     otherObjectsOfSameLetter = [o for o in workspace.initial.objects
-                                if not o != changed
-                                and o.getDescriptionType(letter)]
+                                if not o != changed and
+                                o.getDescriptionType(letter)]
     if not len(otherObjectsOfSameLetter):
         objectList += [letter]
     # if this object corresponds to another object in the workspace
@@ -255,8 +253,7 @@ def rule_scout(codelet):
             if targetObject.described(node):
                 if targetObject.distinguishingDescriptor(node):
                     newList += [node]
-        objectList = newList  # surely this should be +=
-                              # "union of this and distinguishing descriptors"
+        objectList = newList  # should this be += ??
     assert objectList and len(objectList)
     # use conceptual depth to choose a description
     valueList = []
@@ -419,8 +416,6 @@ def bond_builder(codelet):
             if incompatibleCorrespondences:
                 logging.info("trying to break incompatible correspondences")
                 assert __fight(bond, 2.0, incompatibleCorrespondences, 3.0)
-            #assert __fightIncompatibles(incompatibleCorrespondences,
-            #                            bond, 'correspondences', 2.0, 3.0)
     for incompatible in incompatibleBonds:
         incompatible.break_the_structure()
     for incompatible in incompatibleGroups:
@@ -605,7 +600,7 @@ def top_down_group_scout__direction(codelet):
                           direction, bondFacet, codelet)
 
 
-#noinspection PyStringFormat
+# noinspection PyStringFormat
 def group_scout__whole_string(codelet):
     string = workspace.initial
     if random.random() > 0.5:
@@ -664,7 +659,6 @@ def group_strength_tester(codelet):
 def group_builder(codelet):
     # update strength value of the group
     group = codelet.arguments[0]
-    #print '%s' % group
     __showWhichStringObjectIsFrom(group)
     equivalent = group.string.equivalentGroup(group)
     if equivalent:
@@ -680,7 +674,6 @@ def group_builder(codelet):
     if len(group.objectList) > 1:
         previous = group.objectList[0]
         for objekt in group.objectList[1:]:
-            #print 770
             leftBond = objekt.leftBond
             if leftBond:
                 if leftBond.leftObject == previous:
@@ -711,7 +704,6 @@ def group_builder(codelet):
     # create new bonds
     group.bondList = []
     for i in range(1, len(group.objectList)):
-        #print 803
         object1 = group.objectList[i - 1]
         object2 = group.objectList[i]
         if not object1.rightBond:
@@ -801,21 +793,22 @@ def bottom_up_correspondence_scout(codelet):
         objectFromInitial.relevantDescriptions(),
         objectFromTarget.relevantDescriptions())
     assert conceptMappings and __slippability(conceptMappings)
-    #find out if any are distinguishing
+    # find out if any are distinguishing
     distinguishingMappings = [m for m in conceptMappings if m.distinguishing()]
     assert distinguishingMappings
     # if both objects span the strings, check to see if the
     # string description needs to be flipped
-    opposites = [m for m in distinguishingMappings
-                 if m.initialDescriptionType == slipnet.stringPositionCategory
-                 and m.initialDescriptionType != slipnet.bondFacet]
+    opposites = [
+        m for m in distinguishingMappings
+        if m.initialDescriptionType == slipnet.stringPositionCategory and
+        m.initialDescriptionType != slipnet.bondFacet]
     initialDescriptionTypes = [m.initialDescriptionType for m in opposites]
     flipTargetObject = False
-    if  (objectFromInitial.spansString() and
-         objectFromTarget.spansString() and
-         slipnet.directionCategory in initialDescriptionTypes
-         and __allOppositeMappings(formulas.oppositeMappings)
-         and slipnet.opposite.activation != 100.0):
+    if (objectFromInitial.spansString() and
+            objectFromTarget.spansString() and
+            slipnet.directionCategory in initialDescriptionTypes and
+            __allOppositeMappings(formulas.oppositeMappings) and
+            slipnet.opposite.activation != 100.0):
         objectFromTarget = objectFromTarget.flippedVersion()
         conceptMappings = formulas.getMappings(
             objectFromInitial, objectFromTarget,
@@ -851,21 +844,22 @@ def important_object_correspondence_scout(codelet):
         objectFromInitial.relevantDescriptions(),
         objectFromTarget.relevantDescriptions())
     assert conceptMappings and __slippability(conceptMappings)
-    #find out if any are distinguishing
+    # find out if any are distinguishing
     distinguishingMappings = [m for m in conceptMappings if m.distinguishing()]
     assert distinguishingMappings
     # if both objects span the strings, check to see if the
     # string description needs to be flipped
-    opposites = [m for m in distinguishingMappings
-                 if m.initialDescriptionType == slipnet.stringPositionCategory
-                 and m.initialDescriptionType != slipnet.bondFacet]
+    opposites = [
+        m for m in distinguishingMappings
+        if m.initialDescriptionType == slipnet.stringPositionCategory and
+        m.initialDescriptionType != slipnet.bondFacet]
     initialDescriptionTypes = [m.initialDescriptionType for m in opposites]
     flipTargetObject = False
-    if  (objectFromInitial.spansString()
-         and objectFromTarget.spansString()
-         and slipnet.directionCategory in initialDescriptionTypes
-         and __allOppositeMappings(formulas.oppositeMappings)
-         and slipnet.opposite.activation != 100.0):
+    if (objectFromInitial.spansString() and
+            objectFromTarget.spansString() and
+            slipnet.directionCategory in initialDescriptionTypes and
+            __allOppositeMappings(formulas.oppositeMappings) and
+            slipnet.opposite.activation != 100.0):
         objectFromTarget = objectFromTarget.flippedVersion()
         conceptMappings = formulas.getMappings(
             objectFromInitial, objectFromTarget,
@@ -938,8 +932,8 @@ def correspondence_builder(codelet):
     # if there is an incompatible bond then fight against it
     initial = correspondence.objectFromInitial
     target = correspondence.objectFromTarget
-    if  (initial.leftmost or initial.rightmost and
-         target.leftmost or target.rightmost):
+    if (initial.leftmost or initial.rightmost and
+            target.leftmost or target.rightmost):
         # search for the incompatible bond
         incompatibleBond = correspondence.getIncompatibleBond()
         if incompatibleBond:

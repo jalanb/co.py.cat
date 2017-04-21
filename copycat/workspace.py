@@ -14,7 +14,6 @@ def __adjustUnhappiness(values):
 
 class Workspace(object):
     def __init__(self):
-        #logging.debug('workspace.__init__()')
         self.setStrings('', '', '')
         self.reset()
         self.totalUnhappiness = 0.0
@@ -31,7 +30,6 @@ class Workspace(object):
         self.modifiedString = modified
 
     def reset(self):
-        #logging.debug('workspace.reset()')
         self.foundAnswer = False
         self.changedObject = None
         self.objects = []
@@ -94,15 +92,10 @@ class Workspace(object):
         """A list of all objects in the workspace with >= 1 open bond slots"""
         objects = [o for o in self.objects
                    if o.string == self.initial or o.string == self.target]
-        #print 'A: %d' % len(objects)
         objects = [o for o in objects if not o.spansString()]
-        #print 'B: %d' % len(objects)
         objects = [o for o in objects
                    if (not o.leftBond and not o.leftmost) or
                    (not o.rightBond and not o.rightmost)]
-        #print 'C: %d' % len(objects)
-        #objects = [ o for o in objects if  ]
-        #print 'D: %d' % len(objects)
         return len(objects)
 
     def numberOfUngroupedObjects(self):

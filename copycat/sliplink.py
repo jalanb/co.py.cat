@@ -1,4 +1,3 @@
-#from slipnode import Slipnode
 
 
 class Sliplink(object):
