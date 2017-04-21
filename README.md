@@ -32,3 +32,8 @@ For example the following invocation will probably display "ijl"
 ```sh
 $ python main.py abc abd ijk
 ```
+
+See Also
+--------
+"[Analogy-Making as Perception](http://www.amazon.com/Analogy-Making-Perception-Computer-Melanie-Mitchell/dp/0262132893/ref=tmm_hrd_title_0?ie=UTF8&qid=1351269085&sr=1-3)", by [Mitchell, Melanie](https://en.wikipedia.org/wiki/Melanie_Mitchell)
+"[The Copycat Project: An Experiment in Nondeterminism and Creative Analogies](http://dspace.mit.edu/handle/1721.1/5648)" by [Hofstadter, Douglas](https://en.wikipedia.org/wiki/Douglas_Hofstadter#Academic_career)
