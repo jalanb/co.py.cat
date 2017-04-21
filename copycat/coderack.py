@@ -61,10 +61,10 @@ class CodeRack(object):
 
     def postTopDownCodelets(self):
         for node in slipnet.slipnodes:
-            logging.info('Trying slipnode: %s' % node.get_name())
+            logging.info('Trying slipnode: %s', node.get_name())
             if node.activation != 100.0:
                 continue
-            logging.info('using slipnode: %s' % node.get_name())
+            logging.info('using slipnode: %s', node.get_name())
             for codeletName in node.codelets:
                 probability = workspaceFormulas.probabilityOfPosting(
                     codeletName)
@@ -114,7 +114,7 @@ class CodeRack(object):
         self.pressures.removeCodelet(codelet)
 
     def newCodelet(self, name, oldCodelet, strength, arguments=None):
-        logging.debug('Posting new codelet called %s' % name)
+        logging.debug('Posting new codelet called %s', name)
         urgency = getUrgencyBin(strength)
         newCodelet = Codelet(name, urgency, self.codeletsRun)
         if arguments:

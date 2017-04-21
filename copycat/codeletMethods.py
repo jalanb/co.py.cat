@@ -25,12 +25,12 @@ from workspaceFormulas import chooseBondFacet
 # some methods common to the codelets
 def __showWhichStringObjectIsFrom(structure):
     if not structure:
-        return
-    whence = 'other'
+        return 'unstructured'
     if isinstance(structure, WorkspaceObject):
-        whence = 'target'
-        if structure.string == workspace.initial:
-            whence = 'initial'
+        return 'target'
+    if structure.string == workspace.initial:
+        return 'initial'
+    return 'other'
 
 
 def __getScoutSource(slipnode, relevanceMethod, typeName):
@@ -238,8 +238,8 @@ def rule_scout(codelet):
         objectList += [position]
     letter = changed.getDescriptor(slipnet.letterCategory)
     otherObjectsOfSameLetter = [o for o in workspace.initial.objects
-                                if not o != changed
-                                and o.getDescriptionType(letter)]
+                                if not o != changed and
+                                o.getDescriptionType(letter)]
     if not len(otherObjectsOfSameLetter):
         objectList += [letter]
     # if this object corresponds to another object in the workspace
@@ -253,8 +253,7 @@ def rule_scout(codelet):
             if targetObject.described(node):
                 if targetObject.distinguishingDescriptor(node):
                     newList += [node]
-        objectList = newList  # surely this should be +=
-                              # "union of this and distinguishing descriptors"
+        objectList = newList  # should this be += ??
     assert objectList and len(objectList)
     # use conceptual depth to choose a description
     valueList = []
@@ -799,16 +798,17 @@ def bottom_up_correspondence_scout(codelet):
     assert distinguishingMappings
     # if both objects span the strings, check to see if the
     # string description needs to be flipped
-    opposites = [m for m in distinguishingMappings
-                 if m.initialDescriptionType == slipnet.stringPositionCategory
-                 and m.initialDescriptionType != slipnet.bondFacet]
+    opposites = [
+        m for m in distinguishingMappings
+        if m.initialDescriptionType == slipnet.stringPositionCategory and
+        m.initialDescriptionType != slipnet.bondFacet]
     initialDescriptionTypes = [m.initialDescriptionType for m in opposites]
     flipTargetObject = False
-    if  (objectFromInitial.spansString() and
-         objectFromTarget.spansString() and
-         slipnet.directionCategory in initialDescriptionTypes
-         and __allOppositeMappings(formulas.oppositeMappings)
-         and slipnet.opposite.activation != 100.0):
+    if (objectFromInitial.spansString() and
+            objectFromTarget.spansString() and
+            slipnet.directionCategory in initialDescriptionTypes and
+            __allOppositeMappings(formulas.oppositeMappings) and
+            slipnet.opposite.activation != 100.0):
         objectFromTarget = objectFromTarget.flippedVersion()
         conceptMappings = formulas.getMappings(
             objectFromInitial, objectFromTarget,
@@ -849,16 +849,17 @@ def important_object_correspondence_scout(codelet):
     assert distinguishingMappings
     # if both objects span the strings, check to see if the
     # string description needs to be flipped
-    opposites = [m for m in distinguishingMappings
-                 if m.initialDescriptionType == slipnet.stringPositionCategory
-                 and m.initialDescriptionType != slipnet.bondFacet]
+    opposites = [
+        m for m in distinguishingMappings
+        if m.initialDescriptionType == slipnet.stringPositionCategory and
+        m.initialDescriptionType != slipnet.bondFacet]
     initialDescriptionTypes = [m.initialDescriptionType for m in opposites]
     flipTargetObject = False
-    if  (objectFromInitial.spansString()
-         and objectFromTarget.spansString()
-         and slipnet.directionCategory in initialDescriptionTypes
-         and __allOppositeMappings(formulas.oppositeMappings)
-         and slipnet.opposite.activation != 100.0):
+    if (objectFromInitial.spansString() and
+            objectFromTarget.spansString() and
+            slipnet.directionCategory in initialDescriptionTypes and
+            __allOppositeMappings(formulas.oppositeMappings) and
+            slipnet.opposite.activation != 100.0):
         objectFromTarget = objectFromTarget.flippedVersion()
         conceptMappings = formulas.getMappings(
             objectFromInitial, objectFromTarget,
@@ -931,8 +932,8 @@ def correspondence_builder(codelet):
     # if there is an incompatible bond then fight against it
     initial = correspondence.objectFromInitial
     target = correspondence.objectFromTarget
-    if  (initial.leftmost or initial.rightmost and
-         target.leftmost or target.rightmost):
+    if (initial.leftmost or initial.rightmost and
+            target.leftmost or target.rightmost):
         # search for the incompatible bond
         incompatibleBond = correspondence.getIncompatibleBond()
         if incompatibleBond:
