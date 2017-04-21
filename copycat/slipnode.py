@@ -13,7 +13,7 @@ def jump_threshold():
 
 def points_at(links, other):
     """Whether any of the links points at the other"""
-    return any([l.points_at(other) for l in links])
+    return any(l.points_at(other) for l in links)
 
 
 class Slipnode(object):

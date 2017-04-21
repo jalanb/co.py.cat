@@ -87,10 +87,10 @@ class ConceptMapping(object):
         return self.sameTypes(other) and self.sameInitialDescriptor(other)
 
     def isContainedBy(self, mappings):
-        return any([self.sameKind(mapping) for mapping in mappings])
+        return any(self.sameKind(mapping) for mapping in mappings)
 
     def isNearlyContainedBy(self, mappings):
-        return any([self.nearlySameKind(mapping) for mapping in mappings])
+        return any(self.nearlySameKind(mapping) for mapping in mappings)
 
     def related(self, other):
         if self.initialDescriptor.related(other.initialDescriptor):
