@@ -159,7 +159,7 @@ class CodeRack(object):
             mapping.targetDescriptionType.buffer = 100.0
             mapping.targetDescriptor.buffer = 100.0
         mappings = correspondence.distinguishingConceptMappings()
-        urgency = sum([mapping.strength() for mapping in mappings])
+        urgency = sum(mapping.strength() for mapping in mappings)
         numberOfMappings = len(mappings)
         if urgency:
             urgency /= numberOfMappings
