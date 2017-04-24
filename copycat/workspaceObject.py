@@ -174,8 +174,8 @@ class WorkspaceObject(WorkspaceStructure):
                 objectOnMyRightIsRightmost = True
         return objectOnMyRightIsRightmost and objectOnMyLeftIsLeftmost
 
-    def distinguishingDescriptor(self, descriptor):
-        # pylint: disable=no-self-use
+    @staticmethod
+    def distinguishingDescriptor(descriptor):
         return distinguishingDescriptor(descriptor)
 
     def relevantDistinguishingDescriptors(self):
