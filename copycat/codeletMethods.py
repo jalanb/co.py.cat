@@ -67,7 +67,8 @@ def __getBondFacet(source, destination):
 def __getDescriptors(bondFacet, source, destination):
     sourceDescriptor = source.getDescriptor(bondFacet)
     destinationDescriptor = destination.getDescriptor(bondFacet)
-    assert sourceDescriptor and destinationDescriptor
+    assert sourceDescriptor
+    assert destinationDescriptor
     return sourceDescriptor, destinationDescriptor
 
 
@@ -129,7 +130,7 @@ def breaker():
     # choose a structure at random
     structures = [s for s in workspace.structures if
                   isinstance(s, (Group, Bond, Correspondence))]
-    assert len(structures)
+    assert structures
     structure = random.choice(structures)
     __showWhichStringObjectIsFrom(structure)
     breakObjects = [structure]
@@ -154,7 +155,7 @@ def bottom_up_description_scout(codelet):
     description = formulas.chooseRelevantDescriptionByActivation(chosenObject)
     assert description
     sliplinks = formulas.similarPropertyLinks(description.descriptor)
-    assert sliplinks and len(sliplinks)
+    assert sliplinks
     values = [sliplink.degreeOfAssociation() * sliplink.destination.activation
               for sliplink in sliplinks]
     i = formulas.selectListPosition(values)
@@ -170,7 +171,7 @@ def top_down_description_scout(codelet):
     assert chosenObject
     __showWhichStringObjectIsFrom(chosenObject)
     descriptions = chosenObject.getPossibleDescriptions(descriptionType)
-    assert descriptions and len(descriptions)
+    assert descriptions
     values = [n.activation for n in descriptions]
     i = formulas.selectListPosition(values)
     chosenProperty = descriptions[i]
@@ -254,7 +255,7 @@ def rule_scout(codelet):
                 if targetObject.distinguishingDescriptor(node):
                     newList += [node]
         objectList = newList  # should this be += ??
-    assert objectList and len(objectList)
+    assert objectList
     # use conceptual depth to choose a description
     valueList = []
     for node in objectList:
@@ -434,7 +435,8 @@ def top_down_group_scout__category(codelet):
     assert category
     source = __getScoutSource(category, formulas.localBondCategoryRelevance,
                               'group')
-    assert source and not source.spansString()
+    assert source
+    assert not source.spansString()
     if source.leftmost:
         direction = slipnet.right
     elif source.rightmost:
@@ -549,7 +551,8 @@ def top_down_group_scout__direction(codelet):
             logging.info('firstBond2: %s', firstBond)
         if firstBond and not firstBond.directionCategory:
             direction = None
-        assert firstBond and firstBond.directionCategory == direction
+        assert firstBond
+        assert firstBond.directionCategory == direction
     logging.info('possible group: %s', firstBond)
     category = firstBond.category
     assert category
@@ -792,7 +795,8 @@ def bottom_up_correspondence_scout(codelet):
         objectFromInitial, objectFromTarget,
         objectFromInitial.relevantDescriptions(),
         objectFromTarget.relevantDescriptions())
-    assert conceptMappings and __slippability(conceptMappings)
+    assert conceptMappings
+    assert __slippability(conceptMappings)
     # find out if any are distinguishing
     distinguishingMappings = [m for m in conceptMappings if m.distinguishing()]
     assert distinguishingMappings
@@ -843,7 +847,8 @@ def important_object_correspondence_scout(codelet):
         objectFromInitial, objectFromTarget,
         objectFromInitial.relevantDescriptions(),
         objectFromTarget.relevantDescriptions())
-    assert conceptMappings and __slippability(conceptMappings)
+    assert conceptMappings
+    assert __slippability(conceptMappings)
     # find out if any are distinguishing
     distinguishingMappings = [m for m in conceptMappings if m.distinguishing()]
     assert distinguishingMappings
@@ -874,11 +879,11 @@ def correspondence_strength_tester(codelet):
     correspondence = codelet.arguments[0]
     objectFromInitial = correspondence.objectFromInitial
     objectFromTarget = correspondence.objectFromTarget
-    assert (objectFromInitial in workspace.objects and
-            (objectFromTarget in workspace.objects or
-             correspondence.flipTargetObject and
-             not workspace.target.equivalentGroup(
-                 objectFromTarget.flipped_version())))
+    assert objectFromInitial in workspace.objects
+    assert (objectFromTarget in workspace.objects or
+            correspondence.flipTargetObject and
+            not workspace.target.equivalentGroup(
+                objectFromTarget.flipped_version()))
     correspondence.updateStrength()
     strength = correspondence.totalStrength
     probability = formulas.temperatureAdjustedProbability(strength / 100.0)
