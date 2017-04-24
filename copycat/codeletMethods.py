@@ -344,7 +344,7 @@ def top_down_bond_scout__category(codelet):
         backwardBond = slipnet.sameness
     else:
         backwardBond = destinationDescriptor.getBondCategory(sourceDescriptor)
-    assert category == forwardBond or category == backwardBond
+    assert category in [forwardBond, backwardBond]
     if category == forwardBond:
         coderack.proposeBond(source, destination, category,
                              bondFacet, sourceDescriptor,
