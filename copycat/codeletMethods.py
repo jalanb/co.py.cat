@@ -225,6 +225,7 @@ def bottom_up_bond_scout(codelet):
 def rule_scout(codelet):
     assert workspace.numberOfUnreplacedObjects() == 0
     changedObjects = [o for o in workspace.initial.objects if o.changed]
+    # assert len(changedObjects) < 2
     # if there are no changed objects, propose a rule with no changes
     if not changedObjects:
         return coderack.proposeRule(None, None, None, None, codelet)
