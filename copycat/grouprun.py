@@ -1,4 +1,4 @@
-from workspace import workspace
+from .workspace import workspace
 
 
 class GroupRun(object):

@@ -1,8 +1,8 @@
 
 
-from workspace import workspace
-from workspaceStructure import WorkspaceStructure
-from formulas import getMappings
+from .workspace import workspace
+from .workspaceStructure import WorkspaceStructure
+from .formulas import getMappings
 
 
 class Correspondence(WorkspaceStructure):
@@ -52,8 +52,8 @@ class Correspondence(WorkspaceStructure):
         targetBond = self.extract_target_bond()
         if not targetBond:
             return None
-        from conceptMapping import ConceptMapping
-        from slipnet import slipnet
+        from .conceptMapping import ConceptMapping
+        from .slipnet import slipnet
         if initialBond.directionCategory and targetBond.directionCategory:
             mapping = ConceptMapping(
                 slipnet.directionCategory,
@@ -101,7 +101,7 @@ class Correspondence(WorkspaceStructure):
         return False
 
     def support(self):
-        from letter import Letter
+        from .letter import Letter
         if isinstance(self.objectFromInitial, Letter):
             if self.objectFromInitial.spansString():
                 return 100.0
@@ -177,7 +177,7 @@ class Correspondence(WorkspaceStructure):
         for mapping in relevantMappings:
             if mapping.slippage():
                 self.accessoryConceptMappings += [mapping.symmetricVersion()]
-        from group import Group
+        from .group import Group
         if isinstance(self.objectFromInitial, Group):
             if isinstance(self.objectFromTarget, Group):
                 bondMappings = getMappings(

@@ -1,6 +1,6 @@
 import logging
-from formulas import Temperature
-from slipnet import slipnet
+from .formulas import Temperature
+from .slipnet import slipnet
 
 
 class CoderackPressure(object):

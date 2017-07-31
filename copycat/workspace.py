@@ -1,6 +1,6 @@
 import logging
 
-from workspaceString import WorkspaceString
+from .workspaceString import WorkspaceString
 
 unknownAnswer = '?'
 
@@ -108,7 +108,7 @@ class Workspace(object):
 
     def numberOfUnreplacedObjects(self):
         """A list of all unreplaced objects in the inital string"""
-        from letter import Letter
+        from .letter import Letter
 
         objects = [o for o in self.objects
                    if o.string == self.initial and isinstance(o, Letter)]
@@ -124,12 +124,12 @@ class Workspace(object):
 
     def numberOfBonds(self):
         """The number of bonds in the workspace"""
-        from bond import Bond
+        from .bond import Bond
 
         return len([o for o in self.structures if isinstance(o, Bond)])
 
     def correspondences(self):
-        from correspondence import Correspondence
+        from .correspondence import Correspondence
 
         return [s for s in self.structures if isinstance(s, Correspondence)]
 

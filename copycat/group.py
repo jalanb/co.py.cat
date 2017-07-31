@@ -1,10 +1,10 @@
 import logging
 import random
 
-from workspace import workspace
-from workspaceObject import WorkspaceObject
-from slipnet import slipnet
-import formulas
+from .workspace import workspace
+from .workspaceObject import WorkspaceObject
+from .slipnet import slipnet
+from . import formulas
 
 
 class Group(WorkspaceObject):
@@ -42,7 +42,7 @@ class Group(WorkspaceObject):
         self.clampSalience = False
         self.name = ''
 
-        from description import Description
+        from .description import Description
         if self.bondList and len(self.bondList):
             firstFacet = self.bondList[0].facet
             self.addBondDescription(

@@ -1,11 +1,11 @@
 import logging
 
-from workspace import workspace
-from workspaceFormulas import workspaceFormulas
-from slipnet import slipnet
-from temperature import temperature
-from coderack import coderack
-from coderackPressure import coderackPressures
+from .workspace import workspace
+from .workspaceFormulas import workspaceFormulas
+from .slipnet import slipnet
+from .temperature import temperature
+from .coderack import coderack
+from .coderackPressure import coderackPressures
 
 
 def updateEverything():
@@ -44,8 +44,8 @@ def runTrial(answers):
         answer = None
     finalTemperature = temperature.value
     finalTime = coderack.codeletsRun
-    print 'Answered %s (time %d, final temperature %.1f)' % (
-        answer, finalTime, finalTemperature)
+    print('Answered %s (time %d, final temperature %.1f)' % (
+        answer, finalTime, finalTemperature))
     answers[answer] = answers.get(
         answer, {'count': 0, 'tempsum': 0, 'timesum': 0})
     answers[answer]['count'] += 1
@@ -56,9 +56,9 @@ def runTrial(answers):
 def run(initial, modified, target, iterations):
     workspace.setStrings(initial, modified, target)
     answers = {}
-    for _ in xrange(iterations):
+    for _ in range(iterations):
         runTrial(answers)
-    for _, d in answers.iteritems():
+    for _, d in answers.items():
         d['avgtemp'] = d.pop('tempsum') / d['count']
         d['avgtime'] = d.pop('timesum') / d['count']
     return answers

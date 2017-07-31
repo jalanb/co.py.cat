@@ -1,9 +1,10 @@
+#!/usr/bin/env python3
 """Run the copycat program"""
 
 import logging
 import sys
 
-import copycat
+from . import copycat
 
 
 def main(program, args):
@@ -19,11 +20,11 @@ def main(program, args):
             initial, modified, target = args
             iterations = 1
         answers = copycat.run(initial, modified, target, iterations)
-        for answer, d in sorted(answers.iteritems(), key=lambda kv: kv[1]['avgtemp']):
-            print '%s: %d (avg time %.1f, avg temp %.1f)' % (answer, d['count'], d['avgtime'], d['avgtemp'])
+        for answer, d in sorted(iter(answers.items()), key=lambda kv: kv[1]['avgtemp']):
+            print('%s: %d (avg time %.1f, avg temp %.1f)' % (answer, d['count'], d['avgtime'], d['avgtemp']))
         return 0
     except ValueError:
-        print >> sys.stderr, 'Usage: %s initial modified target [iterations]' % program
+        print('Usage: %s initial modified target [iterations]' % program, file=sys.stderr)
         return 1
 
 

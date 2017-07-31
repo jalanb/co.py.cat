@@ -1,6 +1,6 @@
 import logging
-from letter import Letter
-from slipnet import slipnet
+from .letter import Letter
+from .slipnet import slipnet
 
 
 class WorkspaceString(object):
@@ -14,7 +14,7 @@ class WorkspaceString(object):
         if not self.length:
             return
         position = 0
-        from workspace import workspace
+        from .workspace import workspace
 
         for c in self.string.upper():
             value = ord(c) - ord('A')
@@ -75,7 +75,7 @@ class WorkspaceString(object):
         self.intraStringUnhappiness = total / len(self.objects)
 
     def equivalentGroup(self, sought):
-        from group import Group
+        from .group import Group
 
         for objekt in self.objects:
             if isinstance(objekt, Group):

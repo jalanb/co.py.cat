@@ -1,11 +1,11 @@
-from workspaceObject import WorkspaceObject
-from slipnet import slipnet
+from .workspaceObject import WorkspaceObject
+from .slipnet import slipnet
 
 
 class Letter(WorkspaceObject):
     def __init__(self, string, position, length):
         WorkspaceObject.__init__(self, string)
-        from workspace import workspace
+        from .workspace import workspace
         workspace.objects += [self]
         string.objects += [self]
         self.leftIndex = position

@@ -1,9 +1,9 @@
 import logging
 
-from workspace import workspace
-from temperature import temperature
-from slipnet import slipnet
-import formulas
+from .workspace import workspace
+from .temperature import temperature
+from .slipnet import slipnet
+from . import formulas
 
 
 class WorkspaceFormulas(object):
@@ -43,7 +43,7 @@ def numberOfObjects():
 def chooseUnmodifiedObject(attribute, inObjects):
     objects = [o for o in inObjects if o.string != workspace.modified]
     if not len(objects):
-        print 'no objects available in initial or target strings'
+        print('no objects available in initial or target strings')
     return formulas.chooseObjectFromList(objects, attribute)
 
 
