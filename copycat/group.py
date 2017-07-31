@@ -243,7 +243,8 @@ class Group(WorkspaceObject):
 
     def distinguishingDescriptor(self, descriptor):
         """Whether no other object of the same type has the same descriptor"""
-        if not WorkspaceObject.distinguishingDescriptor(self, descriptor):
+        #if not WorkspaceObject.distinguishingDescriptor(self, descriptor):
+        if not WorkspaceObject.distinguishingDescriptor(descriptor):
             return False
         for objekt in self.string.objects:
             # check to see if they are of the same type
