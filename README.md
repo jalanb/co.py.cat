@@ -39,27 +39,24 @@ A big "Thank You" for
 
 Curation
 --------
-* @Alex-Linhares
+* @[Alex-Linhares](https://github.com/Alex-Linhares/co.py.cat)
 
 Contributions
 -------------
-* @jtauber
-* @Quuxplusone
+* @[jtauber](https://github.com/jtauber/co.py.cat)
+* @[Quuxplusone](https://github.com/Quuxplusone/co.py.cat)
 
 Forks
 -----
-* @ayberkt
-* @dproske
-* @erkapilmehta
-* @horacio
-* @josephfosco
-* @jtauber
-* @OrmesKD
-* @Quuxplusone
-* @Alex-Linhares
-* @qython
-* @sjolicoeur
-* @skaslev
+* @[ayberkt](https://github.com/ayberkt/co.py.cat)
+* @[dproske](https://github.com/dproske/co.py.cat)
+* @[erkapilmehta](https://github.com/erkapilmehta/co.py.cat)
+* @[horacio](https://github.com/horacio/co.py.cat)
+* @[josephfosco](https://github.com/josephfosco/co.py.cat)
+* @[OrmesKD](https://github.com/OrmesKD/co.py.cat)
+* @[qython](https://github.com/qython/co.py.cat)
+* @[sjolicoeur](https://github.com/sjolicoeur/co.py.cat)
+* @[skaslev](https://github.com/skaslev/co.py.cat)
 
 You geeks make it all so worthwhile.
 
