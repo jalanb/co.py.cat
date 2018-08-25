@@ -34,27 +34,31 @@ $ python main.py abc abd ijk
 ```
 
 Thanks
-------
+======
 A big "Thank You" for
 
-* curation
-** @Alex-Linhares
-* contributions
-** @jtauber
-** @Quuxplusone
-* forks
-** @ayberkt
-** @dproske
-** @erkapilmehta
-** @horacio
-** @josephfosco
-** @jtauber
-** @OrmesKD
-** @Quuxplusone
-** @Alex-Linhares
-** @qython
-** @sjolicoeur
-** @skaslev
+Curation
+--------
+* @Alex-Linhares
+
+Contributions
+-------------
+* @jtauber
+* @Quuxplusone
+Forks
+-----
+* @ayberkt
+* @dproske
+* @erkapilmehta
+* @horacio
+* @josephfosco
+* @jtauber
+* @OrmesKD
+* @Quuxplusone
+* @Alex-Linhares
+* @qython
+* @sjolicoeur
+* @skaslev
 
 You geeks make it all so worthwhile.
 
