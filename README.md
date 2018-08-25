@@ -33,27 +33,35 @@ For example the following invocation will probably display "ijl"
 $ python main.py abc abd ijk
 ```
 
+Links
+=====
+
+Readers who got this far will definitely enjoy analogising this project with @[Alex-Linhares](https://github.com/Alex-Linhares/co.py.cat)'s collection of FARGonautica over [yonder](https://github.com/Alex-Linhares/FARGonautica#projects-to-join-here-desiderata)
+
 Thanks
 ======
 A big "Thank You" for
 
 Curation
 --------
-* @[Alex-Linhares](https://github.com/Alex-Linhares/co.py.cat)
+* @[Alex-Linhares](https://github.com/Alex-Linhares/FARGonautica#projects-to-join-here-desiderata)
 
 Contributions
 -------------
-* @[jtauber](https://github.com/jtauber/co.py.cat)
-* @[Quuxplusone](https://github.com/Quuxplusone/co.py.cat)
+* @[Quuxplusone](https://github.com/jalanb/co.py.cat/pull/8) for reducing spew
+* @[jtauber](https://github.com/jalanb/co.py.cat/pull/3) for cleaning up
 
 Forks
 -----
+* @[Alex-Linhares](https://github.com/Alex-Linhares/co.py.cat)
 * @[ayberkt](https://github.com/ayberkt/co.py.cat)
 * @[dproske](https://github.com/dproske/co.py.cat)
 * @[erkapilmehta](https://github.com/erkapilmehta/co.py.cat)
 * @[horacio](https://github.com/horacio/co.py.cat)
 * @[josephfosco](https://github.com/josephfosco/co.py.cat)
+* @[jtauber](https://github.com/jtauber/co.py.cat)
 * @[OrmesKD](https://github.com/OrmesKD/co.py.cat)
+* @[Quuxplusone](https://github.com/Quuxplusone/co.py.cat)
 * @[qython](https://github.com/qython/co.py.cat)
 * @[sjolicoeur](https://github.com/sjolicoeur/co.py.cat)
 * @[skaslev](https://github.com/skaslev/co.py.cat)
