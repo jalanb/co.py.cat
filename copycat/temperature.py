@@ -1,7 +1,7 @@
 import logging
 
 
-class Temperature(object):
+class Temperature:
     def __init__(self):
         self.value = 100.0
         self.clamped = True

@@ -6,7 +6,7 @@ from .temperature import temperature
 from .workspace import workspace
 
 
-class WorkspaceFormulas(object):
+class WorkspaceFormulas:
     def __init__(self):
         self.clamp_temperature = False
 

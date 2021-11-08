@@ -1,4 +1,6 @@
-class Sliplink(object):
+
+
+class Sliplink:
     def __init__(self, source, destination, label=None, length=0.0):
         self.source = source
         self.destination = destination

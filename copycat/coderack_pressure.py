@@ -4,7 +4,7 @@ from .formulas import Temperature
 from .slipnet import slipnet
 
 
-class CoderackPressure(object):
+class CoderackPressure:
     def __init__(self, name):
         self.name = name
 
@@ -56,7 +56,7 @@ def _codelet_index(codelet):
             return i[None]
 
 
-class CoderackPressures(object):
+class CoderackPressures:
     def __init__(self):
         self.initialise_pressures()
         self.reset()

@@ -12,7 +12,7 @@ def __adjust_unhappiness(values):
     return result
 
 
-class Workspace(object):
+class Workspace:
     def __init__(self):
         self.set_strings("", "", "")
         self.reset()

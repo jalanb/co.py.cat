@@ -3,7 +3,7 @@ import logging
 from .slipnet import slipnet
 
 
-class ConceptMapping(object):
+class ConceptMapping:
     def __init__(
         self,
         initial_description_type,

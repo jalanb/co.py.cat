@@ -1,4 +1,6 @@
-class Codelet(object):
+
+
+class Codelet:
     def __init__(self, name: str, urgency, timestamp):
         self.name = name
         self.urgency = urgency

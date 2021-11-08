@@ -4,7 +4,7 @@ from .letter import Letter
 from .slipnet import slipnet
 
 
-class WorkspaceString(object):
+class WorkspaceString:
     def __init__(self, s):
         self.string = s
         self.bonds = []

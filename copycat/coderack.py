@@ -21,7 +21,7 @@ def get_urgency_bin(urgency):
     return i + 1
 
 
-class CodeRack(object):
+class CodeRack:
     def __init__(self):
         self.speed_up_bonds = False
         self.remove_breaker_codelets = False

@@ -16,7 +16,7 @@ def distinguishing_descriptor(descriptor):
     return True
 
 
-class SlipNet(object):
+class SlipNet:
     # pylint: disable=too-many-instance-attributes
     def __init__(self):
         logging.debug("SlipNet.__init__()")

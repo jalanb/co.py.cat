@@ -1,7 +1,7 @@
 from .workspace import workspace
 
 
-class GroupRun(object):
+class GroupRun:
     def __init__(self):
         self.name = "xxx"
         self.maximum_number_of_runs = 1000
