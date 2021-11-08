@@ -17,7 +17,7 @@ There are no particular installation instructions, just clone and run, e.g.
 ```sh
 $ git clone https://github.com/jalanb/co.py.cat.git
 $ cd co.py.cat/copycat
-$ python main.py abc abd ijk
+$ python3 -m copycat abc abd ijk
 ```
 
 Running
