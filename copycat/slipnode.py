@@ -19,25 +19,25 @@ def points_at(links, other):
 class Slipnode(object):
     # pylint: disable=too-many-instance-attributes
     def __init__(self, name, depth, length=0.0):
-        self.conceptualDepth = depth
-        self.usualConceptualDepth = depth
+        self.conceptual_depth = depth
+        self.usual_conceptual_depth = depth
         self.name = name
-        self.intrinsicLinkLength = length
-        self.shrunkLinkLength = length * 0.4
+        self.intrinsic_link_length = length
+        self.shrunk_link_length = length * 0.4
 
         self.activation = 0.0
         self.buffer = 0.0
         self.clamped = False
-        self.bondFacetFactor = 0.0
-        self.categoryLinks = []
-        self.instanceLinks = []
-        self.propertyLinks = []
-        self.lateralSlipLinks = []
-        self.lateralNonSlipLinks = []
-        self.incomingLinks = []
-        self.outgoingLinks = []
+        self.bond_facet_factor = 0.0
+        self.category_links = []
+        self.instance_links = []
+        self.property_links = []
+        self.lateral_slip_links = []
+        self.lateral_non_slip_links = []
+        self.incoming_links = []
+        self.outgoing_links = []
         self.codelets = []
-        self.clampBondDegreeOfAssociation = False
+        self.clamp_bond_degree_of_association = False
 
     def __repr__(self):
         return "<Slipnode: %s>" % self.name
@@ -46,7 +46,7 @@ class Slipnode(object):
         self.buffer = 0.0
         self.activation = 0.0
 
-    def clampHigh(self):
+    def clamp_high(self):
         self.clamped = True
         self.activation = 100.0
 
@@ -56,14 +56,14 @@ class Slipnode(object):
     def unclamped(self):
         return not self.clamped
 
-    def setConceptualDepth(self, depth):
+    def set_conceptual_depth(self, depth):
         logging.info("set depth to %s for %s", depth, self.name)
-        self.conceptualDepth = depth
+        self.conceptual_depth = depth
 
     def category(self):
-        if not len(self.categoryLinks):
+        if not len(self.category_links):
             return None
-        link = self.categoryLinks[0]
+        link = self.category_links[0]
         return link.destination
 
     def fully_active(self):
@@ -75,43 +75,43 @@ class Slipnode(object):
         """Make this node fully active"""
         self.activation = full_activation()
 
-    def bondDegreeOfAssociation(self):
-        linkLength = self.intrinsicLinkLength
-        if (not self.clampBondDegreeOfAssociation) and self.fully_active():
-            linkLength = self.shrunkLinkLength
-        result = math.sqrt(100 - linkLength) * 11.0
+    def bond_degree_of_association(self):
+        link_length = self.intrinsic_link_length
+        if (not self.clamp_bond_degree_of_association) and self.fully_active():
+            link_length = self.shrunk_link_length
+        result = math.sqrt(100 - link_length) * 11.0
         return min(100.0, result)
 
-    def degreeOfAssociation(self):
-        linkLength = self.intrinsicLinkLength
+    def degree_of_association(self):
+        link_length = self.intrinsic_link_length
         if self.fully_active():
-            linkLength = self.shrunkLinkLength
-        return 100.0 - linkLength
+            link_length = self.shrunk_link_length
+        return 100.0 - link_length
 
     def update(self):
         act = self.activation
-        self.oldActivation = act
-        self.buffer -= self.activation * (100.0 - self.conceptualDepth) / 100.0
+        self.old_activation = act
+        self.buffer -= self.activation * (100.0 - self.conceptual_depth) / 100.0
 
     def linked(self, other):
         """Whether the other is among the outgoing links"""
-        return points_at(self.outgoingLinks, other)
+        return points_at(self.outgoing_links, other)
 
-    def slipLinked(self, other):
+    def slip_linked(self, other):
         """Whether the other is among the lateral links"""
-        return points_at(self.lateralSlipLinks, other)
+        return points_at(self.lateral_slip_links, other)
 
     def related(self, other):
         """Same or linked"""
         return self == other or self.linked(other)
 
-    def applySlippages(self, slippages):
+    def apply_slippages(self, slippages):
         for slippage in slippages:
-            if self == slippage.initialDescriptor:
-                return slippage.targetDescriptor
+            if self == slippage.initial_descriptor:
+                return slippage.target_descriptor
         return self
 
-    def getRelatedNode(self, relation):
+    def get_related_node(self, relation):
         """Return the node that is linked to this node via this relation.
 
         If no linked node is found, return None
@@ -121,13 +121,13 @@ class Slipnode(object):
         if relation == slipnet.identity:
             return self
         destinations = [
-            _.destination for _ in self.outgoingLinks if _.label == relation
+            _.destination for _ in self.outgoing_links if _.label == relation
         ]
         if destinations:
             return destinations[0]
         return None
 
-    def getBondCategory(self, destination):
+    def get_bond_category(self, destination):
         """Return the label of the link between these nodes if it exists.
 
         If it does not exist return None
@@ -138,7 +138,7 @@ class Slipnode(object):
         if self == destination:
             result = slipnet.identity
         else:
-            for link in self.outgoingLinks:
+            for link in self.outgoing_links:
                 if link.destination == destination:
                     result = link.label
                     break
@@ -150,9 +150,9 @@ class Slipnode(object):
 
     def spread_activation(self):
         if self.fully_active():
-            _ = [link.spread_activation() for link in self.outgoingLinks]
+            _ = [link.spread_activation() for link in self.outgoing_links]
 
-    def addBuffer(self):
+    def add_buffer(self):
         if self.unclamped():
             self.activation += self.buffer
         self.activation = max(min(self.activation, 100), 0)

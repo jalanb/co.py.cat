@@ -1,63 +1,63 @@
 import logging
 
 from .coderack import coderack
-from .coderackPressure import coderackPressures
+from .coderack_pressure import coderack_pressures
 from .slipnet import slipnet
 from .temperature import temperature
 from .workspace import workspace
-from .workspaceFormulas import workspaceFormulas
+from .workspace_formulas import workspace_formulas
 
 
-def updateEverything():
-    workspace.updateEverything()
-    coderack.updateCodelets()
+def update_everything():
+    workspace.update_everything()
+    coderack.update_codelets()
     slipnet.update()
-    workspaceFormulas.updateTemperature()
-    coderackPressures.calculatePressures()
+    workspace_formulas.update_temperature()
+    coderack_pressures.calculate_pressures()
 
 
-def mainLoop(lastUpdate):
-    temperature.tryUnclamp()
-    result = lastUpdate
-    if not coderack.codeletsRun:
-        updateEverything()
-        result = coderack.codeletsRun
-    elif coderack.codeletsRun - lastUpdate >= slipnet.timeStepLength:
-        updateEverything()
-        result = coderack.codeletsRun
+def main_loop(last_update):
+    temperature.try_unclamp()
+    result = last_update
+    if not coderack.codelets_run:
+        update_everything()
+        result = coderack.codelets_run
+    elif coderack.codelets_run - last_update >= slipnet.time_step_ength:
+        update_everything()
+        result = coderack.codelets_run
     logging.debug("Number of codelets: %d", len(coderack.codelets))
-    coderack.chooseAndRunCodelet()
+    coderack.choose_and_run_codelet()
     return result
 
 
-def runTrial(answers):
+def run_trial(answers):
     """Run a trial of the copycat algorithm"""
     slipnet.reset()
     workspace.reset()
     coderack.reset()
-    lastUpdate = 0
-    while not workspace.foundAnswer:
-        lastUpdate = mainLoop(lastUpdate)
+    last_update = 0
+    while not workspace.found_answer:
+        last_update = main_loop(last_update)
     if workspace.rule:
-        answer = workspace.rule.finalAnswer
+        answer = workspace.rule.final_answer
     else:
         answer = None
-    finalTemperature = temperature.value
-    finalTime = coderack.codeletsRun
+    final_temperature = temperature.value
+    final_time = coderack.codelets_run
     logging.info(
-        f"Answered {answer} (time {finalTime}, final temperature {finalTemperature})"
+        f"Answered {answer} (time {final_time}, final temperature {final_temperature})"
     )
     answers[answer] = answers.get(answer, {"count": 0, "tempsum": 0, "timesum": 0})
     answers[answer]["count"] += 1
-    answers[answer]["tempsum"] += finalTemperature
-    answers[answer]["timesum"] += finalTime
+    answers[answer]["tempsum"] += final_temperature
+    answers[answer]["timesum"] += final_time
 
 
 def run(initial, modified, target, iterations):
-    workspace.setStrings(initial, modified, target)
+    workspace.set_strings(initial, modified, target)
     answers = {}
     for _ in range(iterations):
-        runTrial(answers)
+        run_trial(answers)
     for _, d in answers.items():
         d["avgtemp"] = d.pop("tempsum") / d["count"]
         d["avgtime"] = d.pop("timesum") / d["count"]

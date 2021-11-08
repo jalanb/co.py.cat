@@ -4,7 +4,7 @@ class Codelet(object):
         self.urgency = urgency
         self.arguments = []
         self.pressure = None
-        self.timeStamp = timestamp
+        self.timestamp = timestamp
 
     def __repr__(self):
         return "<Codelet: %s>" % self.name

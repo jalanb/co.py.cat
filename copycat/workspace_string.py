@@ -11,7 +11,7 @@ class WorkspaceString(object):
         self.objects = []
         self.letters = []
         self.length = len(s)
-        self.intraStringUnhappiness = 0.0
+        self.intra_string_unhappiness = 0.0
         if not self.length:
             return
         position = 0
@@ -20,11 +20,11 @@ class WorkspaceString(object):
         for c in self.string.upper():
             value = ord(c) - ord("A")
             letter = Letter(self, position + 1, self.length)
-            letter.workspaceString = self
-            letter.addDescription(slipnet.objectCategory, slipnet.letter)
-            letter.addDescription(slipnet.letterCategory, slipnet.letters[value])
+            letter.workspace_string = self
+            letter.add_description(slipnet.object_category, slipnet.letter)
+            letter.add_description(slipnet.letter_category, slipnet.letters[value])
             letter.describe(position + 1, self.length)
-            workspace.buildDescriptions(letter)
+            workspace.build_descriptions(letter)
             self.letters += [letter]
             position += 1
 
@@ -58,35 +58,35 @@ class WorkspaceString(object):
     def __getitem__(self, i):
         return self.string[i]
 
-    def updateRelativeImportance(self):
+    def update_relative_importance(self):
         """Update the normalised importance of all objects in the string"""
-        total = sum(o.rawImportance for o in self.objects)
+        total = sum(o.raw_importance for o in self.objects)
         if not total:
             for o in self.objects:
-                o.relativeImportance = 0.0
+                o.relative_importance = 0.0
         else:
             for o in self.objects:
                 logging.info(
                     "object: %s, relative: %d = raw: %d / total: %d",
                     o,
-                    o.relativeImportance * 1000,
-                    o.rawImportance,
+                    o.relative_importance * 1000,
+                    o.raw_importance,
                     total,
                 )
-                o.relativeImportance = o.rawImportance / total
+                o.relative_importance = o.raw_importance / total
 
-    def updateIntraStringUnhappiness(self):
+    def update_intra_string_unhappiness(self):
         if not len(self.objects):
-            self.intraStringUnhappiness = 0.0
+            self.intra_string_unhappiness = 0.0
             return
-        total = sum(o.intraStringUnhappiness for o in self.objects)
-        self.intraStringUnhappiness = total / len(self.objects)
+        total = sum(o.intra_string_unhappiness for o in self.objects)
+        self.intra_string_unhappiness = total / len(self.objects)
 
-    def equivalentGroup(self, sought):
+    def equivalent_group(self, sought):
         from .group import Group
 
         for objekt in self.objects:
             if isinstance(objekt, Group):
-                if objekt.sameGroup(sought):
+                if objekt.same_group(sought):
                     return objekt
         return None

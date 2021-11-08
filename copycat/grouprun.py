@@ -4,8 +4,8 @@ from .workspace import workspace
 class GroupRun(object):
     def __init__(self):
         self.name = "xxx"
-        self.maximumNumberOfRuns = 1000
-        self.runStrings = []
+        self.maximum_number_of_runs = 1000
+        self.run_strings = []
         self.answers = []
         self.scores = [0] * 100
         self.initial = workspace.initial

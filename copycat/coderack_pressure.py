@@ -9,7 +9,7 @@ class CoderackPressure(object):
         self.name = name
 
     def reset(self):
-        self.unmodifedValues = []
+        self.unmodifed_values = []
         self.values = []
         self.codelets = []
 
@@ -28,8 +28,8 @@ def _codelet_index(codelet):
             None: 3,
         },
         "top-down-group-scout--category": {
-            slipnet.successorGroup: 6,
-            slipnet.predecessorGroup: 7,
+            slipnet.successor_group: 6,
+            slipnet.predecessor_group: 7,
             None: 8,
         },
         "top-down-group-scout--direction": {
@@ -58,10 +58,10 @@ def _codelet_index(codelet):
 
 class CoderackPressures(object):
     def __init__(self):
-        self.initialisePressures()
+        self.initialise_pressures()
         self.reset()
 
-    def initialisePressures(self):
+    def initialise_pressures(self):
         self.pressures = []
         self.pressures += [CoderackPressure("Bottom Up Bonds")]
         self.pressures += [CoderackPressure("Top Down Successor Bonds")]
@@ -82,31 +82,31 @@ class CoderackPressures(object):
         self.pressures += [CoderackPressure("Important Object Correspondences")]
         self.pressures += [CoderackPressure("Breakers")]
 
-    def calculatePressures(self):
+    def calculate_pressures(self):
         scale = (100.0 - Temperature + 10.0) / 15.0
         values = []
         for pressure in self.pressures:
             value = sum(c.urgency ** scale for c in pressure.codelets)
             values += [value]
-        totalValue = sum(values)
-        if not totalValue:
-            totalValue = 1.0
-        values = [value / totalValue for value in values]
-        self.maxValue = max(values)
+        total_value = sum(values)
+        if not total_value:
+            total_value = 1.0
+        values = [value / total_value for value in values]
+        self.max_value = max(values)
         for pressure, value in zip(self.pressures, values):
             pressure.values += [value * 100.0]
-        for codelet in self.removedCodelets:
+        for codelet in self.removed_codelets:
             if codelet.pressure:
-                codelet.pressure.codelets.removeElement(codelet)
-        self.removedCodelets = []
+                codelet.pressure.codelets.remove_element(codelet)
+        self.removed_codelets = []
 
     def reset(self):
-        self.maxValue = 0.001
+        self.max_value = 0.001
         for pressure in self.pressures:
             pressure.reset()
-        self.removedCodelets = []
+        self.removed_codelets = []
 
-    def addCodelet(self, codelet):
+    def add_codelet(self, codelet):
         node = None
         i = _codelet_index(codelet)
         if i >= 0:
@@ -119,11 +119,11 @@ class CoderackPressures(object):
         if node:
             logging.info("Node: %s", node.name)
 
-    def removeCodelet(self, codelet):
-        self.removedCodelets += [codelet]
+    def remove_codelet(self, codelet):
+        self.removed_codelets += [codelet]
 
-    def numberOfPressures(self):
+    def number_of_pressures(self):
         return len(self.pressures)
 
 
-coderackPressures = CoderackPressures()
+coderack_pressures = CoderackPressures()

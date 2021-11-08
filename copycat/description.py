@@ -1,14 +1,14 @@
 import logging
 
-from .workspaceStructure import WorkspaceStructure
+from .workspace_structure import WorkspaceStructure
 
 
 class Description(WorkspaceStructure):
-    def __init__(self, workspaceObject, descriptionType, descriptor):
+    def __init__(self, workspace_object, description_type, descriptor):
         WorkspaceStructure.__init__(self)
-        self.object = workspaceObject
-        self.string = workspaceObject.string
-        self.descriptionType = descriptionType
+        self.object = workspace_object
+        self.string = workspace_object.string
+        self.description_type = description_type
         self.descriptor = descriptor
 
     def __repr__(self):
@@ -24,23 +24,23 @@ class Description(WorkspaceStructure):
             s += " in target string"
         return s
 
-    def updateInternalStrength(self):
-        self.internalStrength = self.descriptor.conceptualDepth
+    def update_internal_strength(self):
+        self.internal_strength = self.descriptor.conceptual_depth
 
-    def updateExternalStrength(self):
-        self.externalStrength = (
-            self.localSupport() + self.descriptionType.activation
+    def update_external_strength(self):
+        self.external_strength = (
+            self.local_support() + self.description_type.activation
         ) / 2
 
-    def localSupport(self):
+    def local_support(self):
         from .workspace import workspace
 
         described_like_self = 0
-        for other in workspace.otherObjects(self.object):
-            if self.object.isWithin(other) or other.isWithin(self.object):
+        for other in workspace.other_objects(self.object):
+            if self.object.is_within(other) or other.is_within(self.object):
                 continue
             for description in other.descriptions:
-                if description.descriptionType == self.descriptionType:
+                if description.description_type == self.description_type:
                     described_like_self += 1
         results = {0: 0.0, 1: 20.0, 2: 60.0, 3: 90.0}
         if described_like_self in results:
@@ -48,13 +48,13 @@ class Description(WorkspaceStructure):
         return 100.0
 
     def build(self):
-        self.descriptionType.buffer = 100.0
+        self.description_type.buffer = 100.0
         self.descriptor.buffer = 100.0
         if not self.object.described(self.descriptor):
             logging.info("Add %s to descriptions", self)
             self.object.descriptions += [self]
 
-    def breakDescription(self):
+    def break_description(self):
         from .workspace import workspace
 
         if self in workspace.structures:

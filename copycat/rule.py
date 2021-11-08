@@ -1,9 +1,9 @@
 import logging
 
-from .formulas import weightedAverage
+from .formulas import weighted_average
 from .slipnet import slipnet
 from .workspace import workspace
-from .workspaceStructure import WorkspaceStructure
+from .workspace_structure import WorkspaceStructure
 
 
 class Rule(WorkspaceStructure):
@@ -24,46 +24,46 @@ class Rule(WorkspaceStructure):
             self.relation.name,
         )
 
-    def updateExternalStrength(self):
-        self.externalStrength = self.internalStrength
+    def update_external_strength(self):
+        self.external_strength = self.internal_strength
 
-    def updateInternalStrength(self):
+    def update_internal_strength(self):
         if not (self.descriptor and self.relation):
-            self.internalStrength = 0.0
+            self.internal_strength = 0.0
             return
-        averageDepth = (
-            self.descriptor.conceptualDepth + self.relation.conceptualDepth
+        average_depth = (
+            self.descriptor.conceptual_depth + self.relation.conceptual_depth
         ) / 2.0
-        averageDepth **= 1.1
+        average_depth **= 1.1
         # see if the object corresponds to an object
         # if so, see if the descriptor is present (modulo slippages) in the
         # corresponding object
-        changedObjects = [o for o in workspace.initial.objects if o.changed]
-        changed = changedObjects[0]
-        sharedDescriptorTerm = 0.0
+        changed_objects = [o for o in workspace.initial.objects if o.changed]
+        changed = changed_objects[0]
+        shared_descriptor_term = 0.0
         if changed and changed.correspondence:
-            targetObject = changed.correspondence.objectFromTarget
+            target_object = changed.correspondence.object_from_target
             slippages = workspace.slippages()
-            slipnode = self.descriptor.applySlippages(slippages)
-            if not targetObject.described(slipnode):
-                self.internalStrength = 0.0
+            slipnode = self.descriptor.apply_slippages(slippages)
+            if not target_object.described(slipnode):
+                self.internal_strength = 0.0
                 return
-            sharedDescriptorTerm = 100.0
-        conceptual_height = (100.0 - self.descriptor.conceptualDepth) / 10.0
-        sharedDescriptorWeight = conceptual_height ** 1.4
-        depthDifference = 100.0 - abs(
-            self.descriptor.conceptualDepth - self.relation.conceptualDepth
+            shared_descriptor_term = 100.0
+        conceptual_height = (100.0 - self.descriptor.conceptual_depth) / 10.0
+        shared_descriptor_weight = conceptual_height ** 1.4
+        depth_difference = 100.0 - abs(
+            self.descriptor.conceptual_depth - self.relation.conceptual_depth
         )
         weights = (
-            (depthDifference, 12),
-            (averageDepth, 18),
-            (sharedDescriptorTerm, sharedDescriptorWeight),
+            (depth_difference, 12),
+            (average_depth, 18),
+            (shared_descriptor_term, shared_descriptor_weight),
         )
-        self.internalStrength = weightedAverage(weights)
-        if self.internalStrength > 100.0:
-            self.internalStrength = 100.0
+        self.internal_strength = weighted_average(weights)
+        if self.internal_strength > 100.0:
+            self.internal_strength = 100.0
 
-    def ruleEqual(self, other):
+    def rule_equal(self, other):
         if not other:
             return False
         if self.relation != other.relation:
@@ -76,7 +76,7 @@ class Rule(WorkspaceStructure):
             return False
         return True
 
-    def activateRuleDescriptions(self):
+    def activate_rule_descriptions(self):
         if self.relation:
             self.relation.buffer = 100.0
         if self.facet:
@@ -86,7 +86,7 @@ class Rule(WorkspaceStructure):
         if self.descriptor:
             self.descriptor.buffer = 100.0
 
-    def incompatibleRuleCorrespondence(self, correspondence):
+    def incompatible_rule_correspondence(self, correspondence):
         if not correspondence:
             return False
         # find changed object
@@ -94,16 +94,16 @@ class Rule(WorkspaceStructure):
         if not changeds:
             return False
         changed = changeds[0]
-        if correspondence.objectFromInitial != changed:
+        if correspondence.object_from_initial != changed:
             return False
         # it is incompatible if the rule descriptor is not in the mapping list
         return bool(
             m
-            for m in correspondence.conceptMappings
-            if m.initialDescriptor == self.descriptor
+            for m in correspondence.concept_mappings
+            if m.initial_descriptor == self.descriptor
         )
 
-    def __changeString(self, string):
+    def __change_string(self, string):
         # applies the changes to self string ie. successor
         if self.facet == slipnet.length:
             if self.relation == slipnet.predecessor:
@@ -123,14 +123,14 @@ class Rule(WorkspaceStructure):
         else:
             return self.relation.name.lower()
 
-    def buildTranslatedRule(self):
+    def build_translated_rule(self):
         slippages = workspace.slippages()
-        self.category = self.category.applySlippages(slippages)
-        self.facet = self.facet.applySlippages(slippages)
-        self.descriptor = self.descriptor.applySlippages(slippages)
-        self.relation = self.relation.applySlippages(slippages)
+        self.category = self.category.apply_slippages(slippages)
+        self.facet = self.facet.apply_slippages(slippages)
+        self.descriptor = self.descriptor.apply_slippages(slippages)
+        self.relation = self.relation.apply_slippages(slippages)
         # generate the final string
-        self.finalAnswer = workspace.targetString
+        self.final_answer = workspace.target_string
         changeds = [
             o
             for o in workspace.target.objects
@@ -139,16 +139,16 @@ class Rule(WorkspaceStructure):
         changed = changeds and changeds[0] or None
         logging.debug("changed object = %s", changed)
         if changed:
-            left = changed.leftIndex
-            startString = ""
+            left = changed.left_index
+            start_string = ""
             if left > 1:
-                startString = self.finalAnswer[0 : left - 1]
-            right = changed.rightIndex
-            middleString = self.__changeString(self.finalAnswer[left - 1 : right])
-            if not middleString:
+                start_string = self.final_answer[0 : left - 1]
+            right = changed.right_index
+            middle_string = self.__change_string(self.final_answer[left - 1 : right])
+            if not middle_string:
                 return False
-            endString = ""
-            if right < len(self.finalAnswer):
-                endString = self.finalAnswer[right:]
-            self.finalAnswer = startString + middleString + endString
+            end_string = ""
+            if right < len(self.final_answer):
+                end_string = self.final_answer[right:]
+            self.final_answer = start_string + middle_string + end_string
         return True

@@ -5,16 +5,16 @@ import random
 import re
 
 from . import formulas
-from . import workspaceFormulas
+from . import workspace_formulas
 from .codelet import Codelet
-from .coderackPressure import CoderackPressures
+from .coderack_pressure import CoderackPressures
 from .slipnet import slipnet
 
 NUMBER_OF_BINS = 7
 MAX_NUMBER_OF_CODELETS = 100
 
 
-def getUrgencyBin(urgency):
+def get_urgency_bin(urgency):
     i = int(urgency) * NUMBER_OF_BINS / 100
     if i >= NUMBER_OF_BINS:
         return NUMBER_OF_BINS
@@ -23,110 +23,110 @@ def getUrgencyBin(urgency):
 
 class CodeRack(object):
     def __init__(self):
-        self.speedUpBonds = False
-        self.removeBreakerCodelets = False
-        self.removeTerracedScan = False
+        self.speed_up_bonds = False
+        self.remove_breaker_codelets = False
+        self.remove_terraced_scan = False
         self.pressures = CoderackPressures()
-        self.pressures.initialisePressures()
+        self.pressures.initialise_pressures()
         self.reset()
-        self.initialCodeletNames = (
+        self.initial_codelet_names = (
             "bottom-up-bond-scout",
             "replacement-finder",
             "bottom-up-correspondence-scout",
         )
-        self.codeletMethodsDir = None
-        self.runCodelets = {}
+        self.codelet_methods_dir = None
+        self.run_codelets = {}
         self.postings = {}
 
     def reset(self):
         from .temperature import temperature
 
         self.codelets = []
-        self.codeletsRun = 0
+        self.codelets_run = 0
         temperature.clamped = True
         self.pressures.reset()
 
-    def updateCodelets(self):
-        if self.codeletsRun > 0:
-            self.postTopDownCodelets()
-            self.postBottomUpCodelets()
+    def update_codelets(self):
+        if self.codelets_run > 0:
+            self.post_top_down_codelets()
+            self.post_bottom_up_codelets()
 
     def post(self, codelet):
         self.postings[codelet.name] = self.postings.get(codelet.name, 0) + 1
-        self.pressures.addCodelet(codelet)
+        self.pressures.add_codelet(codelet)
         self.codelets += [codelet]
         if len(self.codelets) > 100:
-            oldCodelet = self.chooseOldCodelet()
-            self.removeCodelet(oldCodelet)
+            old_codelet = self.choose_old_codelet()
+            self.remove_codelet(old_codelet)
 
-    def postTopDownCodelets(self):
+    def post_top_down_codelets(self):
         for node in slipnet.slipnodes:
             logging.info("Trying slipnode: %s", node.get_name())
             if node.activation != 100.0:
                 continue
             logging.info("using slipnode: %s", node.get_name())
-            for codeletName in node.codelets:
-                probability = workspaceFormulas.probabilityOfPosting(codeletName)
-                howMany = workspaceFormulas.howManyToPost(codeletName)
-                for _ in range(0, howMany):
+            for codelet_name in node.codelets:
+                probability = workspace_formulas.probability_of_posting(codelet_name)
+                how_many = workspace_formulas.how_many_to_post(codelet_name)
+                for _ in range(0, how_many):
                     if random.random() >= probability:
                         continue
-                    urgency = getUrgencyBin(
-                        node.activation * node.conceptualDepth / 100.0
+                    urgency = get_urgency_bin(
+                        node.activation * node.conceptual_depth / 100.0
                     )
-                    codelet = Codelet(codeletName, urgency, self.codeletsRun)
+                    codelet = Codelet(codelet_name, urgency, self.codelets_run)
                     codelet.arguments += [node]
                     logging.info(
                         "Post top down: %s, with urgency: %d", codelet.name, urgency
                     )
                     self.post(codelet)
 
-    def postBottomUpCodelets(self):
+    def post_bottom_up_codelets(self):
         logging.info("posting bottom up codelets")
-        self.__postBottomUpCodelets("bottom-up-description-scout")
-        self.__postBottomUpCodelets("bottom-up-bond-scout")
-        self.__postBottomUpCodelets("group-scout--whole-string")
-        self.__postBottomUpCodelets("bottom-up-correspondence-scout")
-        self.__postBottomUpCodelets("important-object-correspondence-scout")
-        self.__postBottomUpCodelets("replacement-finder")
-        self.__postBottomUpCodelets("rule-scout")
-        self.__postBottomUpCodelets("rule-translator")
-        if not self.removeBreakerCodelets:
-            self.__postBottomUpCodelets("breaker")
+        self.__post_bottom_up_codelets("bottom-up-description-scout")
+        self.__post_bottom_up_codelets("bottom-up-bond-scout")
+        self.__post_bottom_up_codelets("group-scout--whole-string")
+        self.__post_bottom_up_codelets("bottom-up-correspondence-scout")
+        self.__post_bottom_up_codelets("important-object-correspondence-scout")
+        self.__post_bottom_up_codelets("replacement-finder")
+        self.__post_bottom_up_codelets("rule-scout")
+        self.__post_bottom_up_codelets("rule-translator")
+        if not self.remove_breaker_codelets:
+            self.__post_bottom_up_codelets("breaker")
 
-    def __postBottomUpCodelets(self, codeletName):
-        probability = workspaceFormulas.probabilityOfPosting(codeletName)
-        howMany = workspaceFormulas.howManyToPost(codeletName)
-        if self.speedUpBonds:
-            if "bond" in codeletName or "group" in codeletName:
-                howMany *= 3
+    def __post_bottom_up_codelets(self, codelet_name):
+        probability = workspace_formulas.probability_of_posting(codelet_name)
+        how_many = workspace_formulas.how_many_to_post(codelet_name)
+        if self.speed_up_bonds:
+            if "bond" in codelet_name or "group" in codelet_name:
+                how_many *= 3
         urgency = 3
-        if codeletName == "breaker":
+        if codelet_name == "breaker":
             urgency = 1
-        if formulas.Temperature < 25.0 and "translator" in codeletName:
+        if formulas.Temperature < 25.0 and "translator" in codelet_name:
             urgency = 5
-        for _ in range(0, howMany):
+        for _ in range(0, how_many):
             if random.random() < probability:
-                codelet = Codelet(codeletName, urgency, self.codeletsRun)
+                codelet = Codelet(codelet_name, urgency, self.codelets_run)
                 self.post(codelet)
 
-    def removeCodelet(self, codelet):
+    def remove_codelet(self, codelet):
         self.codelets.remove(codelet)
-        self.pressures.removeCodelet(codelet)
+        self.pressures.remove_codelet(codelet)
 
-    def newCodelet(self, name, oldCodelet, strength, arguments=None):
+    def new_codelet(self, name, old_codelet, strength, arguments=None):
         logging.debug("Posting new codelet called %s", name)
-        urgency = getUrgencyBin(strength)
-        newCodelet = Codelet(name, urgency, self.codeletsRun)
+        urgency = get_urgency_bin(strength)
+        new_codelet = Codelet(name, urgency, self.codelets_run)
         if arguments:
-            newCodelet.arguments = [arguments]
+            new_codelet.arguments = [arguments]
         else:
-            newCodelet.arguments = oldCodelet.arguments
-        newCodelet.pressure = oldCodelet.pressure
-        self.tryRun(newCodelet)
+            new_codelet.arguments = old_codelet.arguments
+        new_codelet.pressure = old_codelet.pressure
+        self.try_run(new_codelet)
 
     # pylint: disable=too-many-arguments
-    def proposeRule(self, facet, description, category, relation, oldCodelet):
+    def propose_rule(self, facet, description, category, relation, old_codelet):
         """Creates a proposed rule, and posts a rule-strength-tester codelet.
 
         The new codelet has urgency a function of
@@ -135,138 +135,138 @@ class CodeRack(object):
         from .rule import Rule
 
         rule = Rule(facet, description, category, relation)
-        rule.updateStrength()
+        rule.update_strength()
         if description and relation:
-            depths = description.conceptualDepth + relation.conceptualDepth
+            depths = description.conceptual_depth + relation.conceptual_depth
             depths /= 200.0
             urgency = math.sqrt(depths) * 100.0
         else:
             urgency = 0
-        self.newCodelet("rule-strength-tester", oldCodelet, urgency, rule)
+        self.new_codelet("rule-strength-tester", old_codelet, urgency, rule)
 
-    def proposeCorrespondence(
-        self, initialObject, targetObject, conceptMappings, flipTargetObject, oldCodelet
+    def propose_correspondence(
+        self, initial_object, target_object, concept_mappings, flip_target_object, old_codelet
     ):
         from .correspondence import Correspondence
 
         correspondence = Correspondence(
-            initialObject, targetObject, conceptMappings, flipTargetObject
+            initial_object, target_object, concept_mappings, flip_target_object
         )
-        for mapping in conceptMappings:
-            mapping.initialDescriptionType.buffer = 100.0
-            mapping.initialDescriptor.buffer = 100.0
-            mapping.targetDescriptionType.buffer = 100.0
-            mapping.targetDescriptor.buffer = 100.0
-        mappings = correspondence.distinguishingConceptMappings()
+        for mapping in concept_mappings:
+            mapping.initial_description_type.buffer = 100.0
+            mapping.initial_descriptor.buffer = 100.0
+            mapping.target_description_type.buffer = 100.0
+            mapping.target_descriptor.buffer = 100.0
+        mappings = correspondence.distinguishing_concept_mappings()
         urgency = sum(mapping.strength() for mapping in mappings)
-        numberOfMappings = len(mappings)
+        number_of_mappings = len(mappings)
         if urgency:
-            urgency /= numberOfMappings
-        binn = getUrgencyBin(urgency)
+            urgency /= number_of_mappings
+        binn = get_urgency_bin(urgency)
         logging.info(
-            "urgency: %s, number: %d, bin: %d", urgency, numberOfMappings, binn
+            "urgency: %s, number: %d, bin: %d", urgency, number_of_mappings, binn
         )
-        self.newCodelet(
-            "correspondence-strength-tester", oldCodelet, urgency, correspondence
+        self.new_codelet(
+            "correspondence-strength-tester", old_codelet, urgency, correspondence
         )
 
-    def proposeDescription(self, objekt, type_, descriptor, oldCodelet):
+    def propose_description(self, objekt, type_, descriptor, old_codelet):
         from .description import Description
 
         description = Description(objekt, type_, descriptor)
         descriptor.buffer = 100.0
         urgency = type_.activation
-        self.newCodelet("description-strength-tester", oldCodelet, urgency, description)
+        self.new_codelet("description-strength-tester", old_codelet, urgency, description)
 
-    def proposeSingleLetterGroup(self, source, codelet):
-        self.proposeGroup(
-            [source], [], slipnet.samenessGroup, None, slipnet.letterCategory, codelet
+    def propose_single_letter_group(self, source, codelet):
+        self.propose_group(
+            [source], [], slipnet.sameness_group, None, slipnet.letter_category, codelet
         )
 
-    def proposeGroup(
-        self, objects, bondList, groupCategory, directionCategory, bondFacet, oldCodelet
+    def propose_group(
+        self, objects, bond_list, group_category, direction_category, bond_facet, old_codelet
     ):
         from .group import Group
 
-        bondCategory = groupCategory.getRelatedNode(slipnet.bondCategory)
-        bondCategory.buffer = 100.0
-        if directionCategory:
-            directionCategory.buffer = 100.0
+        bond_category = group_category.get_related_node(slipnet.bond_category)
+        bond_category.buffer = 100.0
+        if direction_category:
+            direction_category.buffer = 100.0
         group = Group(
             objects[0].string,
-            groupCategory,
-            directionCategory,
-            bondFacet,
+            group_category,
+            direction_category,
+            bond_facet,
             objects,
-            bondList,
+            bond_list,
         )
-        urgency = bondCategory.bondDegreeOfAssociation()
-        self.newCodelet("group-strength-tester", oldCodelet, urgency, group)
+        urgency = bond_category.bond_degree_of_association()
+        self.new_codelet("group-strength-tester", old_codelet, urgency, group)
 
-    def proposeBond(
+    def propose_bond(
         self,
         source,
         destination,
-        bondCategory,
-        bondFacet,
-        sourceDescriptor,
-        destinationDescriptor,
-        oldCodelet,
+        bond_category,
+        bond_facet,
+        source_descriptor,
+        destination_descriptor,
+        old_codelet,
     ):
         from .bond import Bond
 
-        bondFacet.buffer = 100.0
-        sourceDescriptor.buffer = 100.0
-        destinationDescriptor.buffer = 100.0
+        bond_facet.buffer = 100.0
+        source_descriptor.buffer = 100.0
+        destination_descriptor.buffer = 100.0
         bond = Bond(
             source,
             destination,
-            bondCategory,
-            bondFacet,
-            sourceDescriptor,
-            destinationDescriptor,
+            bond_category,
+            bond_facet,
+            source_descriptor,
+            destination_descriptor,
         )
-        urgency = bondCategory.bondDegreeOfAssociation()
-        self.newCodelet("bond-strength-tester", oldCodelet, urgency, bond)
+        urgency = bond_category.bond_degree_of_association()
+        self.new_codelet("bond-strength-tester", old_codelet, urgency, bond)
 
-    def chooseOldCodelet(self):
+    def choose_old_codelet(self):
         # selects an old codelet to remove from the coderack
         # more likely to select lower urgency codelets
         if not len(self.codelets):
             return None
         urgencies = []
         for codelet in self.codelets:
-            urgency = (coderack.codeletsRun - codelet.timeStamp) * (
+            urgency = (coderack.codelets_run - codelet.timestamp) * (
                 7.5 - codelet.urgency
             )
             urgencies += [urgency]
         threshold = random.random() * sum(urgencies)
-        sumOfUrgencies = 0.0
+        sum_of_urgencies = 0.0
         for i in range(0, len(self.codelets)):
-            sumOfUrgencies += urgencies[i]
-            if sumOfUrgencies > threshold:
+            sum_of_urgencies += urgencies[i]
+            if sum_of_urgencies > threshold:
                 return self.codelets[i]
         return self.codelets[0]
 
-    def postInitialCodelets(self):
-        for name in self.initialCodeletNames:
-            for _ in range(0, workspaceFormulas.numberOfObjects()):
-                codelet = Codelet(name, 1, self.codeletsRun)
+    def post_initial_codelets(self):
+        for name in self.initial_codelet_names:
+            for _ in range(0, workspace_formulas.number_of_objects()):
+                codelet = Codelet(name, 1, self.codelets_run)
                 self.post(codelet)
-                codelet2 = Codelet(name, 1, self.codeletsRun)
+                codelet2 = Codelet(name, 1, self.codelets_run)
                 self.post(codelet2)
 
-    def tryRun(self, newCodelet):
-        if self.removeTerracedScan:
-            self.run(newCodelet)
+    def try_run(self, new_codelet):
+        if self.remove_terraced_scan:
+            self.run(new_codelet)
         else:
-            self.post(newCodelet)
+            self.post(new_codelet)
 
-    def getCodeletmethods(self):
-        from . import codeletMethods
+    def get_codeletmethods(self):
+        from . import codelet_methods
 
-        self.codeletMethodsDir = dir(codeletMethods)
-        knownCodeletNames = (
+        self.codelet_methods_dir = dir(codelet_methods)
+        known_codelet_names = (
             "breaker",
             "bottom-up-description-scout",
             "top-down-description-scout",
@@ -293,23 +293,23 @@ class CodeRack(object):
             "correspondence-builder",
         )
         self.methods = {}
-        for codeletName in knownCodeletNames:
-            methodName = re.sub("[ -]", "_", codeletName)
-            if methodName not in self.codeletMethodsDir:
+        for codelet_name in known_codelet_names:
+            method_name = re.sub("[ -]", "_", codelet_name)
+            if method_name not in self.codelet_methods_dir:
                 raise NotImplementedError(
-                    "Cannot find %s in codeletMethods" % methodName
+                    "Cannot find %s in codelet_methods" % method_name
                 )
-            method = getattr(codeletMethods, methodName)
-            self.methods[methodName] = method
+            method = getattr(codelet_methods, method_name)
+            self.methods[method_name] = method
 
-    def chooseAndRunCodelet(self):
+    def choose_and_run_codelet(self):
         if not len(coderack.codelets):
-            coderack.postInitialCodelets()
-        codelet = self.chooseCodeletToRun()
+            coderack.post_initial_codelets()
+        codelet = self.choose_codelet_to_run()
         if codelet:
             self.run(codelet)
 
-    def chooseCodeletToRun(self):
+    def choose_codelet_to_run(self):
         if not self.codelets:
             return None
         temp = formulas.Temperature
@@ -321,9 +321,9 @@ class CodeRack(object):
         r = random.random()
         threshold = r * urgsum
         chosen = None
-        urgencySum = 0.0
+        urgency_sum = 0.0
         logging.info("temperature: %f", formulas.Temperature)
-        logging.info("actualTemperature: %f", formulas.actualTemperature)
+        logging.info("actualTemperature: %f", formulas.actual_temperature)
         logging.info("Slipnet:")
         for node in slipnet.slipnodes:
             logging.info(
@@ -331,7 +331,7 @@ class CodeRack(object):
                 node.get_name(),
                 node.activation,
                 node.buffer,
-                node.conceptualDepth,
+                node.conceptual_depth,
             )
         logging.info("Coderack:")
         for codelet in self.codelets:
@@ -341,30 +341,30 @@ class CodeRack(object):
         workspace.initial.log("Initial: ")
         workspace.target.log("Target: ")
         for codelet in self.codelets:
-            urgencySum += codelet.urgency ** scale
-            if not chosen and urgencySum > threshold:
+            urgency_sum += codelet.urgency ** scale
+            if not chosen and urgency_sum > threshold:
                 chosen = codelet
                 break
         if not chosen:
             chosen = self.codelets[0]
-        self.removeCodelet(chosen)
+        self.remove_codelet(chosen)
         logging.info("chosen codelet\n\t%s, urgency = %s", chosen.name, chosen.urgency)
         return chosen
 
     def run(self, codelet):
-        methodName = re.sub("[ -]", "_", codelet.name)
-        self.codeletsRun += 1
-        self.runCodelets[methodName] = self.runCodelets.get(methodName, 0) + 1
+        method_name = re.sub("[ -]", "_", codelet.name)
+        self.codelets_run += 1
+        self.run_codelets[method_name] = self.run_codelets.get(method_name, 0) + 1
 
-        if not self.codeletMethodsDir:
-            self.getCodeletmethods()
-        method = self.methods[methodName]
+        if not self.codelet_methods_dir:
+            self.get_codeletmethods()
+        method = self.methods[method_name]
         if not method:
             raise ValueError(
-                "Found %s in codeletMethods, but cannot get it", methodName
+                "Found %s in codelet_methods, but cannot get it", method_name
             )
         if not callable(method):
-            raise RuntimeError("Cannot call %s()" % methodName)
+            raise RuntimeError("Cannot call %s()" % method_name)
         args, _varargs, _varkw, _defaults = inspect.getargspec(method)
         try:
             if "codelet" in args:

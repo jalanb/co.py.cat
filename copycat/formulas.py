@@ -4,47 +4,47 @@ import random
 
 from .temperature import temperature
 
-actualTemperature = Temperature = 100.0
+actual_temperature = Temperature = 100.0
 
 
-def selectListPosition(probabilities):
+def select_list_position(probabilities):
     total = sum(probabilities)
     logging.info("total: %s", total)
     r = random.random()
-    stopPosition = total * r
-    logging.info("stopPosition: %s", stopPosition)
+    stop_position = total * r
+    logging.info("stop_position: %s", stop_position)
     total = 0
     i = 0
     for probability in probabilities:
         total += probability
-        if total > stopPosition:
+        if total > stop_position:
             return i
         i += 1
     return 0
 
 
-def weightedAverage(values):
+def weighted_average(values):
     total = 0.0
-    totalWeights = 0.0
+    total_weights = 0.0
     for value, weight in values:
         total += value * weight
-        totalWeights += weight
-    if not totalWeights:
+        total_weights += weight
+    if not total_weights:
         return 0.0
-    return total / totalWeights
+    return total / total_weights
 
 
-def temperatureAdjustedValue(value):
+def temperature_adjusted_value(value):
     logging.info("Temperature: %s", Temperature)
-    logging.info("actualTemperature: %s", actualTemperature)
+    logging.info("actual_temperature: %s", actual_temperature)
     return value ** (((100.0 - Temperature) / 30.0) + 0.5)
 
 
-def temperatureAdjustedProbability(value):
+def temperature_adjusted_probability(value):
     if not value or value == 0.5 or not temperature.value:
         return value
     if value < 0.5:
-        return 1.0 - temperatureAdjustedProbability(1.0 - value)
+        return 1.0 - temperature_adjusted_probability(1.0 - value)
     coldness = 100.0 - temperature.value
     a = math.sqrt(coldness)
     b = 10.0 - a
@@ -55,112 +55,112 @@ def temperatureAdjustedProbability(value):
     return max(f, 0.5)
 
 
-def coinFlip(chance=0.5):
+def coin_flip(chance=0.5):
     return random.random() < chance
 
 
 def blur(value):
     root = math.sqrt(value)
-    if coinFlip():
+    if coin_flip():
         return value + root
     return value - root
 
 
-def chooseObjectFromList(objects, attribute):
+def choose_object_from_list(objects, attribute):
     if not objects:
         return None
     probabilities = []
     for objekt in objects:
         value = getattr(objekt, attribute)
-        probability = temperatureAdjustedValue(value)
+        probability = temperature_adjusted_value(value)
         logging.info(
             "Object: %s, value: %d, probability: %d", objekt, value, probability
         )
         probabilities += [probability]
-    i = selectListPosition(probabilities)
+    i = select_list_position(probabilities)
     logging.info("Selected: %d", i)
     return objects[i]
 
 
-def chooseRelevantDescriptionByActivation(workspaceObject):
-    descriptions = workspaceObject.relevantDescriptions()
+def choose_relevant_description_by_activation(workspace_object):
+    descriptions = workspace_object.relevant_descriptions()
     if not descriptions:
         return None
     activations = [description.descriptor.activation for description in descriptions]
-    i = selectListPosition(activations)
+    i = select_list_position(activations)
     return descriptions[i]
 
 
-def similarPropertyLinks(slip_node):
+def similar_property_links(slip_node):
     result = []
-    for slip_link in slip_node.propertyLinks:
-        association = slip_link.degreeOfAssociation() / 100.0
-        probability = temperatureAdjustedProbability(association)
-        if coinFlip(probability):
+    for slip_link in slip_node.property_links:
+        association = slip_link.degree_of_association() / 100.0
+        probability = temperature_adjusted_probability(association)
+        if coin_flip(probability):
             result += [slip_link]
     return result
 
 
-def chooseSlipnodeByConceptualDepth(slip_nodes):
+def choose_slipnode_by_conceptual_depth(slip_nodes):
     if not slip_nodes:
         return None
-    depths = [temperatureAdjustedValue(n.conceptualDepth) for n in slip_nodes]
-    i = selectListPosition(depths)
+    depths = [temperature_adjusted_value(n.conceptual_depth) for n in slip_nodes]
+    i = select_list_position(depths)
     return slip_nodes[i]
 
 
-def __relevantCategory(objekt, slipnode):
-    return objekt.rightBond and objekt.rightBond.category == slipnode
+def __relevant_category(objekt, slipnode):
+    return objekt.right_bond and objekt.right_bond.category == slipnode
 
 
-def __relevantDirection(objekt, slipnode):
-    return objekt.rightBond and objekt.rightBond.directionCategory == slipnode
+def __relevant_direction(objekt, slipnode):
+    return objekt.right_bond and objekt.right_bond.direction_category == slipnode
 
 
-def __localRelevance(string, slipnode, relevance):
-    numberOfObjectsNotSpanning = numberOfMatches = 0.0
+def __local_relevance(string, slipnode, relevance):
+    number_of_objects_not_spanning = number_of_matches = 0.0
     logging.info("find relevance for a string: %s", string)
     for objekt in string.objects:
-        if not objekt.spansString():
+        if not objekt.spans_string():
             logging.info("non spanner: %s", objekt)
-            numberOfObjectsNotSpanning += 1.0
+            number_of_objects_not_spanning += 1.0
             if relevance(objekt, slipnode):
-                numberOfMatches += 1.0
-    if numberOfObjectsNotSpanning == 1:
-        return 100.0 * numberOfMatches
-    return 100.0 * numberOfMatches / (numberOfObjectsNotSpanning - 1.0)
+                number_of_matches += 1.0
+    if number_of_objects_not_spanning == 1:
+        return 100.0 * number_of_matches
+    return 100.0 * number_of_matches / (number_of_objects_not_spanning - 1.0)
 
 
-def localBondCategoryRelevance(string, category):
+def local_bond_category_relevance(string, category):
     if len(string.objects) == 1:
         return 0.0
-    return __localRelevance(string, category, __relevantCategory)
+    return __local_relevance(string, category, __relevant_category)
 
 
-def localDirectionCategoryRelevance(string, direction):
-    return __localRelevance(string, direction, __relevantDirection)
+def local_direction_category_relevance(string, direction):
+    return __local_relevance(string, direction, __relevant_direction)
 
 
-def getMappings(
-    objectFromInitial, objectFromTarget, initialDescriptions, targetDescriptions
+def get_mappings(
+    object_from_initial, object_from_target, initial_descriptions, target_descriptions
 ):
     mappings = []
-    from .conceptMapping import ConceptMapping
+    from .concept_mapping import ConceptMapping
 
-    for initial in initialDescriptions:
-        for target in targetDescriptions:
-            if initial.descriptionType == target.descriptionType:
+    for initial in initial_descriptions:
+        for target in target_descriptions:
+            if initial.description_type == target.description_type:
                 if (
                     initial.descriptor == target.descriptor
-                    or initial.descriptor.slipLinked(target.descriptor)
+                    or initial.descriptor.slip_linked(target.descriptor)
                 ):
                     mapping = ConceptMapping(
-                        initial.descriptionType,
-                        target.descriptionType,
+                        initial.description_type,
+                        target.description_type,
                         initial.descriptor,
                         target.descriptor,
-                        objectFromInitial,
-                        objectFromTarget,
+                        object_from_initial,
+                        object_from_target,
                     )
                     mappings += [mapping]
     return mappings

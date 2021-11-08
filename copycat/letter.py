@@ -1,5 +1,5 @@
 from .slipnet import slipnet
-from .workspaceObject import WorkspaceObject
+from .workspace_object import WorkspaceObject
 
 
 class Letter(WorkspaceObject):
@@ -9,20 +9,20 @@ class Letter(WorkspaceObject):
 
         workspace.objects += [self]
         string.objects += [self]
-        self.leftIndex = position
-        self.leftmost = self.leftIndex == 1
-        self.rightIndex = position
-        self.rightmost = self.rightIndex == length
+        self.left_index = position
+        self.leftmost = self.left_index == 1
+        self.right_index = position
+        self.rightmost = self.right_index == length
 
     def describe(self, position, length):
         if length == 1:
-            self.addDescription(slipnet.stringPositionCategory, slipnet.single)
+            self.add_description(slipnet.string_position_category, slipnet.single)
         if self.leftmost and length > 1:  # ? why check length ?
-            self.addDescription(slipnet.stringPositionCategory, slipnet.leftmost)
+            self.add_description(slipnet.string_position_category, slipnet.leftmost)
         if self.rightmost and length > 1:  # ? why check length ?
-            self.addDescription(slipnet.stringPositionCategory, slipnet.rightmost)
+            self.add_description(slipnet.string_position_category, slipnet.rightmost)
         if length > 2 and position * 2 == length + 1:
-            self.addDescription(slipnet.stringPositionCategory, slipnet.middle)
+            self.add_description(slipnet.string_position_category, slipnet.middle)
 
     def __repr__(self):
         return "<Letter: %s>" % self.__str__()
@@ -30,18 +30,18 @@ class Letter(WorkspaceObject):
     def __str__(self):
         if not self.string:
             return ""
-        i = self.leftIndex - 1
+        i = self.left_index - 1
         if len(self.string) <= i:
             raise ValueError(
-                "len(self.string) <= self.leftIndex :: %d <= %d",
+                "len(self.string) <= self.left_index :: %d <= %d",
                 len(self.string),
-                self.leftIndex,
+                self.left_index,
             )
         return self.string[i]
 
-    def distinguishingDescriptor(self, descriptor):
+    def distinguishing_descriptor(self, descriptor):
         """Whether no other object of the same type has the same descriptor"""
-        if not WorkspaceObject.distinguishingDescriptor(descriptor):
+        if not WorkspaceObject.distinguishing_descriptor(descriptor):
             return False
         for objekt in self.string.objects:
             # check to see if they are of the same type
