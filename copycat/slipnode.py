@@ -13,7 +13,7 @@ def jump_threshold():
 
 def points_at(links, other):
     """Whether any of the links points at the other"""
-    return any(l.points_at(other) for l in links)
+    return any(_.points_at(other) for _ in links)
 
 
 class Slipnode(object):
@@ -121,7 +121,7 @@ class Slipnode(object):
         if relation == slipnet.identity:
             return self
         destinations = [
-            l.destination for l in self.outgoingLinks if l.label == relation
+            _.destination for _ in self.outgoingLinks if _.label == relation
         ]
         if destinations:
             return destinations[0]

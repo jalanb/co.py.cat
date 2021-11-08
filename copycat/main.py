@@ -22,7 +22,8 @@ def main(program, args):
         answers = copycat.run(initial, modified, target, iterations)
         for answer, d in sorted(answers.iteritems(), key=lambda kv: kv[1]["avgtemp"]):
             print(
-                f"{answer}: {d['count']} (avg time {d['avgtime']}, avg temp {d['avgtemp']})"
+                f"{answer}: {d['count']} "
+                f"(avg time {d['avgtime']}, avg temp {d['avgtemp']})"
             )
         return 0
     except ValueError:

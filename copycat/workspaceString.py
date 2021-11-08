@@ -40,8 +40,8 @@ class WorkspaceString(object):
 
     def log(self, heading):
         s = "%s: %s - " % (heading, self)
-        for l in self.letters:
-            s += " %s" % l
+        for letter in self.letters:
+            s += " %s" % letter
         s += "; "
         for o in self.objects:
             s += " %s" % o

@@ -56,7 +56,7 @@ def runTrial(answers):
 def run(initial, modified, target, iterations):
     workspace.setStrings(initial, modified, target)
     answers = {}
-    for _ in xrange(iterations):
+    for _ in range(iterations):
         runTrial(answers)
     for _, d in answers.iteritems():
         d["avgtemp"] = d.pop("tempsum") / d["count"]

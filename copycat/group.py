@@ -78,10 +78,10 @@ class Group(WorkspaceObject):
                 self.addDescription(slipnet.length, slipnet.numbers[length - 1])
 
     def __str__(self):
-        s = self.string.__str__()
-        l = self.leftIndex - 1
-        r = self.rightIndex
-        return "group[%d:%d] == %s" % (l, r - 1, s[l:r])
+        string = self.string.__str__()
+        left = self.leftIndex - 1
+        right = self.rightIndex
+        return f"group[{left}:{right - 1}] == {string[left:right]}"
 
     def getIncompatibleGroups(self):
         result = []
