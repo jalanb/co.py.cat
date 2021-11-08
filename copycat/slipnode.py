@@ -39,8 +39,11 @@ class Slipnode(object):
         self.codelets = []
         self.clamp_bond_degree_of_association = False
 
+    def __str__(self):
+        return str(self.name)
+
     def __repr__(self):
-        return f"<{self.__class__.__name__}: {self.name}>"
+        return f"<{self.__class__.__name__}: {self}>"
 
     def reset(self):
         self.buffer = 0.0
@@ -57,7 +60,7 @@ class Slipnode(object):
         return not self.clamped
 
     def set_conceptual_depth(self, depth):
-        logging.info("set depth to %s for %s", depth, self.name)
+        logging.info(f"set depth to {depth} for {self}")
         self.conceptual_depth = depth
 
     def category(self):
@@ -143,7 +146,7 @@ class Slipnode(object):
                     result = link.label
                     break
         if result:
-            logging.info("Got bond: %s", result.name)
+            logging.info(f"Got bond: {result.name}")
         else:
             logging.info("Got no bond")
         return result

@@ -70,10 +70,8 @@ class Workspace(object):
     def calculate_total_unhappiness(self):
         for o in self.objects:
             logging.info(
-                "%s, total_unhappiness: %d, relative_importance: %d",
-                o,
-                o.total_unhappiness,
-                o.relative_importance * 1000,
+                f"{o}, total_unhappiness: {o.total_unhappiness}, "
+                f"relative_importance: {o.relative_importance * 1000}"
             )
         values = [o.relative_importance * o.total_unhappiness for o in self.objects]
         value = sum(values) / 2.0

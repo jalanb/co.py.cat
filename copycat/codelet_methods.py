@@ -36,14 +36,12 @@ def __get_scout_source(slipnode, relevance_method, type_name):
     initial_unhappiness = workspace.initial.intra_string_unhappiness
     target_unhappiness = workspace.target.intra_string_unhappiness
     logging.info(
-        "initial : relevance = %d, unhappiness=%d",
-        initial_relevance,
-        int(initial_unhappiness),
+        f"initial : relevance = {initial_relevance}, "
+        f"unhappiness = {int(initial_unhappiness)}"
     )
     logging.info(
-        "target : relevance = %d, unhappiness=%d",
-        target_relevance,
-        int(target_unhappiness),
+        f"target : relevance = {target_relevance}, "
+        f"unhappiness = {int(target_unhappiness)}"
     )
     string = workspace.initial
     relevances = initial_relevance + target_relevance
@@ -52,9 +50,9 @@ def __get_scout_source(slipnode, relevance_method, type_name):
     initials = initial_relevance + initial_unhappiness
     if randomized > initials:
         string = workspace.target
-        logging.info("target string selected: %s for %s", workspace.target, type_name)
+        logging.info(f"target string selected: {workspace.target} for {type_name}")
     else:
-        logging.info("initial string selected: %s for %s", workspace.initial, type_name)
+        logging.info(f"initial string selected: {workspace.initial} for {type_name}")
     source = choose_unmodified_object("intra_string_salience", string.objects)
     return source
 
@@ -87,7 +85,7 @@ def __structure_versus_structure(structure1, weight1, structure2, weight2):
         structure2.total_strength * weight2
     )
     rhs = (weighted_strength1 + weighted_strength2) * random.random()
-    logging.info("%d > %d", weighted_strength1, rhs)
+    logging.info(f"{weighted_strength1} > {rhs}: {weighted_strength1 > rhs}")
     return weighted_strength1 > rhs
 
 
@@ -98,9 +96,9 @@ def __fight(structure, structure_weight, incompatibles, incompatible_weight):
         if not __structure_versus_structure(
             structure, structure_weight, incompatible, incompatible_weight
         ):
-            logging.info("lost fight with %s", incompatible)
+            logging.info(f"lost fight with {incompatible}")
             return False
-        logging.info("won fight with %s", incompatible)
+        logging.info(f"won fight with {incompatible}")
     return True
 
 
@@ -109,11 +107,11 @@ def __fight_incompatibles(
 ):
     if len(incompatibles):
         if __fight(structure, structure_weight, incompatibles, incompatible_weight):
-            logging.info("broke the %s", name)
+            logging.info(f"broke the {name}")
             return True
-        logging.info("failed to break %s: Fizzle", name)
+        logging.info(f"failed to break {name}: Fizzle")
         return False
-    logging.info("no incompatible %s", name)
+    logging.info(f"no incompatible {name}")
     return True
 
 
@@ -213,19 +211,19 @@ def bottom_up_bond_scout(codelet):
     __show_which_string_object_is_from(source)
     destination = choose_neighbour(source)
     assert destination
-    logging.info("destination: %s", destination)
+    logging.info(f"destination: {destination}")
     bond_facet = __get_bond_facet(source, destination)
-    logging.info("chosen bond facet: %s", bond_facet.get_name())
-    logging.info("Source: %s, destination: %s", source, destination)
+    logging.info(f"chosen bond facet: {bond_facet.get_name()}")
+    logging.info(f"Source: {source}, destination: {destination}")
     bond_descriptors = __get_descriptors(bond_facet, source, destination)
     source_descriptor, destination_descriptor = bond_descriptors
-    logging.info("source descriptor: %s", source_descriptor.name.upper())
-    logging.info("destination descriptor: %s", destination_descriptor.name.upper())
+    logging.info(f"source descriptor: {source_descriptor.name.upper()}")
+    logging.info(f"destination descriptor: {destination_descriptor.name.upper()}")
     category = source_descriptor.get_bond_category(destination_descriptor)
     assert category
     if category == slipnet.identity:
         category = slipnet.sameness
-    logging.info("proposing %s bond ", category.name)
+    logging.info(f"proposing {category.name} bond ")
     coderack.propose_bond(
         source,
         destination,
@@ -314,10 +312,10 @@ def replacement_finder():
     # choose random letter in initial string
     letters = [o for o in workspace.initial.objects if isinstance(o, Letter)]
     letter_of_initial_string = random.choice(letters)
-    logging.info("selected letter in initial string = %s", letter_of_initial_string)
+    logging.info(f"selected letter in initial string = {letter_of_initial_string}")
     if letter_of_initial_string.replacement:
         logging.info(
-            "Replacement already found for %s, so fizzling", letter_of_initial_string
+            f"Replacement already found for {letter_of_initial_string}, so fizzling"
         )
         return
     position = letter_of_initial_string.left_index
@@ -335,7 +333,7 @@ def replacement_finder():
     if abs(diff) < 2:
         relations = {0: slipnet.sameness, -1: slipnet.successor, 1: slipnet.predecessor}
         relation = relations[diff]
-        logging.info("Relation found: %s", relation.name)
+        logging.info(f"Relation found: {relation.name}")
     else:
         relation = None
         logging.info("no relation found")
@@ -353,7 +351,7 @@ def top_down_bond_scout__category(codelet):
     category = codelet.arguments[0]
     source = __get_scout_source(category, formulas.local_bond_category_relevance, "bond")
     destination = choose_neighbour(source)
-    logging.info("source: %s, destination: %s", source, destination)
+    logging.info(f"source: {source}, destination: {destination}")
     assert destination
     bond_facet = __get_bond_facet(source, destination)
     source_descriptor, destination_descriptor = __get_descriptors(
@@ -395,7 +393,7 @@ def top_down_bond_scout__direction(codelet):
     )
     destination = choose_directed_neighbor(source, direction)
     assert destination
-    logging.info("to object: %s", destination)
+    logging.info(f"to object: {destination}")
     bond_facet = __get_bond_facet(source, destination)
     source_descriptor, destination_descriptor = __get_descriptors(
         bond_facet, source, destination
@@ -421,7 +419,7 @@ def bond_strength_tester(codelet):
     bond.update_strength()
     strength = bond.total_strength
     probability = formulas.temperature_adjusted_probability(strength / 100.0)
-    logging.info("bond strength = %d for %s", strength, bond)
+    logging.info(f"bond strength = {strength} for {bond}")
     assert formulas.coin_flip(probability)
     bond.facet.buffer = 100.0
     bond.source_descriptor.buffer = 100.0
@@ -443,9 +441,9 @@ def bond_builder(codelet):
             logging.info("already exists: activate descriptors & Fizzle")
             return
     incompatible_bonds = bond.get_incompatible_bonds()
-    logging.info("number of incompatible_bonds: %d", len(incompatible_bonds))
+    logging.info(f"number of incompatible_bonds: {len(incompatible_bonds)}")
     if len(incompatible_bonds):
-        logging.info("%s", incompatible_bonds[0])
+        logging.info(str(incompatible_bonds[0]))
     assert __fight_incompatibles(incompatible_bonds, bond, "bonds", 1.0, 1.0)
     incompatible_groups = bond.source.get_common_groups(bond.destination)
     assert __fight_incompatibles(incompatible_groups, bond, "groups", 1.0, 1.0)
@@ -463,7 +461,7 @@ def bond_builder(codelet):
         incompatible.break_the_structure()
     for incompatible in incompatible_correspondences:
         incompatible.break_the_structure()
-    logging.info("building bond %s", bond)
+    logging.info(f"building bond {bond}")
     bond.build_bond()
 
 
@@ -561,7 +559,7 @@ def top_down_group_scout__direction(codelet):
     source = __get_scout_source(
         direction, formulas.local_direction_category_relevance, "direction"
     )
-    logging.info("source chosen = %s", source)
+    logging.info(f"source chosen = {source}")
     assert not source.spans_string()
     if source.leftmost:
         mydirection = slipnet.right
@@ -581,7 +579,7 @@ def top_down_group_scout__direction(codelet):
     if not first_bond:
         logging.info("no first_bond")
     else:
-        logging.info("first_bond: %s", first_bond)
+        logging.info(f"first_bond: {first_bond}")
     if first_bond and not first_bond.direction_category:
         direction = None
     if not first_bond or first_bond.direction_category != direction:
@@ -592,16 +590,16 @@ def top_down_group_scout__direction(codelet):
         if not first_bond:
             logging.info("no first_bond2")
         else:
-            logging.info("first_bond2: %s", first_bond)
+            logging.info(f"first_bond2: {first_bond}")
         if first_bond and not first_bond.direction_category:
             direction = None
         assert first_bond
         assert first_bond.direction_category == direction
-    logging.info("possible group: %s", first_bond)
+    logging.info(f"possible group: {first_bond}")
     category = first_bond.category
     assert category
     group_category = category.get_related_node(slipnet.group_category)
-    logging.info("trying from %s to %s", source, category.name)
+    logging.info(f"trying from {source} to {category.name}")
     bond_facet = None
     # find leftmost object in group with these bonds
     search = True
@@ -636,7 +634,7 @@ def top_down_group_scout__direction(codelet):
             destination = destination.right_bond.right_object
             search = True
     assert destination != source
-    logging.info("proposing group from %s to %s", source, destination)
+    logging.info(f"proposing group from {source} to {destination}")
     objects = [source]
     bonds = []
     while source != destination:
@@ -651,9 +649,9 @@ def group_scout__whole_string(codelet):
     string = workspace.initial
     if random.random() > 0.5:
         string = workspace.target
-        logging.info("target string selected: %s", workspace.target)
+        logging.info(f"target string selected: {workspace.target}")
     else:
-        logging.info("initial string selected: %s", workspace.initial)
+        logging.info(f"initial string selected: {workspace.initial}")
     # find leftmost object & the highest group to which it belongs
     leftmost = None
     for objekt in string.objects:

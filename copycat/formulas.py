@@ -9,10 +9,10 @@ actual_temperature = Temperature = 100.0
 
 def select_list_position(probabilities):
     total = sum(probabilities)
-    logging.info("total: %s", total)
+    logging.info(f"Total of probabilities: {total}")
     r = random.random()
     stop_position = total * r
-    logging.info("stop_position: %s", stop_position)
+    logging.info(f"stop_position: {stop_position}")
     total = 0
     i = 0
     for probability in probabilities:
@@ -34,9 +34,29 @@ def weighted_average(values):
     return total / total_weights
 
 
+def log_temperature():
+    logging.info(f"Temperature: {Temperature}")
+
+
+def log_actual_temperature():
+    logging.info(f"actual_temperature: {actual_temperature}")
+
+
+def clamp_actual_temperature(values):
+    global actual_temperature
+    actual_temperature = 100.0
+    log_actual_temperature()
+
+
+def weigh_actual_temperature(values):
+    global actual_temperature
+    actual_temperature = weighted_average(values)
+    log_actual_temperature()
+
+
 def temperature_adjusted_value(value):
-    logging.info("Temperature: %s", Temperature)
-    logging.info("actual_temperature: %s", actual_temperature)
+    log_temperature()
+    log_actual_temperature()
     return value ** (((100.0 - Temperature) / 30.0) + 0.5)
 
 
@@ -74,12 +94,12 @@ def choose_object_from_list(objects, attribute):
         value = getattr(objekt, attribute)
         probability = temperature_adjusted_value(value)
         logging.info(
-            "Object: %s, value: %d, probability: %d", objekt, value, probability
+            f"Object: {objekt}, value: {value}, probability: {probability}"
         )
         probabilities += [probability]
-    i = select_list_position(probabilities)
-    logging.info("Selected: %d", i)
-    return objects[i]
+    selected = select_list_position(probabilities)
+    logging.info(f"Selected: {selected}")
+    return objects[selected]
 
 
 def choose_relevant_description_by_activation(workspace_object):
@@ -87,8 +107,8 @@ def choose_relevant_description_by_activation(workspace_object):
     if not descriptions:
         return None
     activations = [description.descriptor.activation for description in descriptions]
-    i = select_list_position(activations)
-    return descriptions[i]
+    selected = select_list_position(activations)
+    return descriptions[selected]
 
 
 def similar_property_links(slip_node):
@@ -105,8 +125,8 @@ def choose_slipnode_by_conceptual_depth(slip_nodes):
     if not slip_nodes:
         return None
     depths = [temperature_adjusted_value(n.conceptual_depth) for n in slip_nodes]
-    i = select_list_position(depths)
-    return slip_nodes[i]
+    selected = select_list_position(depths)
+    return slip_nodes[selected]
 
 
 def __relevant_category(objekt, slipnode):
@@ -119,10 +139,10 @@ def __relevant_direction(objekt, slipnode):
 
 def __local_relevance(string, slipnode, relevance):
     number_of_objects_not_spanning = number_of_matches = 0.0
-    logging.info("find relevance for a string: %s", string)
+    logging.info(f"find relevance for a string: {string}")
     for objekt in string.objects:
         if not objekt.spans_string():
-            logging.info("non spanner: %s", objekt)
+            logging.info(f"Non spanner: {objekt}")
             number_of_objects_not_spanning += 1.0
             if relevance(objekt, slipnode):
                 number_of_matches += 1.0

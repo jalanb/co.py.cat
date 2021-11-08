@@ -25,7 +25,7 @@ def main_loop(last_update):
     elif coderack.codelets_run - last_update >= slipnet.time_step_ength:
         update_everything()
         result = coderack.codelets_run
-    logging.debug("Number of codelets: %d", len(coderack.codelets))
+    logging.debug(f"Number of codelets: {len(coderack.codelets)}")
     coderack.choose_and_run_codelet()
     return result
 

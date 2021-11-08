@@ -46,13 +46,13 @@ class WorkspaceObject(WorkspaceStructure):
 
     def add_description(self, description_type, descriptor):
         description = Description(self, description_type, descriptor)
-        logging.info("Adding description: %s to %s", description, self)
+        logging.info(f"Adding description: {description} to {self}")
         self.descriptions += [description]
 
     def add_descriptions(self, descriptions):
         copy = descriptions[:]  # in case we add to our own descriptions
         for description in copy:
-            logging.info("might add: %s", description)
+            logging.info(f"might add: {description}")
             if not self.contains_description(description):
                 self.add_description(description.description_type, description.descriptor)
             else:
@@ -117,11 +117,8 @@ class WorkspaceObject(WorkspaceStructure):
             )
         self.total_salience = (self.intra_string_salience + self.inter_string_salience) / 2.0
         logging.info(
-            "Set salience of %s to %f = (%f + %f)/2",
-            self.__str__(),
-            self.total_salience,
-            self.intra_string_salience,
-            self.inter_string_salience,
+            f"Set salience of {self} to {self.total_salience}"
+            f" = ({self.intra_string_salience} + {self.inter_string_salience}) / 2"
         )
 
     def is_within(self, other):
@@ -131,7 +128,7 @@ class WorkspaceObject(WorkspaceStructure):
         return [d for d in self.descriptions if d.description_type.fully_active()]
 
     def get_possible_descriptions(self, description_type):
-        logging.info("getting possible descriptions for %s", self)
+        logging.info(f"getting possible descriptions for {self}")
         descriptions = []
         from .group import Group
 
@@ -189,9 +186,9 @@ class WorkspaceObject(WorkspaceStructure):
     def get_descriptor(self, description_type):
         """The description attached to this object of the description type."""
         descriptor = None
-        logging.info("\nIn %s, trying for type: %s", self, description_type.get_name())
+        logging.info(f"\nIn {self}, trying for type: {description_type.get_name()}")
         for description in self.descriptions:
-            logging.info("Trying description: %s", description)
+            logging.info(f"Trying description: {description}")
             if description.description_type == description_type:
                 return description.descriptor
         return descriptor

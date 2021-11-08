@@ -133,7 +133,7 @@ class Group(WorkspaceObject):
 
     def activate_descriptions(self):
         for description in self.descriptions:
-            logging.info("Activate: %s", description)
+            logging.info(f"Activate: {description}")
             description.descriptor.buffer = 100.0
 
     def length_description_probability(self):

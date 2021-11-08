@@ -135,7 +135,7 @@ class Rule(WorkspaceStructure):
             if o.described(self.descriptor) and o.described(self.category)
         ]
         changed = changeds and changeds[0] or None
-        logging.debug("changed object = %s", changed)
+        logging.debug(f"changed object = {changed}")
         if changed:
             left = changed.left_index
             start_string = ""

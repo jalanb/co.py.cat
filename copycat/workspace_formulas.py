@@ -18,18 +18,15 @@ class WorkspaceFormulas(object):
             workspace.rule.update_strength()
             rule_weakness = 100.0 - workspace.rule.total_strength
         values = ((workspace.total_unhappiness, 0.8), (rule_weakness, 0.2))
-        above_actual_temperature = formulas.actual_temperature + 0.001
-        logging.info("actual_temperature: %f", above_actual_temperature)
-        formulas.actual_temperature = formulas.weighted_average(values)
-        logging.info(
-            "unhappiness: %f, weakness: %f, actual_temperature: %f",
-            workspace.total_unhappiness + 0.001,
-            rule_weakness + 0.001,
-            formulas.actual_temperature + 0.001,
-        )
+        formulas.log_actual_temperature()
         if temperature.clamped:
-            formulas.actual_temperature = 100.0
-        logging.info("actual_temperature: %f", formulas.actual_temperature + 0.001)
+            formulas.clamp_actual_temperature()
+        else:
+            formulas.weigh_actual_temperature(values)
+        logging.info(
+            f"unhappiness: {workspace.total_unhappiness + 0.001}, "
+            f"weakness: {rule_weakness + 0.001}"
+        )
         temperature.update(formulas.actual_temperature)
         if not self.clamp_temperature:
             formulas.Temperature = formulas.actual_temperature

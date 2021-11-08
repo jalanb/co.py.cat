@@ -34,7 +34,7 @@ class SlipNet(object):
         return "<slipnet>"
 
     def set_conceptual_depths(self, depth):
-        logging.debug("slipnet set all depths to %f", depth)
+        logging.debug(f"slipnet set all depths to {depth}")
         _ = [node.set_conceptual_depth(depth) for node in self.slipnodes]
 
     def reset(self):

@@ -115,9 +115,9 @@ class CoderackPressures(object):
             codelet.pressure.codelets += [codelet]
         if i >= 0:
             codelet.pressure = self.pressures[i]
-        logging.info("Add %s: %d", codelet.name, i)
+        logging.info(f"Add {codelet.name}: {i}")
         if node:
-            logging.info("Node: %s", node.name)
+            logging.info(f"Node: {node.name}")
 
     def remove_codelet(self, codelet):
         self.removed_codelets += [codelet]

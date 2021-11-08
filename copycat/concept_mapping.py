@@ -15,9 +15,7 @@ class ConceptMapping(object):
     ):
         # pylint: disable=too-many-arguments
         logging.info(
-            "make a map: %s-%s",
-            initial_description_type.get_name(),
-            target_description_type.get_name(),
+            f"make a map: {initial_description_type.get_name()}-{target_description_type.get_name()}"
         )
         self.initial_description_type = initial_description_type
         self.target_description_type = target_description_type

@@ -61,10 +61,10 @@ class CodeRack(object):
 
     def post_top_down_codelets(self):
         for node in slipnet.slipnodes:
-            logging.info("Trying slipnode: %s", node.get_name())
+            logging.info(f"Trying slipnode: {node}")
             if node.activation != 100.0:
                 continue
-            logging.info("using slipnode: %s", node.get_name())
+            logging.info(f"Using slipnode: {node}")
             for codelet_name in node.codelets:
                 probability = workspace_formulas.probability_of_posting(codelet_name)
                 how_many = workspace_formulas.how_many_to_post(codelet_name)
@@ -77,7 +77,7 @@ class CodeRack(object):
                     codelet = Codelet(codelet_name, urgency, self.codelets_run)
                     codelet.arguments += [node]
                     logging.info(
-                        "Post top down: %s, with urgency: %d", codelet.name, urgency
+                        f"Post top down: {codelet}, with urgency: {urgency}"
                     )
                     self.post(codelet)
 
@@ -115,7 +115,7 @@ class CodeRack(object):
         self.pressures.remove_codelet(codelet)
 
     def new_codelet(self, name, old_codelet, strength, arguments=None):
-        logging.debug("Posting new codelet called %s", name)
+        logging.debug(f"Posting new codelet called {name}")
         urgency = get_urgency_bin(strength)
         new_codelet = Codelet(name, urgency, self.codelets_run)
         if arguments:
@@ -164,7 +164,7 @@ class CodeRack(object):
             urgency /= number_of_mappings
         binn = get_urgency_bin(urgency)
         logging.info(
-            "urgency: %s, number: %d, bin: %d", urgency, number_of_mappings, binn
+            f"urgency: {urgency}, number: {number_of_mappings}, bin: {binn}"
         )
         self.new_codelet(
             "correspondence-strength-tester", old_codelet, urgency, correspondence
@@ -322,20 +322,17 @@ class CodeRack(object):
         threshold = r * urgsum
         chosen = None
         urgency_sum = 0.0
-        logging.info("temperature: %f", formulas.Temperature)
-        logging.info("actualTemperature: %f", formulas.actual_temperature)
+        formulas.log_temperature()
+        formulas.log_actual_temperature()
         logging.info("Slipnet:")
         for node in slipnet.slipnodes:
             logging.info(
-                "\tnode %s, activation: %d, buffer: %d, depth: %s",
-                node.get_name(),
-                node.activation,
-                node.buffer,
-                node.conceptual_depth,
+                f"\tnode {node.get_name()}, activation: {node.activation}, "
+                f"buffer: {node.buffer}, depth: {node.conceptual_depth}"
             )
         logging.info("Coderack:")
         for codelet in self.codelets:
-            logging.info("\t%s, %d", codelet.name, codelet.urgency)
+            logging.info(f"\t{codelet.name}, {codelet.urgency}")
         from .workspace import workspace
 
         workspace.initial.log("Initial: ")
@@ -348,7 +345,7 @@ class CodeRack(object):
         if not chosen:
             chosen = self.codelets[0]
         self.remove_codelet(chosen)
-        logging.info("chosen codelet\n\t%s, urgency = %s", chosen.name, chosen.urgency)
+        logging.info(f"chosen codelet:\n\t{chosen.name}, urgency = {chosen.urgency}")
         return chosen
 
     def run(self, codelet):
