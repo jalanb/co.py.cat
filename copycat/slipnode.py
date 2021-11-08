@@ -40,7 +40,7 @@ class Slipnode(object):
         self.clampBondDegreeOfAssociation = False
 
     def __repr__(self):
-        return '<Slipnode: %s>' % self.name
+        return "<Slipnode: %s>" % self.name
 
     def reset(self):
         self.buffer = 0.0
@@ -57,7 +57,7 @@ class Slipnode(object):
         return not self.clamped
 
     def setConceptualDepth(self, depth):
-        logging.info('set depth to %s for %s', depth, self.name)
+        logging.info("set depth to %s for %s", depth, self.name)
         self.conceptualDepth = depth
 
     def category(self):
@@ -120,8 +120,9 @@ class Slipnode(object):
 
         if relation == slipnet.identity:
             return self
-        destinations = [l.destination
-                        for l in self.outgoingLinks if l.label == relation]
+        destinations = [
+            l.destination for l in self.outgoingLinks if l.label == relation
+        ]
         if destinations:
             return destinations[0]
         return None
@@ -142,9 +143,9 @@ class Slipnode(object):
                     result = link.label
                     break
         if result:
-            logging.info('Got bond: %s', result.name)
+            logging.info("Got bond: %s", result.name)
         else:
-            logging.info('Got no bond')
+            logging.info("Got no bond")
         return result
 
     def spread_activation(self):

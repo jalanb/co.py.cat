@@ -24,7 +24,7 @@ class WorkspaceObject(WorkspaceStructure):
         self.leftBond = None
         self.rightBond = None
         self.newAnswerLetter = False
-        self.name = ''
+        self.name = ""
         self.replacement = None
         self.rightIndex = 0
         self.leftIndex = 0
@@ -38,7 +38,7 @@ class WorkspaceObject(WorkspaceStructure):
         self.totalUnhappiness = 0.0
 
     def __str__(self):
-        return 'object'
+        return "object"
 
     def spansString(self):
         return self.leftmost and self.rightmost
@@ -51,13 +51,13 @@ class WorkspaceObject(WorkspaceStructure):
     def addDescriptions(self, descriptions):
         copy = descriptions[:]  # in case we add to our own descriptions
         for description in copy:
-            logging.info('might add: %s', description)
+            logging.info("might add: %s", description)
             if not self.containsDescription(description):
-                self.addDescription(description.descriptionType,
-                                    description.descriptor)
+                self.addDescription(description.descriptionType, description.descriptor)
             else:
                 logging.info("Won't add it")
         from workspace import workspace
+
         workspace.buildDescriptions(self)
 
     def __calculateIntraStringHappiness(self):
@@ -107,30 +107,33 @@ class WorkspaceObject(WorkspaceStructure):
             self.interStringSalience = 100.0
         else:
             from formulas import weightedAverage
-            self.intraStringSalience = weightedAverage((
-                (self.relativeImportance, 0.2),
-                (self.intraStringUnhappiness, 0.8)))
-            self.interStringSalience = weightedAverage((
-                (self.relativeImportance, 0.8),
-                (self.interStringUnhappiness, 0.2)))
-        self.totalSalience = (self.intraStringSalience +
-                              self.interStringSalience) / 2.0
-        logging.info('Set salience of %s to %f = (%f + %f)/2',
-                     self.__str__(), self.totalSalience,
-                     self.intraStringSalience, self.interStringSalience)
+
+            self.intraStringSalience = weightedAverage(
+                ((self.relativeImportance, 0.2), (self.intraStringUnhappiness, 0.8))
+            )
+            self.interStringSalience = weightedAverage(
+                ((self.relativeImportance, 0.8), (self.interStringUnhappiness, 0.2))
+            )
+        self.totalSalience = (self.intraStringSalience + self.interStringSalience) / 2.0
+        logging.info(
+            "Set salience of %s to %f = (%f + %f)/2",
+            self.__str__(),
+            self.totalSalience,
+            self.intraStringSalience,
+            self.interStringSalience,
+        )
 
     def isWithin(self, other):
-        return (self.leftIndex >= other.leftIndex and
-                self.rightIndex <= other.rightIndex)
+        return self.leftIndex >= other.leftIndex and self.rightIndex <= other.rightIndex
 
     def relevantDescriptions(self):
-        return [d for d in self.descriptions
-                if d.descriptionType.fully_active()]
+        return [d for d in self.descriptions if d.descriptionType.fully_active()]
 
     def getPossibleDescriptions(self, descriptionType):
-        logging.info('getting possible descriptions for %s', self)
+        logging.info("getting possible descriptions for %s", self)
         descriptions = []
         from group import Group
+
         for link in descriptionType.instanceLinks:
             node = link.destination
             if node == slipnet.first and self.described(slipnet.letters[0]):
@@ -145,9 +148,9 @@ class WorkspaceObject(WorkspaceStructure):
                 i += 1
             if node == slipnet.middle and self.middleObject():
                 descriptions += [node]
-        s = ''
+        s = ""
         for d in descriptions:
-            s = '%s, %s' % (s, d.get_name())
+            s = "%s, %s" % (s, d.get_name())
         logging.info(s)
         return descriptions
 
@@ -179,15 +182,16 @@ class WorkspaceObject(WorkspaceStructure):
         return distinguishingDescriptor(descriptor)
 
     def relevantDistinguishingDescriptors(self):
-        return [d.descriptor
-                for d in self.relevantDescriptions()
-                if distinguishingDescriptor(d.descriptor)]
+        return [
+            d.descriptor
+            for d in self.relevantDescriptions()
+            if distinguishingDescriptor(d.descriptor)
+        ]
 
     def getDescriptor(self, descriptionType):
         """The description attached to this object of the description type."""
         descriptor = None
-        logging.info("\nIn %s, trying for type: %s",
-                     self, descriptionType.get_name())
+        logging.info("\nIn %s, trying for type: %s", self, descriptionType.get_name())
         for description in self.descriptions:
             logging.info("Trying description: %s", description)
             if description.descriptionType == descriptionType:
@@ -203,8 +207,9 @@ class WorkspaceObject(WorkspaceStructure):
         return description
 
     def getCommonGroups(self, other):
-        return [o for o in self.string.objects
-                if self.isWithin(o) and other.isWithin(o)]
+        return [
+            o for o in self.string.objects if self.isWithin(o) and other.isWithin(o)
+        ]
 
     def letterDistance(self, other):
         if other.leftIndex > self.rightIndex:

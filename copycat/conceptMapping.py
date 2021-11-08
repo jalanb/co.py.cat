@@ -3,12 +3,21 @@ from slipnet import slipnet
 
 
 class ConceptMapping(object):
-    def __init__(self, initialDescriptionType, targetDescriptionType,
-                 initialDescriptor, targetDescriptor,
-                 initialObject, targetObject):
+    def __init__(
+        self,
+        initialDescriptionType,
+        targetDescriptionType,
+        initialDescriptor,
+        targetDescriptor,
+        initialObject,
+        targetObject,
+    ):
         # pylint: disable=too-many-arguments
-        logging.info('make a map: %s-%s', initialDescriptionType.get_name(),
-                     targetDescriptionType.get_name())
+        logging.info(
+            "make a map: %s-%s",
+            initialDescriptionType.get_name(),
+            targetDescriptionType.get_name(),
+        )
         self.initialDescriptionType = initialDescriptionType
         self.targetDescriptionType = targetDescriptionType
         self.initialDescriptor = initialDescriptor
@@ -18,11 +27,14 @@ class ConceptMapping(object):
         self.label = initialDescriptor.getBondCategory(targetDescriptor)
 
     def __repr__(self):
-        return '<ConceptMapping: %s from %s to %s>' % (
-            self.__str__(), self.initialDescriptor, self.targetDescriptor)
+        return "<ConceptMapping: %s from %s to %s>" % (
+            self.__str__(),
+            self.initialDescriptor,
+            self.targetDescriptor,
+        )
 
     def __str__(self):
-        return self.label and self.label.name or 'anonymous'
+        return self.label and self.label.name or "anonymous"
 
     def slippability(self):
         association = self.__degreeOfAssociation()
@@ -48,18 +60,18 @@ class ConceptMapping(object):
         return association * (1 + depth * depth)
 
     def __conceptualDepth(self):
-        return (self.initialDescriptor.conceptualDepth +
-                self.targetDescriptor.conceptualDepth) / 2.0
+        return (
+            self.initialDescriptor.conceptualDepth
+            + self.targetDescriptor.conceptualDepth
+        ) / 2.0
 
     def distinguishing(self):
         if self.initialDescriptor == slipnet.whole:
             if self.targetDescriptor == slipnet.whole:
                 return False
-        if not self.initialObject.distinguishingDescriptor(
-                self.initialDescriptor):
+        if not self.initialObject.distinguishingDescriptor(self.initialDescriptor):
             return False
-        return self.targetObject.distinguishingDescriptor(
-            self.targetDescriptor)
+        return self.targetObject.distinguishingDescriptor(self.targetDescriptor)
 
     def sameInitialType(self, other):
         return self.initialDescriptionType == other.initialDescriptionType
@@ -153,5 +165,5 @@ class ConceptMapping(object):
             self.targetDescriptor,
             self.initialDescriptor1,
             self.initialObject,
-            self.targetObject
+            self.targetObject,
         )

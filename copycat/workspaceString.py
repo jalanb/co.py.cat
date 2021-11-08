@@ -17,35 +17,38 @@ class WorkspaceString(object):
         from workspace import workspace
 
         for c in self.string.upper():
-            value = ord(c) - ord('A')
+            value = ord(c) - ord("A")
             letter = Letter(self, position + 1, self.length)
             letter.workspaceString = self
             letter.addDescription(slipnet.objectCategory, slipnet.letter)
-            letter.addDescription(slipnet.letterCategory,
-                                  slipnet.letters[value])
+            letter.addDescription(slipnet.letterCategory, slipnet.letters[value])
             letter.describe(position + 1, self.length)
             workspace.buildDescriptions(letter)
             self.letters += [letter]
             position += 1
 
     def __repr__(self):
-        return '<WorkspaceString: %s>' % self.string
+        return "<WorkspaceString: %s>" % self.string
 
     def __str__(self):
-        return '%s with %d letters, %d objects, %d bonds' % (
-            self.string, len(self.letters), len(self.objects), len(self.bonds))
+        return "%s with %d letters, %d objects, %d bonds" % (
+            self.string,
+            len(self.letters),
+            len(self.objects),
+            len(self.bonds),
+        )
 
     def log(self, heading):
-        s = '%s: %s - ' % (heading, self)
+        s = "%s: %s - " % (heading, self)
         for l in self.letters:
-            s += ' %s' % l
-        s += '; '
+            s += " %s" % l
+        s += "; "
         for o in self.objects:
-            s += ' %s' % o
-        s += '; '
+            s += " %s" % o
+        s += "; "
         for b in self.bonds:
-            s += ' %s' % b
-        s += '.'
+            s += " %s" % b
+        s += "."
         logging.info(s)
 
     def __len__(self):
@@ -62,9 +65,13 @@ class WorkspaceString(object):
                 o.relativeImportance = 0.0
         else:
             for o in self.objects:
-                logging.info('object: %s, relative: %d = raw: %d / total: %d',
-                             o, o.relativeImportance * 1000, o.rawImportance,
-                             total)
+                logging.info(
+                    "object: %s, relative: %d = raw: %d / total: %d",
+                    o,
+                    o.relativeImportance * 1000,
+                    o.rawImportance,
+                    total,
+                )
                 o.relativeImportance = o.rawImportance / total
 
     def updateIntraStringUnhappiness(self):

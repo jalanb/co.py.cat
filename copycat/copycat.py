@@ -25,7 +25,7 @@ def mainLoop(lastUpdate):
     elif coderack.codeletsRun - lastUpdate >= slipnet.timeStepLength:
         updateEverything()
         result = coderack.codeletsRun
-    logging.debug('Number of codelets: %d', len(coderack.codelets))
+    logging.debug("Number of codelets: %d", len(coderack.codelets))
     coderack.chooseAndRunCodelet()
     return result
 
@@ -44,12 +44,13 @@ def runTrial(answers):
         answer = None
     finalTemperature = temperature.value
     finalTime = coderack.codeletsRun
-    logging.info(f"Answered {answer} (time {finalTime}, final temperature {finalTemperature})")
-    answers[answer] = answers.get(
-        answer, {'count': 0, 'tempsum': 0, 'timesum': 0})
-    answers[answer]['count'] += 1
-    answers[answer]['tempsum'] += finalTemperature
-    answers[answer]['timesum'] += finalTime
+    logging.info(
+        f"Answered {answer} (time {finalTime}, final temperature {finalTemperature})"
+    )
+    answers[answer] = answers.get(answer, {"count": 0, "tempsum": 0, "timesum": 0})
+    answers[answer]["count"] += 1
+    answers[answer]["tempsum"] += finalTemperature
+    answers[answer]["timesum"] += finalTime
 
 
 def run(initial, modified, target, iterations):
@@ -58,6 +59,6 @@ def run(initial, modified, target, iterations):
     for _ in xrange(iterations):
         runTrial(answers)
     for _, d in answers.iteritems():
-        d['avgtemp'] = d.pop('tempsum') / d['count']
-        d['avgtime'] = d.pop('timesum') / d['count']
+        d["avgtemp"] = d.pop("tempsum") / d["count"]
+        d["avgtime"] = d.pop("timesum") / d["count"]
     return answers

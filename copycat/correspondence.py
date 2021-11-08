@@ -1,13 +1,12 @@
-
-
 from workspace import workspace
 from workspaceStructure import WorkspaceStructure
 from formulas import getMappings
 
 
 class Correspondence(WorkspaceStructure):
-    def __init__(self, objectFromInitial, objectFromTarget,
-                 conceptMappings, flipTargetObject):
+    def __init__(
+        self, objectFromInitial, objectFromTarget, conceptMappings, flipTargetObject
+    ):
         WorkspaceStructure.__init__(self)
         self.objectFromInitial = objectFromInitial
         self.objectFromTarget = objectFromTarget
@@ -16,18 +15,19 @@ class Correspondence(WorkspaceStructure):
         self.accessoryConceptMappings = []
 
     def __repr__(self):
-        return '<%s>' % self.__str__()
+        return "<%s>" % self.__str__()
 
     def __str__(self):
-        return 'Correspondence between %s and %s' % (
-            self.objectFromInitial, self.objectFromTarget)
+        return "Correspondence between %s and %s" % (
+            self.objectFromInitial,
+            self.objectFromTarget,
+        )
 
     def distinguishingConceptMappings(self):
         return [m for m in self.conceptMappings if m.distinguishing()]
 
     def relevantDistinguishingConceptMappings(self):
-        return [m for m in self.conceptMappings
-                if m.distinguishing() and m.relevant()]
+        return [m for m in self.conceptMappings if m.distinguishing() and m.relevant()]
 
     def extract_target_bond(self):
         targetBond = False
@@ -54,6 +54,7 @@ class Correspondence(WorkspaceStructure):
             return None
         from conceptMapping import ConceptMapping
         from slipnet import slipnet
+
         if initialBond.directionCategory and targetBond.directionCategory:
             mapping = ConceptMapping(
                 slipnet.directionCategory,
@@ -61,7 +62,7 @@ class Correspondence(WorkspaceStructure):
                 initialBond.directionCategory,
                 targetBond.directionCategory,
                 None,
-                None
+                None,
             )
             for m in self.conceptMappings:
                 if m.incompatible(mapping):
@@ -69,8 +70,11 @@ class Correspondence(WorkspaceStructure):
         return None
 
     def getIncompatibleCorrespondences(self):
-        return [o.correspondence for o in workspace.initial.objects
-                if o and self.incompatible(o.correspondence)]
+        return [
+            o.correspondence
+            for o in workspace.initial.objects
+            if o and self.incompatible(o.correspondence)
+        ]
 
     def incompatible(self, other):
         if not other:
@@ -102,14 +106,16 @@ class Correspondence(WorkspaceStructure):
 
     def support(self):
         from letter import Letter
+
         if isinstance(self.objectFromInitial, Letter):
             if self.objectFromInitial.spansString():
                 return 100.0
         if isinstance(self.objectFromTarget, Letter):
             if self.objectFromTarget.spansString():
                 return 100.0
-        total = sum(c.totalStrength for c in workspace.correspondences()
-                    if self.supporting(c))
+        total = sum(
+            c.totalStrength for c in workspace.correspondences() if self.supporting(c)
+        )
         total = min(total, 100.0)
         return total
 
@@ -134,8 +140,9 @@ class Correspondence(WorkspaceStructure):
             internalCoherenceFactor = 2.5
         else:
             internalCoherenceFactor = 1.0
-        internalStrength = (averageStrength * internalCoherenceFactor *
-                            numberOfConceptMappingsFactor)
+        internalStrength = (
+            averageStrength * internalCoherenceFactor * numberOfConceptMappingsFactor
+        )
         self.internalStrength = min(internalStrength, 100.0)
 
     def updateExternalStrength(self):
@@ -178,19 +185,19 @@ class Correspondence(WorkspaceStructure):
             if mapping.slippage():
                 self.accessoryConceptMappings += [mapping.symmetricVersion()]
         from group import Group
+
         if isinstance(self.objectFromInitial, Group):
             if isinstance(self.objectFromTarget, Group):
                 bondMappings = getMappings(
                     self.objectFromInitial,
                     self.objectFromTarget,
                     self.objectFromInitial.bondDescriptions,
-                    self.objectFromTarget.bondDescriptions
+                    self.objectFromTarget.bondDescriptions,
                 )
                 for mapping in bondMappings:
                     self.accessoryConceptMappings += [mapping]
                     if mapping.slippage():
-                        self.accessoryConceptMappings += [
-                            mapping.symmetricVersion()]
+                        self.accessoryConceptMappings += [mapping.symmetricVersion()]
         for mapping in self.conceptMappings:
             if mapping.label:
                 mapping.label.activation = 100.0

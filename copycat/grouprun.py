@@ -3,7 +3,7 @@ from workspace import workspace
 
 class GroupRun(object):
     def __init__(self):
-        self.name = 'xxx'
+        self.name = "xxx"
         self.maximumNumberOfRuns = 1000
         self.runStrings = []
         self.answers = []
@@ -11,5 +11,6 @@ class GroupRun(object):
         self.initial = workspace.initial
         self.modified = workspace.modified
         self.target = workspace.target
+
 
 groupRun = GroupRun()

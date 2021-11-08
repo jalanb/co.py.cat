@@ -9,8 +9,9 @@ import formulas
 
 class Group(WorkspaceObject):
     # pylint: disable=too-many-instance-attributes
-    def __init__(self, string, groupCategory, directionCategory, facet,
-                 objectList, bondList):
+    def __init__(
+        self, string, groupCategory, directionCategory, facet, objectList, bondList
+    ):
         # pylint: disable=too-many-arguments
         WorkspaceObject.__init__(self, string)
         self.groupCategory = groupCategory
@@ -18,8 +19,7 @@ class Group(WorkspaceObject):
         self.facet = facet
         self.objectList = objectList
         self.bondList = bondList
-        self.bondCategory = self.groupCategory.getRelatedNode(
-            slipnet.bondCategory)
+        self.bondCategory = self.groupCategory.getRelatedNode(slipnet.bondCategory)
 
         leftObject = objectList[0]
         rightObject = objectList[-1]
@@ -40,15 +40,16 @@ class Group(WorkspaceObject):
         self.changed = False
         self.newAnswerLetter = False
         self.clampSalience = False
-        self.name = ''
+        self.name = ""
 
         from description import Description
+
         if self.bondList and len(self.bondList):
             firstFacet = self.bondList[0].facet
-            self.addBondDescription(
-                Description(self, slipnet.bondFacet, firstFacet))
+            self.addBondDescription(Description(self, slipnet.bondFacet, firstFacet))
         self.addBondDescription(
-            Description(self, slipnet.bondCategory, self.bondCategory))
+            Description(self, slipnet.bondCategory, self.bondCategory)
+        )
 
         self.addDescription(slipnet.objectCategory, slipnet.group)
         self.addDescription(slipnet.groupCategory, self.groupCategory)
@@ -57,19 +58,15 @@ class Group(WorkspaceObject):
             letter = self.objectList[0].getDescriptor(self.facet)
             self.addDescription(self.facet, letter)
         if self.directionCategory:
-            self.addDescription(slipnet.directionCategory,
-                                self.directionCategory)
+            self.addDescription(slipnet.directionCategory, self.directionCategory)
         if self.spansString():
             self.addDescription(slipnet.stringPositionCategory, slipnet.whole)
         elif self.leftIndex == 1:
-            self.addDescription(
-                slipnet.stringPositionCategory, slipnet.leftmost)
+            self.addDescription(slipnet.stringPositionCategory, slipnet.leftmost)
         elif self.rightIndex == self.string.length:
-            self.addDescription(
-                slipnet.stringPositionCategory, slipnet.rightmost)
+            self.addDescription(slipnet.stringPositionCategory, slipnet.rightmost)
         elif self.middleObject():
-            self.addDescription(
-                slipnet.stringPositionCategory, slipnet.middle)
+            self.addDescription(slipnet.stringPositionCategory, slipnet.middle)
         self.add_length_description_category()
 
     def add_length_description_category(self):
@@ -78,14 +75,13 @@ class Group(WorkspaceObject):
         if random.random() < probability:
             length = len(self.objectList)
             if length < 6:
-                self.addDescription(slipnet.length,
-                                    slipnet.numbers[length - 1])
+                self.addDescription(slipnet.length, slipnet.numbers[length - 1])
 
     def __str__(self):
         s = self.string.__str__()
         l = self.leftIndex - 1
         r = self.rightIndex
-        return 'group[%d:%d] == %s' % (l, r - 1, s[l:r])
+        return "group[%d:%d] == %s" % (l, r - 1, s[l:r])
 
     def getIncompatibleGroups(self):
         result = []
@@ -116,10 +112,15 @@ class Group(WorkspaceObject):
     def flippedVersion(self):
         flippedBonds = [b.flippedversion() for b in self.bondList]
         flippedGroup = self.groupCategory.getRelatedNode(slipnet.flipped)
-        flippedDirection = self.directionCategory.getRelatedNode(
-            slipnet.flipped)
-        return Group(self.string, flippedGroup, flippedDirection,
-                     self.facet, self.objectList, flippedBonds)
+        flippedDirection = self.directionCategory.getRelatedNode(slipnet.flipped)
+        return Group(
+            self.string,
+            flippedGroup,
+            flippedDirection,
+            self.facet,
+            self.objectList,
+            flippedBonds,
+        )
 
     def buildGroup(self):
         workspace.objects += [self]
@@ -132,7 +133,7 @@ class Group(WorkspaceObject):
 
     def activateDescriptions(self):
         for description in self.descriptions:
-            logging.info('Activate: %s', description)
+            logging.info("Activate: %s", description)
             description.descriptor.buffer = 100.0
 
     def lengthDescriptionProbability(self):
@@ -173,7 +174,8 @@ class Group(WorkspaceObject):
 
     def updateInternalStrength(self):
         relatedBondAssociation = self.groupCategory.getRelatedNode(
-            slipnet.bondCategory).degreeOfAssociation()
+            slipnet.bondCategory
+        ).degreeOfAssociation()
         bondWeight = relatedBondAssociation ** 0.98
         length = len(self.objectList)
         if length == 1:
@@ -185,8 +187,10 @@ class Group(WorkspaceObject):
         else:
             lengthFactor = 90.0
         lengthWeight = 100.0 - bondWeight
-        weightList = ((relatedBondAssociation, bondWeight),
-                      (lengthFactor, lengthWeight))
+        weightList = (
+            (relatedBondAssociation, bondWeight),
+            (lengthFactor, lengthWeight),
+        )
         self.internalStrength = formulas.weightedAverage(weightList)
 
     def updateExternalStrength(self):
@@ -207,10 +211,12 @@ class Group(WorkspaceObject):
         count = 0
         for objekt in self.string.objects:
             if isinstance(objekt, Group):
-                if (objekt.rightIndex < self.leftIndex or
-                        objekt.leftIndex > self.rightIndex and
-                        objekt.groupCategory == self.groupCategory and
-                        objekt.directionCategory == self.directionCategory):
+                if (
+                    objekt.rightIndex < self.leftIndex
+                    or objekt.leftIndex > self.rightIndex
+                    and objekt.groupCategory == self.groupCategory
+                    and objekt.directionCategory == self.directionCategory
+                ):
                     count += 1
         return count
 

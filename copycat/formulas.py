@@ -9,10 +9,10 @@ actualTemperature = Temperature = 100.0
 
 def selectListPosition(probabilities):
     total = sum(probabilities)
-    logging.info('total: %s', total)
+    logging.info("total: %s", total)
     r = random.random()
     stopPosition = total * r
-    logging.info('stopPosition: %s', stopPosition)
+    logging.info("stopPosition: %s", stopPosition)
     total = 0
     i = 0
     for probability in probabilities:
@@ -35,8 +35,8 @@ def weightedAverage(values):
 
 
 def temperatureAdjustedValue(value):
-    logging.info('Temperature: %s', Temperature)
-    logging.info('actualTemperature: %s', actualTemperature)
+    logging.info("Temperature: %s", Temperature)
+    logging.info("actualTemperature: %s", actualTemperature)
     return value ** (((100.0 - Temperature) / 30.0) + 0.5)
 
 
@@ -73,11 +73,12 @@ def chooseObjectFromList(objects, attribute):
     for objekt in objects:
         value = getattr(objekt, attribute)
         probability = temperatureAdjustedValue(value)
-        logging.info('Object: %s, value: %d, probability: %d',
-                     objekt, value, probability)
+        logging.info(
+            "Object: %s, value: %d, probability: %d", objekt, value, probability
+        )
         probabilities += [probability]
     i = selectListPosition(probabilities)
-    logging.info('Selected: %d', i)
+    logging.info("Selected: %d", i)
     return objects[i]
 
 
@@ -85,8 +86,7 @@ def chooseRelevantDescriptionByActivation(workspaceObject):
     descriptions = workspaceObject.relevantDescriptions()
     if not descriptions:
         return None
-    activations = [description.descriptor.activation
-                   for description in descriptions]
+    activations = [description.descriptor.activation for description in descriptions]
     i = selectListPosition(activations)
     return descriptions[i]
 
@@ -122,7 +122,7 @@ def __localRelevance(string, slipnode, relevance):
     logging.info("find relevance for a string: %s", string)
     for objekt in string.objects:
         if not objekt.spansString():
-            logging.info('non spanner: %s', objekt)
+            logging.info("non spanner: %s", objekt)
             numberOfObjectsNotSpanning += 1.0
             if relevance(objekt, slipnode):
                 numberOfMatches += 1.0
@@ -141,22 +141,26 @@ def localDirectionCategoryRelevance(string, direction):
     return __localRelevance(string, direction, __relevantDirection)
 
 
-def getMappings(objectFromInitial, objectFromTarget,
-                initialDescriptions, targetDescriptions):
+def getMappings(
+    objectFromInitial, objectFromTarget, initialDescriptions, targetDescriptions
+):
     mappings = []
     from conceptMapping import ConceptMapping
+
     for initial in initialDescriptions:
         for target in targetDescriptions:
             if initial.descriptionType == target.descriptionType:
-                if (initial.descriptor == target.descriptor or
-                        initial.descriptor.slipLinked(target.descriptor)):
+                if (
+                    initial.descriptor == target.descriptor
+                    or initial.descriptor.slipLinked(target.descriptor)
+                ):
                     mapping = ConceptMapping(
                         initial.descriptionType,
                         target.descriptionType,
                         initial.descriptor,
                         target.descriptor,
                         objectFromInitial,
-                        objectFromTarget
+                        objectFromTarget,
                     )
                     mappings += [mapping]
     return mappings

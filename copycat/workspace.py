@@ -2,7 +2,7 @@ import logging
 
 from workspaceString import WorkspaceString
 
-unknownAnswer = '?'
+unknownAnswer = "?"
 
 
 def __adjustUnhappiness(values):
@@ -14,15 +14,18 @@ def __adjustUnhappiness(values):
 
 class Workspace(object):
     def __init__(self):
-        self.setStrings('', '', '')
+        self.setStrings("", "", "")
         self.reset()
         self.totalUnhappiness = 0.0
         self.intraStringUnhappiness = 0.0
         self.interStringUnhappiness = 0.0
 
     def __repr__(self):
-        return '<Workspace trying %s:%s::%s:?>' % (
-            self.initialString, self.modifiedString, self.targetString)
+        return "<Workspace trying %s:%s::%s:?>" % (
+            self.initialString,
+            self.modifiedString,
+            self.targetString,
+        )
 
     def setStrings(self, initial, modified, target):
         self.targetString = target
@@ -40,14 +43,15 @@ class Workspace(object):
         self.target = WorkspaceString(self.targetString)
 
     def assessUnhappiness(self):
-        self.intraStringUnhappiness = __adjustUnhappiness([
-            o.relativeImportance * o.intraStringUnhappiness
-            for o in self.objects])
-        self.interStringUnhappiness = __adjustUnhappiness([
-            o.relativeImportance * o.interStringUnhappiness
-            for o in self.objects])
-        self.totalUnhappiness = __adjustUnhappiness([
-            o.relativeImportance * o.totalUnhappiness for o in self.objects])
+        self.intraStringUnhappiness = __adjustUnhappiness(
+            [o.relativeImportance * o.intraStringUnhappiness for o in self.objects]
+        )
+        self.interStringUnhappiness = __adjustUnhappiness(
+            [o.relativeImportance * o.interStringUnhappiness for o in self.objects]
+        )
+        self.totalUnhappiness = __adjustUnhappiness(
+            [o.relativeImportance * o.totalUnhappiness for o in self.objects]
+        )
 
     def assessTemperature(self):
         self.calculateIntraStringUnhappiness()
@@ -55,23 +59,24 @@ class Workspace(object):
         self.calculateTotalUnhappiness()
 
     def calculateIntraStringUnhappiness(self):
-        values = [o.relativeImportance * o.intraStringUnhappiness
-                  for o in self.objects]
+        values = [o.relativeImportance * o.intraStringUnhappiness for o in self.objects]
         value = sum(values) / 2.0
         self.intraStringUnhappiness = min(value, 100.0)
 
     def calculateInterStringUnhappiness(self):
-        values = [o.relativeImportance * o.interStringUnhappiness
-                  for o in self.objects]
+        values = [o.relativeImportance * o.interStringUnhappiness for o in self.objects]
         value = sum(values) / 2.0
         self.interStringUnhappiness = min(value, 100.0)
 
     def calculateTotalUnhappiness(self):
         for o in self.objects:
-            logging.info("%s, totalUnhappiness: %d, relativeImportance: %d",
-                         o, o.totalUnhappiness, o.relativeImportance * 1000)
-        values = [o.relativeImportance * o.totalUnhappiness
-                  for o in self.objects]
+            logging.info(
+                "%s, totalUnhappiness: %d, relativeImportance: %d",
+                o,
+                o.totalUnhappiness,
+                o.relativeImportance * 1000,
+            )
+        values = [o.relativeImportance * o.totalUnhappiness for o in self.objects]
         value = sum(values) / 2.0
         self.totalUnhappiness = min(value, 100.0)
 
@@ -90,18 +95,27 @@ class Workspace(object):
 
     def numberOfUnrelatedObjects(self):
         """A list of all objects in the workspace with >= 1 open bond slots"""
-        objects = [o for o in self.objects
-                   if o.string == self.initial or o.string == self.target]
+        objects = [
+            o
+            for o in self.objects
+            if o.string == self.initial or o.string == self.target
+        ]
         objects = [o for o in objects if not o.spansString()]
-        objects = [o for o in objects
-                   if (not o.leftBond and not o.leftmost) or
-                   (not o.rightBond and not o.rightmost)]
+        objects = [
+            o
+            for o in objects
+            if (not o.leftBond and not o.leftmost)
+            or (not o.rightBond and not o.rightmost)
+        ]
         return len(objects)
 
     def numberOfUngroupedObjects(self):
         """A list of all objects in the workspace that have no group."""
-        objects = [o for o in self.objects if
-                   o.string == self.initial or o.string == self.target]
+        objects = [
+            o
+            for o in self.objects
+            if o.string == self.initial or o.string == self.target
+        ]
         objects = [o for o in objects if not o.spansString()]
         objects = [o for o in objects if not o.group]
         return len(objects)
@@ -110,15 +124,21 @@ class Workspace(object):
         """A list of all unreplaced objects in the inital string"""
         from letter import Letter
 
-        objects = [o for o in self.objects
-                   if o.string == self.initial and isinstance(o, Letter)]
+        objects = [
+            o
+            for o in self.objects
+            if o.string == self.initial and isinstance(o, Letter)
+        ]
         objects = [o for o in objects if not o.replacement]
         return len(objects)
 
     def numberOfUncorrespondingObjects(self):
         """A list of all uncorresponded objects in the inital string"""
-        objects = [o for o in self.objects
-                   if o.string == self.initial or o.string == self.target]
+        objects = [
+            o
+            for o in self.objects
+            if o.string == self.initial or o.string == self.target
+        ]
         objects = [o for o in objects if not o.correspondence]
         return len(objects)
 
@@ -136,8 +156,7 @@ class Workspace(object):
     def slippages(self):
         result = []
         if self.changedObject and self.changedObject.correspondence:
-            result = [m for m in
-                      self.changedObject.correspondence.conceptMappings]
+            result = [m for m in self.changedObject.correspondence.conceptMappings]
         for objekt in workspace.initial.objects:
             if objekt.correspondence:
                 for mapping in objekt.correspondence.slippages():

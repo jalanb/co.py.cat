@@ -11,26 +11,29 @@ class Description(WorkspaceStructure):
         self.descriptor = descriptor
 
     def __repr__(self):
-        return '<Description: %s>' % self.__str__()
+        return "<Description: %s>" % self.__str__()
 
     def __str__(self):
-        s = 'description(%s) of %s' % (self.descriptor.get_name(), self.object)
+        s = "description(%s) of %s" % (self.descriptor.get_name(), self.object)
         from workspace import workspace
+
         if self.object.string == workspace.initial:
-            s += ' in initial string'
+            s += " in initial string"
         else:
-            s += ' in target string'
+            s += " in target string"
         return s
 
     def updateInternalStrength(self):
         self.internalStrength = self.descriptor.conceptualDepth
 
     def updateExternalStrength(self):
-        self.externalStrength = (self.localSupport() +
-                                 self.descriptionType.activation) / 2
+        self.externalStrength = (
+            self.localSupport() + self.descriptionType.activation
+        ) / 2
 
     def localSupport(self):
         from workspace import workspace
+
         described_like_self = 0
         for other in workspace.otherObjects(self.object):
             if self.object.isWithin(other) or other.isWithin(self.object):
@@ -47,11 +50,12 @@ class Description(WorkspaceStructure):
         self.descriptionType.buffer = 100.0
         self.descriptor.buffer = 100.0
         if not self.object.described(self.descriptor):
-            logging.info('Add %s to descriptions', self)
+            logging.info("Add %s to descriptions", self)
             self.object.descriptions += [self]
 
     def breakDescription(self):
         from workspace import workspace
+
         if self in workspace.structures:
             workspace.structures.remove(self)
         self.object.descriptions.remove(self)

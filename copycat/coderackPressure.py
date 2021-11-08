@@ -15,34 +15,34 @@ class CoderackPressure(object):
 
 def _codelet_index(codelet):
     name_indices = {
-        'bottom-up-bond-scout': 0,
-        'top-down-bond-scout--category': {
+        "bottom-up-bond-scout": 0,
+        "top-down-bond-scout--category": {
             slipnet.successor: 1,
             slipnet.predecessor: 2,
-            None: 3
+            None: 3,
         },
-        'top-down-bond-scout--direction': {
+        "top-down-bond-scout--direction": {
             slipnet.left: 4,
             slipnet.right: 5,
             None: 3,
         },
-        'top-down-group-scout--category': {
+        "top-down-group-scout--category": {
             slipnet.successorGroup: 6,
             slipnet.predecessorGroup: 7,
             None: 8,
         },
-        'top-down-group-scout--direction': {
+        "top-down-group-scout--direction": {
             slipnet.left: 9,
             slipnet.right: 10,
             None: -1,
         },
-        'group-scout--whole-string': 11,
-        'replacement-finder': 12,
-        'rule-scout': 13,
-        'rule-translator': 14,
-        'bottom-up-correspondence-scout': 15,
-        'important-object-correspondence-scout': 16,
-        'breaker': 17,
+        "group-scout--whole-string": 11,
+        "replacement-finder": 12,
+        "rule-scout": 13,
+        "rule-translator": 14,
+        "bottom-up-correspondence-scout": 15,
+        "important-object-correspondence-scout": 16,
+        "breaker": 17,
     }
     i = name_indices.get(codelet.name, -1)
     try:
@@ -62,25 +62,24 @@ class CoderackPressures(object):
 
     def initialisePressures(self):
         self.pressures = []
-        self.pressures += [CoderackPressure('Bottom Up Bonds')]
-        self.pressures += [CoderackPressure('Top Down Successor Bonds')]
-        self.pressures += [CoderackPressure('Top Down Predecessor Bonds')]
-        self.pressures += [CoderackPressure('Top Down Sameness Bonds')]
-        self.pressures += [CoderackPressure('Top Down Left Bonds')]
-        self.pressures += [CoderackPressure('Top Down Right Bonds')]
-        self.pressures += [CoderackPressure('Top Down Successor Group')]
-        self.pressures += [CoderackPressure('Top Down Predecessor Group')]
-        self.pressures += [CoderackPressure('Top Down Sameness Group')]
-        self.pressures += [CoderackPressure('Top Down Left Group')]
-        self.pressures += [CoderackPressure('Top Down Right Group')]
-        self.pressures += [CoderackPressure('Bottom Up Whole Group')]
-        self.pressures += [CoderackPressure('Replacement Finder')]
-        self.pressures += [CoderackPressure('Rule Codelets')]
-        self.pressures += [CoderackPressure('Rule Translator')]
-        self.pressures += [CoderackPressure('Bottom Up Correspondences')]
-        self.pressures += [CoderackPressure(
-            'Important Object Correspondences')]
-        self.pressures += [CoderackPressure('Breakers')]
+        self.pressures += [CoderackPressure("Bottom Up Bonds")]
+        self.pressures += [CoderackPressure("Top Down Successor Bonds")]
+        self.pressures += [CoderackPressure("Top Down Predecessor Bonds")]
+        self.pressures += [CoderackPressure("Top Down Sameness Bonds")]
+        self.pressures += [CoderackPressure("Top Down Left Bonds")]
+        self.pressures += [CoderackPressure("Top Down Right Bonds")]
+        self.pressures += [CoderackPressure("Top Down Successor Group")]
+        self.pressures += [CoderackPressure("Top Down Predecessor Group")]
+        self.pressures += [CoderackPressure("Top Down Sameness Group")]
+        self.pressures += [CoderackPressure("Top Down Left Group")]
+        self.pressures += [CoderackPressure("Top Down Right Group")]
+        self.pressures += [CoderackPressure("Bottom Up Whole Group")]
+        self.pressures += [CoderackPressure("Replacement Finder")]
+        self.pressures += [CoderackPressure("Rule Codelets")]
+        self.pressures += [CoderackPressure("Rule Translator")]
+        self.pressures += [CoderackPressure("Bottom Up Correspondences")]
+        self.pressures += [CoderackPressure("Important Object Correspondences")]
+        self.pressures += [CoderackPressure("Breakers")]
 
     def calculatePressures(self):
         scale = (100.0 - Temperature + 10.0) / 15.0
@@ -115,14 +114,15 @@ class CoderackPressures(object):
             codelet.pressure.codelets += [codelet]
         if i >= 0:
             codelet.pressure = self.pressures[i]
-        logging.info('Add %s: %d', codelet.name, i)
+        logging.info("Add %s: %d", codelet.name, i)
         if node:
-            logging.info('Node: %s', node.name)
+            logging.info("Node: %s", node.name)
 
     def removeCodelet(self, codelet):
         self.removedCodelets += [codelet]
 
     def numberOfPressures(self):
         return len(self.pressures)
+
 
 coderackPressures = CoderackPressures()

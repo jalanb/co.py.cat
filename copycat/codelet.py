@@ -7,4 +7,4 @@ class Codelet(object):
         self.timeStamp = timestamp
 
     def __repr__(self):
-        return '<Codelet: %s>' % self.name
+        return "<Codelet: %s>" % self.name

@@ -11,7 +11,7 @@ class WorkspaceFormulas(object):
         self.clampTemperature = False
 
     def updateTemperature(self):
-        logging.debug('updateTemperature')
+        logging.debug("updateTemperature")
         workspace.assessTemperature()
         ruleWeakness = 100.0
         if workspace.rule:
@@ -19,19 +19,22 @@ class WorkspaceFormulas(object):
             ruleWeakness = 100.0 - workspace.rule.totalStrength
         values = ((workspace.totalUnhappiness, 0.8), (ruleWeakness, 0.2))
         above_actual_temperature = formulas.actualTemperature + 0.001
-        logging.info('actualTemperature: %f', above_actual_temperature)
+        logging.info("actualTemperature: %f", above_actual_temperature)
         formulas.actualTemperature = formulas.weightedAverage(values)
-        logging.info('unhappiness: %f, weakness: %f, actualTemperature: %f',
-                     workspace.totalUnhappiness + 0.001, ruleWeakness + 0.001,
-                     formulas.actualTemperature + 0.001)
+        logging.info(
+            "unhappiness: %f, weakness: %f, actualTemperature: %f",
+            workspace.totalUnhappiness + 0.001,
+            ruleWeakness + 0.001,
+            formulas.actualTemperature + 0.001,
+        )
         if temperature.clamped:
             formulas.actualTemperature = 100.0
-        logging.info('actualTemperature: %f',
-                     formulas.actualTemperature + 0.001)
+        logging.info("actualTemperature: %f", formulas.actualTemperature + 0.001)
         temperature.update(formulas.actualTemperature)
         if not self.clampTemperature:
             formulas.Temperature = formulas.actualTemperature
         temperature.update(formulas.Temperature)
+
 
 workspaceFormulas = WorkspaceFormulas()
 
@@ -43,7 +46,7 @@ def numberOfObjects():
 def chooseUnmodifiedObject(attribute, inObjects):
     objects = [o for o in inObjects if o.string != workspace.modified]
     if not len(objects):
-        logging.error('no objects available in initial or target strings')
+        logging.error("no objects available in initial or target strings")
     return formulas.chooseObjectFromList(objects, attribute)
 
 
@@ -61,9 +64,9 @@ def chooseNeighbour(source):
 
 def chooseDirectedNeighbor(source, direction):
     if direction == slipnet.left:
-        logging.info('Left')
+        logging.info("Left")
         return __chooseLeftNeighbor(source)
-    logging.info('Right')
+    logging.info("Right")
     return __chooseRightNeighbor(source)
 
 
@@ -72,30 +75,37 @@ def __chooseLeftNeighbor(source):
     for o in workspace.objects:
         if o.string == source.string:
             if source.leftIndex == o.rightIndex + 1:
-                logging.info('%s is on left of %s', o, source)
+                logging.info("%s is on left of %s", o, source)
                 objects += [o]
             else:
-                logging.info('%s is not on left of %s', o, source)
-    logging.info('Number of left objects: %s', len(objects))
-    return formulas.chooseObjectFromList(objects, 'intraStringSalience')
+                logging.info("%s is not on left of %s", o, source)
+    logging.info("Number of left objects: %s", len(objects))
+    return formulas.chooseObjectFromList(objects, "intraStringSalience")
 
 
 def __chooseRightNeighbor(source):
-    objects = [o for o in workspace.objects
-               if o.string == source.string and
-               o.leftIndex == source.rightIndex + 1]
-    return formulas.chooseObjectFromList(objects, 'intraStringSalience')
+    objects = [
+        o
+        for o in workspace.objects
+        if o.string == source.string and o.leftIndex == source.rightIndex + 1
+    ]
+    return formulas.chooseObjectFromList(objects, "intraStringSalience")
 
 
 def chooseBondFacet(source, destination):
-    sourceFacets = [d.descriptionType for d in source.descriptions
-                    if d.descriptionType in slipnet.bondFacets]
-    bondFacets = [d.descriptionType for d in destination.descriptions
-                  if d.descriptionType in sourceFacets]
+    sourceFacets = [
+        d.descriptionType
+        for d in source.descriptions
+        if d.descriptionType in slipnet.bondFacets
+    ]
+    bondFacets = [
+        d.descriptionType
+        for d in destination.descriptions
+        if d.descriptionType in sourceFacets
+    ]
     if not bondFacets:
         return None
-    supports = [__supportForDescriptionType(f, source.string)
-                for f in bondFacets]
+    supports = [__supportForDescriptionType(f, source.string) for f in bondFacets]
     i = formulas.selectListPosition(supports)
     return bondFacets[i]
 
@@ -118,23 +128,23 @@ def __descriptionTypeSupport(descriptionType, string):
 
 
 def probabilityOfPosting(codeletName):
-    if codeletName == 'breaker':
+    if codeletName == "breaker":
         return 1.0
-    if 'description' in codeletName:
+    if "description" in codeletName:
         result = (formulas.Temperature / 100.0) ** 2
     else:
         result = workspace.intraStringUnhappiness / 100.0
-    if 'correspondence' in codeletName:
+    if "correspondence" in codeletName:
         result = workspace.interStringUnhappiness / 100.0
-    if 'replacement' in codeletName:
+    if "replacement" in codeletName:
         if workspace.numberOfUnreplacedObjects() > 0:
             return 1.0
         return 0.0
-    if 'rule' in codeletName:
+    if "rule" in codeletName:
         if not workspace.rule:
             return 1.0
         return workspace.rule.totalWeakness() / 100.0
-    if 'translator' in codeletName:
+    if "translator" in codeletName:
         if not workspace.rule:
             assert 0
             return 0.0
@@ -144,26 +154,26 @@ def probabilityOfPosting(codeletName):
 
 
 def howManyToPost(codeletName):
-    if codeletName == 'breaker' or 'description' in codeletName:
+    if codeletName == "breaker" or "description" in codeletName:
         return 1
-    if 'translator' in codeletName:
+    if "translator" in codeletName:
         if not workspace.rule:
             return 0
         return 1
-    if 'rule' in codeletName:
+    if "rule" in codeletName:
         return 2
-    if 'group' in codeletName and not workspace.numberOfBonds():
+    if "group" in codeletName and not workspace.numberOfBonds():
         return 0
-    if 'replacement' in codeletName and workspace.rule:
+    if "replacement" in codeletName and workspace.rule:
         return 0
     number = 0
-    if 'bond' in codeletName:
+    if "bond" in codeletName:
         number = workspace.numberOfUnrelatedObjects()
-    if 'group' in codeletName:
+    if "group" in codeletName:
         number = workspace.numberOfUngroupedObjects()
-    if 'replacement' in codeletName:
+    if "replacement" in codeletName:
         number = workspace.numberOfUnreplacedObjects()
-    if 'correspondence' in codeletName:
+    if "correspondence" in codeletName:
         number = workspace.numberOfUncorrespondingObjects()
     if number < formulas.blur(2.0):
         return 1
