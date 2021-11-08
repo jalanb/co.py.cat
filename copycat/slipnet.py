@@ -17,7 +17,6 @@ def distinguishing_descriptor(descriptor):
 
 
 class SlipNet:
-    # pylint: disable=too-many-instance-attributes
     def __init__(self):
         logging.debug("SlipNet.__init__()")
         self.initially_clamped_slipnodes = []
@@ -60,7 +59,6 @@ class SlipNet:
         _ = [_update(node) for node in self.slipnodes]
 
     def __add_initial_nodes(self):
-        # pylint: disable=too-many-statements
         self.slipnodes = []
         self.letters = [self.__add_node(c, 10.0) for c in "abcdefghijklmnopqrstuvwxyz"]
         self.numbers = [self.__add_node(c, 30.0) for c in "12345"]

@@ -123,7 +123,6 @@ class CodeRack:
         new_codelet.pressure = old_codelet.pressure
         self.try_run(new_codelet)
 
-    # pylint: disable=too-many-arguments
     def propose_rule(self, facet, description, category, relation, old_codelet):
         """Creates a proposed rule, and posts a rule-strength-tester codelet.
 

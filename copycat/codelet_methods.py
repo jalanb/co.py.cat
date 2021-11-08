@@ -467,8 +467,6 @@ def bond_builder(codelet):
     bond.build_bond()
 
 
-# pylint: disable=too-many-branches
-# pylint: disable=too-many-statements
 def top_down_group_scout__category(codelet):
     group_category = codelet.arguments[0]
     category = group_category.get_related_node(slipnet.bond_category)

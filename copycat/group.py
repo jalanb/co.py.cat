@@ -8,11 +8,9 @@ from .workspace_object import WorkspaceObject
 
 
 class Group(WorkspaceObject):
-    # pylint: disable=too-many-instance-attributes
     def __init__(
         self, string, group_category, direction_category, facet, object_list, bond_list
     ):
-        # pylint: disable=too-many-arguments
         WorkspaceObject.__init__(self, string)
         self.group_category = group_category
         self.direction_category = direction_category

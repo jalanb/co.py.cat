@@ -7,7 +7,6 @@ from .workspace_structure import WorkspaceStructure
 
 
 class WorkspaceObject(WorkspaceStructure):
-    # pylint: disable=too-many-instance-attributes
     def __init__(self, workspace_string):
         WorkspaceStructure.__init__(self)
         self.string = workspace_string

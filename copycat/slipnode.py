@@ -17,7 +17,6 @@ def points_at(links, other):
 
 
 class Slipnode:
-    # pylint: disable=too-many-instance-attributes
     def __init__(self, name, depth, length=0.0):
         self.conceptual_depth = depth
         self.usual_conceptual_depth = depth

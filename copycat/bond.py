@@ -4,7 +4,6 @@ from .workspace_structure import WorkspaceStructure
 
 
 class Bond(WorkspaceStructure):
-    # pylint: disable=too-many-arguments
     def __init__(
         self,
         source,
