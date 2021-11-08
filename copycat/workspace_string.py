@@ -22,6 +22,7 @@ class WorkspaceString:
         position = 0
 
         from .workspace import workspace
+
         for char in self.string.upper():
             value = ord(char) - ord("A")
             letter = Letter(self, position + 1, self.length)
