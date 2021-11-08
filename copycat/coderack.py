@@ -13,8 +13,6 @@ from coderackPressure import CoderackPressures
 NUMBER_OF_BINS = 7
 MAX_NUMBER_OF_CODELETS = 100
 
-codeletsUsed = {}
-
 
 def getUrgencyBin(urgency):
     i = int(urgency) * NUMBER_OF_BINS / 100
