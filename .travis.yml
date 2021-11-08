@@ -3,7 +3,14 @@ python:
   - "3.7"
   - "3.8"
   - "3.9"
+install: pip install tox codecov
 script: tox
+after_success:
+  - codecov
 notifications:
   email: false
+  slack:
+    secure: GKcWdCLYXXXJAQZqFhMk1LN+FZFSu4jpQ/zSqaRAsgVnpeoodzBvKGMBEu+KYjUwWtV3H8c+2h49kDYGATShdZwdD6CgBGoO6UPzI8bBi/55LegjNXorwmnWT3rHudgo/RWJxw++kh5oSGlpD5TjUZkruuV6lwSu5FjG6vAw6AA=
+  on_success: change
+  on_failure: always
 
