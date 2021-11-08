@@ -4,11 +4,11 @@ import math
 import logging
 import random
 
-import formulas
-import workspaceFormulas
-from slipnet import slipnet
-from codelet import Codelet
-from coderackPressure import CoderackPressures
+from . import formulas
+from . import workspaceFormulas
+from .slipnet import slipnet
+from .codelet import Codelet
+from .coderackPressure import CoderackPressures
 
 NUMBER_OF_BINS = 7
 MAX_NUMBER_OF_CODELETS = 100
@@ -39,7 +39,7 @@ class CodeRack(object):
         self.postings = {}
 
     def reset(self):
-        from temperature import temperature
+        from .temperature import temperature
 
         self.codelets = []
         self.codeletsRun = 0
@@ -132,7 +132,7 @@ class CodeRack(object):
         The new codelet has urgency a function of
             the degree of conceptual-depth of the descriptions in the rule
         """
-        from rule import Rule
+        from .rule import Rule
 
         rule = Rule(facet, description, category, relation)
         rule.updateStrength()
@@ -147,7 +147,7 @@ class CodeRack(object):
     def proposeCorrespondence(
         self, initialObject, targetObject, conceptMappings, flipTargetObject, oldCodelet
     ):
-        from correspondence import Correspondence
+        from .correspondence import Correspondence
 
         correspondence = Correspondence(
             initialObject, targetObject, conceptMappings, flipTargetObject
@@ -171,7 +171,7 @@ class CodeRack(object):
         )
 
     def proposeDescription(self, objekt, type_, descriptor, oldCodelet):
-        from description import Description
+        from .description import Description
 
         description = Description(objekt, type_, descriptor)
         descriptor.buffer = 100.0
@@ -186,7 +186,7 @@ class CodeRack(object):
     def proposeGroup(
         self, objects, bondList, groupCategory, directionCategory, bondFacet, oldCodelet
     ):
-        from group import Group
+        from .group import Group
 
         bondCategory = groupCategory.getRelatedNode(slipnet.bondCategory)
         bondCategory.buffer = 100.0
@@ -213,7 +213,7 @@ class CodeRack(object):
         destinationDescriptor,
         oldCodelet,
     ):
-        from bond import Bond
+        from .bond import Bond
 
         bondFacet.buffer = 100.0
         sourceDescriptor.buffer = 100.0
@@ -263,7 +263,7 @@ class CodeRack(object):
             self.post(newCodelet)
 
     def getCodeletmethods(self):
-        import codeletMethods
+        from . import codeletMethods
 
         self.codeletMethodsDir = dir(codeletMethods)
         knownCodeletNames = (
@@ -336,7 +336,7 @@ class CodeRack(object):
         logging.info("Coderack:")
         for codelet in self.codelets:
             logging.info("\t%s, %d", codelet.name, codelet.urgency)
-        from workspace import workspace
+        from .workspace import workspace
 
         workspace.initial.log("Initial: ")
         workspace.target.log("Target: ")

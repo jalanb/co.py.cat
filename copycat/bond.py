@@ -1,6 +1,6 @@
-from workspaceStructure import WorkspaceStructure
-from slipnet import slipnet
-from workspace import workspace
+from .workspaceStructure import WorkspaceStructure
+from .slipnet import slipnet
+from .workspace import workspace
 
 
 class Bond(WorkspaceStructure):

@@ -1,9 +1,9 @@
 import logging
 
-from workspace import workspace
-from temperature import temperature
-from slipnet import slipnet
-import formulas
+from .workspace import workspace
+from .temperature import temperature
+from .slipnet import slipnet
+from . import formulas
 
 
 class WorkspaceFormulas(object):

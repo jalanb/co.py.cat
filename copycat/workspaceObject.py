@@ -1,8 +1,8 @@
 import logging
 
-from description import Description
-from slipnet import slipnet, distinguishingDescriptor
-from workspaceStructure import WorkspaceStructure
+from .description import Description
+from .slipnet import slipnet, distinguishingDescriptor
+from .workspaceStructure import WorkspaceStructure
 
 
 class WorkspaceObject(WorkspaceStructure):
@@ -56,7 +56,7 @@ class WorkspaceObject(WorkspaceStructure):
                 self.addDescription(description.descriptionType, description.descriptor)
             else:
                 logging.info("Won't add it")
-        from workspace import workspace
+        from .workspace import workspace
 
         workspace.buildDescriptions(self)
 
@@ -106,7 +106,7 @@ class WorkspaceObject(WorkspaceStructure):
             self.intraStringSalience = 100.0
             self.interStringSalience = 100.0
         else:
-            from formulas import weightedAverage
+            from .formulas import weightedAverage
 
             self.intraStringSalience = weightedAverage(
                 ((self.relativeImportance, 0.2), (self.intraStringUnhappiness, 0.8))
@@ -132,7 +132,7 @@ class WorkspaceObject(WorkspaceStructure):
     def getPossibleDescriptions(self, descriptionType):
         logging.info("getting possible descriptions for %s", self)
         descriptions = []
-        from group import Group
+        from .group import Group
 
         for link in descriptionType.instanceLinks:
             node = link.destination

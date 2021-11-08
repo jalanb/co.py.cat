@@ -1,5 +1,6 @@
 import logging
-from slipnet import slipnet
+
+from .slipnet import slipnet
 
 
 class ConceptMapping(object):

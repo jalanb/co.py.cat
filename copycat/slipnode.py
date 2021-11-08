@@ -116,7 +116,7 @@ class Slipnode(object):
 
         If no linked node is found, return None
         """
-        from slipnet import slipnet
+        from .slipnet import slipnet
 
         if relation == slipnet.identity:
             return self
@@ -132,7 +132,7 @@ class Slipnode(object):
 
         If it does not exist return None
         """
-        from slipnet import slipnet
+        from .slipnet import slipnet
 
         result = None
         if self == destination:

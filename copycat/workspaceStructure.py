@@ -1,4 +1,4 @@
-import formulas
+from . import formulas
 
 
 def abstract_call(objekt, name):

@@ -2,7 +2,7 @@ import math
 import logging
 import random
 
-from temperature import temperature
+from .temperature import temperature
 
 actualTemperature = Temperature = 100.0
 
@@ -145,7 +145,7 @@ def getMappings(
     objectFromInitial, objectFromTarget, initialDescriptions, targetDescriptions
 ):
     mappings = []
-    from conceptMapping import ConceptMapping
+    from .conceptMapping import ConceptMapping
 
     for initial in initialDescriptions:
         for target in targetDescriptions:

@@ -1,5 +1,6 @@
 import logging
-from workspaceStructure import WorkspaceStructure
+
+from .workspaceStructure import WorkspaceStructure
 
 
 class Description(WorkspaceStructure):
@@ -15,7 +16,7 @@ class Description(WorkspaceStructure):
 
     def __str__(self):
         s = "description(%s) of %s" % (self.descriptor.get_name(), self.object)
-        from workspace import workspace
+        from .workspace import workspace
 
         if self.object.string == workspace.initial:
             s += " in initial string"
@@ -32,7 +33,7 @@ class Description(WorkspaceStructure):
         ) / 2
 
     def localSupport(self):
-        from workspace import workspace
+        from .workspace import workspace
 
         described_like_self = 0
         for other in workspace.otherObjects(self.object):
@@ -54,7 +55,7 @@ class Description(WorkspaceStructure):
             self.object.descriptions += [self]
 
     def breakDescription(self):
-        from workspace import workspace
+        from .workspace import workspace
 
         if self in workspace.structures:
             workspace.structures.remove(self)

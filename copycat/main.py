@@ -3,7 +3,7 @@
 import logging
 import sys
 
-import copycat
+from . import copycat
 
 
 def main(program, args):
