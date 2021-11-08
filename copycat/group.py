@@ -3,7 +3,6 @@ import random
 
 from . import formulas
 from .slipnet import slipnet
-from .workspace import workspace
 from .workspace_object import WorkspaceObject
 
 
@@ -123,6 +122,7 @@ class Group(WorkspaceObject):
         )
 
     def build_group(self):
+        from .workspace import workspace
         workspace.objects += [self]
         workspace.structures += [self]
         self.string.objects += [self]
@@ -159,6 +159,7 @@ class Group(WorkspaceObject):
             objekt.group = None
         if self.group:
             self.group.break_group()
+        from .workspace import workspace
         if self in workspace.structures:
             workspace.structures.remove(self)
         if self in workspace.objects:
