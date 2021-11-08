@@ -43,7 +43,7 @@ def numberOfObjects():
 def chooseUnmodifiedObject(attribute, inObjects):
     objects = [o for o in inObjects if o.string != workspace.modified]
     if not len(objects):
-        print 'no objects available in initial or target strings'
+        logging.error('no objects available in initial or target strings')
     return formulas.chooseObjectFromList(objects, attribute)
 
 

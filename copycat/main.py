@@ -20,10 +20,10 @@ def main(program, args):
             iterations = 1
         answers = copycat.run(initial, modified, target, iterations)
         for answer, d in sorted(answers.iteritems(), key=lambda kv: kv[1]['avgtemp']):
-            print '%s: %d (avg time %.1f, avg temp %.1f)' % (answer, d['count'], d['avgtime'], d['avgtemp'])
+            print(f"{answer}: {d['count']} (avg time {d['avgtime']}, avg temp {d['avgtemp']})")
         return 0
     except ValueError:
-        print >> sys.stderr, 'Usage: %s initial modified target [iterations]' % program
+        print(f"Usage: {program} initial modified target [iterations]", file=sys.stderr)
         return 1
 
 

@@ -44,8 +44,7 @@ def runTrial(answers):
         answer = None
     finalTemperature = temperature.value
     finalTime = coderack.codeletsRun
-    print 'Answered %s (time %d, final temperature %.1f)' % (
-        answer, finalTime, finalTemperature)
+    logging.info(f"Answered {answer} (time {finalTime}, final temperature {finalTemperature})")
     answers[answer] = answers.get(
         answer, {'count': 0, 'tempsum': 0, 'timesum': 0})
     answers[answer]['count'] += 1
