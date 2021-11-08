@@ -5,12 +5,13 @@ import sys
 from . import copycat
 
 
-def main(program, args):
+def main():
     """Run the program"""
     logging.basicConfig(
         level=logging.WARN, format="%(message)s", filename="./copycat.log", filemode="w"
     )
 
+    program, *args = sys.argv
     try:
         if len(args) == 4:
             initial, modified, target = args[:-1]
@@ -31,4 +32,4 @@ def main(program, args):
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[0], sys.argv[1:]))
+    sys.exit(main())
