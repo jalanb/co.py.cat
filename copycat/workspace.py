@@ -152,12 +152,12 @@ class Workspace:
     def correspondences(self):
         from .correspondence import Correspondence
 
-        return [s for s in self.structures if isinstance(s, Correspondence)]
+        return [_ for _ in self.structures if isinstance(_, Correspondence)]
 
     def slippages(self):
         result = []
         if self.changed_object and self.changed_object.correspondence:
-            result = [m for m in self.changed_object.correspondence.concept_mappings]
+            result = [_ for _ in self.changed_object.correspondence.concept_mappings]
         for object_ in workspace.initial.objects:
             if object_.correspondence:
                 for mapping in object_.correspondence.slippages():

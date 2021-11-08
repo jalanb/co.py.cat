@@ -145,13 +145,13 @@ class Bond(WorkspaceStructure):
     def number_of_local_supporting_bonds(self):
         return len(
             [
-                b
-                for b in self.string.bonds
-                if b.string == self.source.string
-                and self.left_object.letter_distance(b.left_object) != 0
-                and self.right_object.letter_distance(b.right_object) != 0
-                and self.category == b.category
-                and self.direction_category == b.direction_category
+                _
+                for _ in self.string.bonds
+                if _.string == self.source.string
+                and self.left_object.letter_distance(_.left_object) != 0
+                and self.right_object.letter_distance(_.right_object) != 0
+                and self.category == _.category
+                and self.direction_category == _.direction_category
             ]
         )
 
@@ -194,7 +194,7 @@ class Bond(WorkspaceStructure):
         return self.right_object == other.right_object
 
     def get_incompatible_bonds(self):
-        return [b for b in self.string.bonds if self.same_neighbours(b)]
+        return [_ for _ in self.string.bonds if self.same_neighbours(_)]
 
 
 def possible_group_bonds(bond_category, direction_category, bond_facet, bonds):

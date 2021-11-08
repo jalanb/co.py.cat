@@ -109,7 +109,7 @@ class Group(WorkspaceObject):
         return formulas.temperature_adjusted_probability(supported_activation)
 
     def flipped_version(self):
-        flipped_bonds = [b.flippedversion() for b in self.bond_list]
+        flipped_bonds = [_.flippedversion() for _ in self.bond_list]
         flipped_group = self.group_category.get_related_node(slipnet.flipped)
         flipped_direction = self.direction_category.get_related_node(slipnet.flipped)
         return Group(
@@ -243,11 +243,11 @@ class Group(WorkspaceObject):
 
     def more_possible_descriptions(self, node):
         result = []
-        i = 1
+        index = 1
         for number in slipnet.numbers:
-            if node == number and len(self.objects) == i:
+            if node == number and len(self.objects) == index:
                 result += [node]
-            i += 1
+            index += 1
         return result
 
     def distinguishing_descriptor(self, descriptor):

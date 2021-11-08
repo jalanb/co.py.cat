@@ -28,10 +28,10 @@ class Correspondence(WorkspaceStructure):
         )
 
     def distinguishing_concept_mappings(self):
-        return [m for m in self.concept_mappings if m.distinguishing()]
+        return [_ for _ in self.concept_mappings if _.distinguishing()]
 
     def relevant_distinguishing_concept_mappings(self):
-        return [m for m in self.concept_mappings if m.distinguishing() and m.relevant()]
+        return [_ for _ in self.concept_mappings if _.distinguishing() and _.relevant()]
 
     def extract_target_bond(self):
         target_bond = False
@@ -68,16 +68,16 @@ class Correspondence(WorkspaceStructure):
                 None,
                 None,
             )
-            for m in self.concept_mappings:
-                if m.incompatible(mapping):
+            for mapping in self.concept_mappings:
+                if mapping.incompatible(mapping):
                     return target_bond
         return None
 
     def get_incompatible_correspondences(self):
         return [
-            o.correspondence
-            for o in workspace.initial.objects
-            if o and self.incompatible(o.correspondence)
+            _.correspondence
+            for _ in workspace.initial.objects
+            if _ and self.incompatible(_.correspondence)
         ]
 
     def incompatible(self, other):
@@ -118,7 +118,7 @@ class Correspondence(WorkspaceStructure):
             if self.object_from_target.spans_string():
                 return 100.0
         total = sum(
-            c.total_strength for c in workspace.correspondences() if self.supporting(c)
+            _.total_strength for _ in workspace.correspondences() if self.supporting(_)
         )
         total = min(total, 100.0)
         return total
@@ -132,7 +132,7 @@ class Correspondence(WorkspaceStructure):
         if number_of_concept_mappings < 1:
             self.internal_strength = 0.0
             return
-        total_strength = sum(m.strength() for m in distinguishing_mappings)
+        total_strength = sum(_.strength() for _ in distinguishing_mappings)
         average_strength = total_strength / number_of_concept_mappings
         if number_of_concept_mappings == 1.0:
             number_of_concept_mappings_factor = 0.8
@@ -165,8 +165,8 @@ class Correspondence(WorkspaceStructure):
         return False
 
     def slippages(self):
-        mappings = [m for m in self.concept_mappings if m.slippage()]
-        mappings += [m for m in self.accessory_concept_mappings if m.slippage()]
+        mappings = [_ for _ in self.concept_mappings if _.slippage()]
+        mappings += [_ for _ in self.accessory_concept_mappings if _.slippage()]
         return mappings
 
     def reflexive(self):

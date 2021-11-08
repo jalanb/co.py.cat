@@ -20,11 +20,11 @@ def main():
             initial, modified, target = args
             iterations = 1
         answers = copycat.run(initial, modified, target, iterations)
-        for answer, d in sorted(answers.items(), key=lambda kv: kv[1]["avgtemp"]):
-            average_time = round(d['avgtime'] / 1000.0, 2)
-            average_temperature = round(d['avgtemp'], 2)
+        for answer, values in sorted(answers.items(), key=lambda kv: kv[1]["avgtemp"]):
+            average_time = round(values['avgtime'] / 1000.0, 2)
+            average_temperature = round(values['avgtemp'], 2)
             print(
-                f"{answer}: {d['count']} "
+                f"{answer}: {values['count']} "
                 f"(average time {average_time} seconds, average temperature {average_temperature})"
             )
         return 0

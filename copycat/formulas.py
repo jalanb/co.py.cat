@@ -12,16 +12,15 @@ actual_temperature = Temperature = 100.0
 def select_list_position(probabilities):
     total = sum(probabilities)
     logging.info(f"Total of probabilities: {total}")
-    r = random.random()
-    stop_position = total * r
+    stop_position = total * random.random()
     logging.info(f"stop_position: {stop_position}")
     total = 0
-    i = 0
+    index = 0
     for probability in probabilities:
         total += probability
         if total > stop_position:
-            return i
-        i += 1
+            return index
+        index += 1
     return 0
 
 
@@ -68,13 +67,13 @@ def temperature_adjusted_probability(value):
     if value < 0.5:
         return 1.0 - temperature_adjusted_probability(1.0 - value)
     coldness = 100.0 - temperature.value
-    a = math.sqrt(coldness)
-    b = 10.0 - a
-    c = b / 100
-    d = c * (1.0 - (1.0 - value))  # as said the java
-    e = (1.0 - value) + d
-    f = 1.0 - e
-    return max(f, 0.5)
+    cold = math.sqrt(coldness)
+    warm = 10.0 - cold
+    centi_warm = warm / 100
+    norm_warm = centi_warm * (1.0 - (1.0 - value))  # as said the java
+    norm_cold = (1.0 - value) + norm_warm
+    result = 1.0 - norm_cold
+    return max(result, 0.5)
 
 
 def coin_flip(chance=0.5):
@@ -124,7 +123,7 @@ def similar_property_links(slip_node):
 def choose_slipnode_by_conceptual_depth(slip_nodes):
     if not slip_nodes:
         return None
-    depths = [temperature_adjusted_value(n.conceptual_depth) for n in slip_nodes]
+    depths = [temperature_adjusted_value(_.conceptual_depth) for _ in slip_nodes]
     selected = select_list_position(depths)
     return slip_nodes[selected]
 

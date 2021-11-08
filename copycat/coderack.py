@@ -15,10 +15,10 @@ MAX_NUMBER_OF_CODELETS = 100
 
 
 def get_urgency_bin(urgency):
-    i = int(urgency) * NUMBER_OF_BINS / 100
-    if i >= NUMBER_OF_BINS:
+    index = int(urgency) * NUMBER_OF_BINS / 100
+    if index >= NUMBER_OF_BINS:
         return NUMBER_OF_BINS
-    return i + 1
+    return index + 1
 
 
 class CodeRack:
@@ -250,10 +250,10 @@ class CodeRack:
             urgencies += [urgency]
         threshold = random.random() * sum(urgencies)
         sum_of_urgencies = 0.0
-        for i in range(0, len(self.codelets)):
-            sum_of_urgencies += urgencies[i]
+        for index in range(0, len(self.codelets)):
+            sum_of_urgencies += urgencies[index]
             if sum_of_urgencies > threshold:
-                return self.codelets[i]
+                return self.codelets[index]
         return self.codelets[0]
 
     def post_initial_codelets(self):
@@ -326,8 +326,7 @@ class CodeRack:
         for codelet in self.codelets:
             urg = codelet.urgency ** scale
             urgsum += urg
-        r = random.random()
-        threshold = r * urgsum
+        threshold = urgsum * random.random()
         chosen = None
         urgency_sum = 0.0
         formulas.log_temperature()

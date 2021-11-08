@@ -72,7 +72,7 @@ def __get_descriptors(bond_facet, source, destination):
 
 
 def __all_opposite_mappings(mappings):
-    return len([m for m in mappings if m.label != slipnet.opposite]) == 0
+    return len([_ for _ in mappings if _.label != slipnet.opposite]) == 0
 
 
 def __structure_versus_structure(structure1, weight1, structure2, weight2):
@@ -130,7 +130,7 @@ def breaker():
     assert not formulas.coin_flip(probability_of_fizzle)
     # choose a structure at random
     structures = [
-        s for s in workspace.structures if isinstance(s, (Group, Bond, Correspondence))
+        _ for _ in workspace.structures if isinstance(_, (Group, Bond, Correspondence))
     ]
     assert structures
     structure = random.choice(structures)
@@ -163,8 +163,8 @@ def bottom_up_description_scout(codelet):
         sliplink.degree_of_association() * sliplink.destination.activation
         for sliplink in sliplinks
     ]
-    i = formulas.select_list_position(values)
-    chosen = sliplinks[i]
+    index = formulas.select_list_position(values)
+    chosen = sliplinks[index]
     chosen_property = chosen.destination
     coderack.propose_description(
         chosen_object, chosen_property.category(), chosen_property, codelet
@@ -178,9 +178,9 @@ def top_down_description_scout(codelet):
     __show_which_string_object_is_from(chosen_object)
     descriptions = chosen_object.get_possible_descriptions(description_type)
     assert descriptions
-    values = [n.activation for n in descriptions]
-    i = formulas.select_list_position(values)
-    chosen_property = descriptions[i]
+    values = [_.activation for _ in descriptions]
+    index = formulas.select_list_position(values)
+    chosen_property = descriptions[index]
     coderack.propose_description(
         chosen_object, chosen_property.category(), chosen_property, codelet
     )
@@ -237,7 +237,7 @@ def bottom_up_bond_scout(codelet):
 
 def rule_scout(codelet):
     assert workspace.number_of_unreplaced_objects() == 0
-    changed_objects = [o for o in workspace.initial.objects if o.changed]
+    changed_objects = [_ for _ in workspace.initial.objects if _.changed]
     # assert len(changed_objects) < 2
     # if there are no changed objects, propose a rule with no changes
     if not changed_objects:
@@ -253,9 +253,9 @@ def rule_scout(codelet):
         object_list += [position]
     letter = changed.get_descriptor(slipnet.letter_category)
     other_objects_of_same_letter = [
-        o
-        for o in workspace.initial.objects
-        if not o != changed and o.get_description_type(letter)
+        _
+        for _ in workspace.initial.objects
+        if not _ != changed and _.get_description_type(letter)
     ]
     if not len(other_objects_of_same_letter):
         object_list += [letter]
@@ -278,8 +278,8 @@ def rule_scout(codelet):
         depth = node.conceptual_depth
         value = formulas.temperature_adjusted_value(depth)
         value_list += [value]
-    i = formulas.select_list_position(value_list)
-    descriptor = object_list[i]
+    index = formulas.select_list_position(value_list)
+    descriptor = object_list[index]
     # choose the relation (change the letmost object to "successor" or "d"
     object_list = []
     if changed.replacement.relation:
@@ -293,8 +293,8 @@ def rule_scout(codelet):
         depth = node.conceptual_depth
         value = formulas.temperature_adjusted_value(depth)
         value_list += [value]
-    i = formulas.select_list_position(value_list)
-    relation = object_list[i]
+    index = formulas.select_list_position(value_list)
+    relation = object_list[index]
     coderack.propose_rule(
         slipnet.letter_category, descriptor, slipnet.letter, relation, codelet
     )
@@ -310,7 +310,7 @@ def rule_strength_tester(codelet):
 
 def replacement_finder():
     # choose random letter in initial string
-    letters = [o for o in workspace.initial.objects if isinstance(o, Letter)]
+    letters = [_ for _ in workspace.initial.objects if isinstance(_, Letter)]
     letter_of_initial_string = random.choice(letters)
     logging.info(f"selected letter in initial string = {letter_of_initial_string}")
     if letter_of_initial_string.replacement:
@@ -320,9 +320,9 @@ def replacement_finder():
         return
     position = letter_of_initial_string.left_index
     more_letters = [
-        o
-        for o in workspace.modified.objects
-        if isinstance(o, Letter) and o.left_index == position
+        _
+        for _ in workspace.modified.objects
+        if isinstance(_, Letter) and _.left_index == position
     ]
     letter_of_modified_string = more_letters and more_letters[0] or None
     assert letter_of_modified_string
@@ -723,8 +723,8 @@ def group_builder(codelet):
         equivalent.add_descriptions(group.descriptions)
         return
     # check to see if all objects are still there
-    for o in group.object_list:
-        assert o in workspace.objects
+    for object_ in group.object_list:
+        assert object_ in workspace.objects
     # check to see if bonds are there of the same direction
     incompatible_bonds = []  # incompatible bond list
     if len(group.object_list) > 1:
@@ -759,9 +759,9 @@ def group_builder(codelet):
         incompatible.break_the_structure()
     # create new bonds
     group.bond_list = []
-    for i in range(1, len(group.object_list)):
-        object1 = group.object_list[i - 1]
-        object2 = group.object_list[i]
+    for index in range(1, len(group.object_list)):
+        object1 = group.object_list[index - 1]
+        object2 = group.object_list[index]
         if not object1.right_bond:
             if group.direction_category == slipnet.right:
                 source = object1
@@ -814,10 +814,10 @@ def __get_cut_off(density):
         distribution = [1.0, 1.0, 1.0, 2.0, 5.0, 150.0, 5.0, 2.0, 1.0, 1.0]
     stop = sum(distribution) * random.random()
     total = 0.0
-    for i in range(0, len(distribution)):
-        total += distribution[i]
+    for index in range(0, len(distribution)):
+        total += distribution[index]
         if total >= stop:
-            return i + 1
+            return index + 1
     return len(distribution)
 
 
@@ -859,17 +859,17 @@ def bottom_up_correspondence_scout(codelet):
     assert concept_mappings
     assert __slippability(concept_mappings)
     # find out if any are distinguishing
-    distinguishing_mappings = [m for m in concept_mappings if m.distinguishing()]
+    distinguishing_mappings = [_ for _ in concept_mappings if _.distinguishing()]
     assert distinguishing_mappings
     # if both objects span the strings, check to see if the
     # string description needs to be flipped
     opposites = [
-        m
-        for m in distinguishing_mappings
-        if m.initial_description_type == slipnet.string_position_category
-        and m.initial_description_type != slipnet.bond_facet
+        _
+        for _ in distinguishing_mappings
+        if _.initial_description_type == slipnet.string_position_category
+        and _.initial_description_type != slipnet.bond_facet
     ]
-    initial_description_types = [m.initial_description_type for m in opposites]
+    initial_description_types = [_.initial_description_type for _ in opposites]
     flip_target_object = False
     if (
         object_from_initial.spans_string()
@@ -926,17 +926,17 @@ def important_object_correspondence_scout(codelet):
     assert concept_mappings
     assert __slippability(concept_mappings)
     # find out if any are distinguishing
-    distinguishing_mappings = [m for m in concept_mappings if m.distinguishing()]
+    distinguishing_mappings = [_ for _ in concept_mappings if _.distinguishing()]
     assert distinguishing_mappings
     # if both objects span the strings, check to see if the
     # string description needs to be flipped
     opposites = [
-        m
-        for m in distinguishing_mappings
-        if m.initial_description_type == slipnet.string_position_category
-        and m.initial_description_type != slipnet.bond_facet
+        _
+        for _ in distinguishing_mappings
+        if _.initial_description_type == slipnet.string_position_category
+        and _.initial_description_type != slipnet.bond_facet
     ]
-    initial_description_types = [m.initial_description_type for m in opposites]
+    initial_description_types = [_.initial_description_type for _ in opposites]
     flip_target_object = False
     if (
         object_from_initial.spans_string()

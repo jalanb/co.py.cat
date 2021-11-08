@@ -30,13 +30,13 @@ class Letter(WorkspaceObject):
     def __str__(self):
         if not self.string:
             return ""
-        i = self.left_index - 1
-        if len(self.string) <= i:
+        index = self.left_index - 1
+        if len(self.string) <= index:
             raise ValueError(
                 "len(self.string) <= self.left_index ::"
                 f" {len(self.string)} <= {self.left_index}"
             )
-        return self.string[i]
+        return self.string[index]
 
     def distinguishing_descriptor(self, descriptor):
         """Whether no other object of the same type has the same descriptor"""
