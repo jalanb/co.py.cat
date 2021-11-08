@@ -9,6 +9,7 @@ from .slipnet import slipnet
 
 class WorkspaceString:
     """A string in a workplace"""
+
     def __init__(self, string):
         self.string = string
         self.bonds = []
