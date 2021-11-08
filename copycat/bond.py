@@ -86,25 +86,25 @@ class Bond(WorkspaceStructure):
         if self.left_object.leftmost and self.left_object.correspondence:
             correspondence = self.left_object.correspondence
             if self.string == workspace.initial:
-                objekt = self.left_object.correspondence.object_from_target
+                object_ = self.left_object.correspondence.object_from_target
             else:
-                objekt = self.left_object.correspondence.object_from_initial
-            if objekt.leftmost and objekt.right_bond:
+                object_ = self.left_object.correspondence.object_from_initial
+            if object_.leftmost and object_.right_bond:
                 if (
-                    objekt.right_bond.direction_category
-                    and objekt.right_bond.direction_category != self.direction_category
+                    object_.right_bond.direction_category
+                    and object_.right_bond.direction_category != self.direction_category
                 ):
                     incompatibles += [correspondence]
         if self.right_object.rightmost and self.right_object.correspondence:
             correspondence = self.right_object.correspondence
             if self.string == workspace.initial:
-                objekt = self.right_object.correspondence.object_from_target
+                object_ = self.right_object.correspondence.object_from_target
             else:
-                objekt = self.right_object.correspondence.object_from_initial
-            if objekt.rightmost and objekt.left_bond:
+                object_ = self.right_object.correspondence.object_from_initial
+            if object_.rightmost and object_.left_bond:
                 if (
-                    objekt.left_bond.direction_category
-                    and objekt.left_bond.direction_category != self.direction_category
+                    object_.left_bond.direction_category
+                    and object_.left_bond.direction_category != self.direction_category
                 ):
                     incompatibles += [correspondence]
         return incompatibles

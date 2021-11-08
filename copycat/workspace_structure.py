@@ -1,9 +1,9 @@
 from . import formulas
 
 
-def abstract_call(objekt, name):
+def abstract_call(object_, name):
     raise NotImplementedError(
-        f"call of abstract method: {objekt.__class__.__name__}.{name}()"
+        f"call of abstract method: {object_.__class__.__name__}.{name}()"
     )
 
 

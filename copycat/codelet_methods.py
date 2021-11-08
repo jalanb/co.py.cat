@@ -660,9 +660,9 @@ def group_scout__whole_string(codelet):
         logging.info(f"initial string selected: {workspace.initial}")
     # find leftmost object & the highest group to which it belongs
     leftmost = None
-    for objekt in string.objects:
-        if objekt.leftmost:
-            leftmost = objekt
+    for object_ in string.objects:
+        if object_.leftmost:
+            leftmost = object_
     while leftmost.group and leftmost.group.bond_category == slipnet.sameness:
         leftmost = leftmost.group
     if leftmost.spans_string():
@@ -729,25 +729,25 @@ def group_builder(codelet):
     incompatible_bonds = []  # incompatible bond list
     if len(group.object_list) > 1:
         previous = group.object_list[0]
-        for objekt in group.object_list[1:]:
-            left_bond = objekt.left_bond
+        for object_ in group.object_list[1:]:
+            left_bond = object_.left_bond
             if left_bond:
                 if left_bond.left_object == previous:
                     continue
                 if left_bond.direction_category == group.direction_category:
                     continue
                 incompatible_bonds += [left_bond]
-            previous = objekt
+            previous = object_
         next_object = group.object_list[-1]
-        for objekt in reversed(group.object_list[:-1]):
-            right_bond = objekt.right_bond
+        for object_ in reversed(group.object_list[:-1]):
+            right_bond = object_.right_bond
             if right_bond:
                 if right_bond.right_object == next_object:
                     continue
                 if right_bond.direction_category == group.direction_category:
                     continue
                 incompatible_bonds += [right_bond]
-            next_object = objekt
+            next_object = object_
     # if incompatible bonds exist - fight
     group.update_strength()
     assert __fight_incompatibles(incompatible_bonds, group, "bonds", 1.0, 1.0)
@@ -907,10 +907,10 @@ def important_object_correspondence_scout(codelet):
         if mapping.initial_descriptor == slipnode:
             initial_descriptor = mapping.target_descriptor
     target_candidates = []
-    for objekt in workspace.target.objects:
-        for description in objekt.relevant_descriptions():
+    for object_ in workspace.target.objects:
+        for description in object_.relevant_descriptions():
             if description.descriptor == initial_descriptor:
-                target_candidates += [objekt]
+                target_candidates += [object_]
     assert target_candidates
     object_from_target = choose_unmodified_object(
         "inter_string_salience", target_candidates

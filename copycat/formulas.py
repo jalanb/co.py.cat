@@ -92,10 +92,10 @@ def choose_object_from_list(objects, attribute):
     if not objects:
         return None
     probabilities = []
-    for objekt in objects:
-        value = getattr(objekt, attribute)
+    for object_ in objects:
+        value = getattr(object_, attribute)
         probability = temperature_adjusted_value(value)
-        logging.info(f"Object: {objekt}, value: {value}, probability: {probability}")
+        logging.info(f"Object: {object_}, value: {value}, probability: {probability}")
         probabilities += [probability]
     selected = select_list_position(probabilities)
     logging.info(f"Selected: {selected}")
@@ -129,22 +129,22 @@ def choose_slipnode_by_conceptual_depth(slip_nodes):
     return slip_nodes[selected]
 
 
-def __relevant_category(objekt, slipnode):
-    return objekt.right_bond and objekt.right_bond.category == slipnode
+def __relevant_category(object_, slipnode):
+    return object_.right_bond and object_.right_bond.category == slipnode
 
 
-def __relevant_direction(objekt, slipnode):
-    return objekt.right_bond and objekt.right_bond.direction_category == slipnode
+def __relevant_direction(object_, slipnode):
+    return object_.right_bond and object_.right_bond.direction_category == slipnode
 
 
 def __local_relevance(string, slipnode, relevance):
     number_of_objects_not_spanning = number_of_matches = 0.0
     logging.info(f"find relevance for a string: {string}")
-    for objekt in string.objects:
-        if not objekt.spans_string():
-            logging.info(f"Non spanner: {objekt}")
+    for object_ in string.objects:
+        if not object_.spans_string():
+            logging.info(f"Non spanner: {object_}")
             number_of_objects_not_spanning += 1.0
-            if relevance(objekt, slipnode):
+            if relevance(object_, slipnode):
                 number_of_matches += 1.0
     if number_of_objects_not_spanning == 1:
         return 100.0 * number_of_matches

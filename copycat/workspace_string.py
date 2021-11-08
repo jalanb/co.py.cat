@@ -81,8 +81,8 @@ class WorkspaceString:
     def equivalent_group(self, sought):
         """The first object from the same group as sought"""
 
-        for objekt in self.objects:
-            if isinstance(objekt, Group):
-                if objekt.same_group(sought):
-                    return objekt
+        for object_ in self.objects:
+            if isinstance(object_, Group):
+                if object_.same_group(sought):
+                    return object_
         return None

@@ -170,10 +170,10 @@ class CodeRack:
             "correspondence-strength-tester", old_codelet, urgency, correspondence
         )
 
-    def propose_description(self, objekt, type_, descriptor, old_codelet):
+    def propose_description(self, object_, type_, descriptor, old_codelet):
         from .description import Description
 
-        description = Description(objekt, type_, descriptor)
+        description = Description(object_, type_, descriptor)
         descriptor.buffer = 100.0
         urgency = type_.activation
         self.new_codelet(

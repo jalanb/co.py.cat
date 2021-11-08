@@ -42,11 +42,11 @@ class Letter(WorkspaceObject):
         """Whether no other object of the same type has the same descriptor"""
         if not WorkspaceObject.distinguishing_descriptor(descriptor):
             return False
-        for objekt in self.string.objects:
+        for object_ in self.string.objects:
             # check to see if they are of the same type
-            if isinstance(objekt, Letter) and objekt != self:
+            if isinstance(object_, Letter) and object_ != self:
                 # check all descriptions for the descriptor
-                for description in objekt.descriptions:
+                for description in object_.descriptions:
                     if description.descriptor == descriptor:
                         return False
         return True

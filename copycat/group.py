@@ -84,10 +84,10 @@ class Group(WorkspaceObject):
 
     def get_incompatible_groups(self):
         result = []
-        for objekt in self.object_list:
-            while objekt.group:
-                result += [objekt.group]
-                objekt = objekt.group
+        for object_ in self.object_list:
+            while object_.group:
+                result += [object_.group]
+                object_ = object_.group
         return result
 
     def add_bond_description(self, description):
@@ -127,8 +127,8 @@ class Group(WorkspaceObject):
         workspace.objects += [self]
         workspace.structures += [self]
         self.string.objects += [self]
-        for objekt in self.object_list:
-            objekt.group = self
+        for object_ in self.object_list:
+            object_.group = self
         workspace.build_descriptions(self)
         self.activate_descriptions()
 
@@ -156,8 +156,8 @@ class Group(WorkspaceObject):
         while len(self.descriptions):
             description = self.descriptions[-1]
             description.break_description()
-        for objekt in self.object_list:
-            objekt.group = None
+        for object_ in self.object_list:
+            object_.group = None
         if self.group:
             self.group.break_group()
         from .workspace import workspace
@@ -212,13 +212,13 @@ class Group(WorkspaceObject):
 
     def number_of_local_supporting_groups(self):
         count = 0
-        for objekt in self.string.objects:
-            if isinstance(objekt, Group):
+        for object_ in self.string.objects:
+            if isinstance(object_, Group):
                 if (
-                    objekt.right_index < self.left_index
-                    or objekt.left_index > self.right_index
-                    and objekt.group_category == self.group_category
-                    and objekt.direction_category == self.direction_category
+                    object_.right_index < self.left_index
+                    or object_.left_index > self.right_index
+                    and object_.group_category == self.group_category
+                    and object_.direction_category == self.direction_category
                 ):
                     count += 1
         return count
@@ -254,11 +254,11 @@ class Group(WorkspaceObject):
         """Whether no other object of the same type has the same descriptor"""
         if not WorkspaceObject.distinguishing_descriptor(descriptor):
             return False
-        for objekt in self.string.objects:
+        for object_ in self.string.objects:
             # check to see if they are of the same type
-            if isinstance(objekt, Group) and objekt != self:
+            if isinstance(object_, Group) and object_ != self:
                 # check all descriptions for the descriptor
-                for description in objekt.descriptions:
+                for description in object_.descriptions:
                     if description.descriptor == descriptor:
                         return False
         return True

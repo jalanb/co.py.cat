@@ -49,13 +49,13 @@ def choose_unmodified_object(attribute, in_objects):
 
 def choose_neighbour(source):
     objects = []
-    for objekt in workspace.objects:
-        if objekt.string != source.string:
+    for object_ in workspace.objects:
+        if object_.string != source.string:
             continue
-        if objekt.left_index == source.right_index + 1:
-            objects += [objekt]
-        elif source.left_index == objekt.right_index + 1:
-            objects += [objekt]
+        if object_.left_index == source.right_index + 1:
+            objects += [object_]
+        elif source.left_index == object_.right_index + 1:
+            objects += [object_]
     return formulas.choose_object_from_list(objects, "intra_string_salience")
 
 
@@ -115,10 +115,10 @@ def __support_for_description_type(description_type, string):
 def __description_type_support(description_type, string):
     """The proportion of objects in the string with this description_type"""
     described_count = total = 0
-    for objekt in workspace.objects:
-        if objekt.string == string:
+    for object_ in workspace.objects:
+        if object_.string == string:
             total += 1
-            for description in objekt.descriptions:
+            for description in object_.descriptions:
                 if description.description_type == description_type:
                     described_count += 1
     return described_count / float(total)

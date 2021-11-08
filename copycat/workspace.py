@@ -158,9 +158,9 @@ class Workspace:
         result = []
         if self.changed_object and self.changed_object.correspondence:
             result = [m for m in self.changed_object.correspondence.concept_mappings]
-        for objekt in workspace.initial.objects:
-            if objekt.correspondence:
-                for mapping in objekt.correspondence.slippages():
+        for object_ in workspace.initial.objects:
+            if object_.correspondence:
+                for mapping in object_.correspondence.slippages():
                     if not mapping.is_nearly_contained_by(result):
                         result += [mapping]
         return result
@@ -175,8 +175,8 @@ class Workspace:
     def break_rule(self):
         self.rule = None
 
-    def build_descriptions(self, objekt):
-        for description in objekt.descriptions:
+    def build_descriptions(self, object_):
+        for description in object_.descriptions:
             description.description_type.buffer = 100.0
             description.descriptor.buffer = 100.0
             if description not in self.structures:
