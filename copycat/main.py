@@ -20,7 +20,7 @@ def main(program, args):
             initial, modified, target = args
             iterations = 1
         answers = copycat.run(initial, modified, target, iterations)
-        for answer, d in sorted(answers.iteritems(), key=lambda kv: kv[1]["avgtemp"]):
+        for answer, d in sorted(answers.items(), key=lambda kv: kv[1]["avgtemp"]):
             print(
                 f"{answer}: {d['count']} "
                 f"(avg time {d['avgtime']}, avg temp {d['avgtemp']})"

@@ -58,7 +58,7 @@ def run(initial, modified, target, iterations):
     answers = {}
     for _ in range(iterations):
         runTrial(answers)
-    for _, d in answers.iteritems():
+    for _, d in answers.items():
         d["avgtemp"] = d.pop("tempsum") / d["count"]
         d["avgtime"] = d.pop("timesum") / d["count"]
     return answers
