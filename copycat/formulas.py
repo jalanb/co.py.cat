@@ -93,9 +93,7 @@ def choose_object_from_list(objects, attribute):
     for objekt in objects:
         value = getattr(objekt, attribute)
         probability = temperature_adjusted_value(value)
-        logging.info(
-            f"Object: {objekt}, value: {value}, probability: {probability}"
-        )
+        logging.info(f"Object: {objekt}, value: {value}, probability: {probability}")
         probabilities += [probability]
     selected = select_list_position(probabilities)
     logging.info(f"Selected: {selected}")

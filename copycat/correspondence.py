@@ -5,7 +5,11 @@ from .workspace_structure import WorkspaceStructure
 
 class Correspondence(WorkspaceStructure):
     def __init__(
-        self, object_from_initial, object_from_target, concept_mappings, flip_target_object
+        self,
+        object_from_initial,
+        object_from_target,
+        concept_mappings,
+        flip_target_object,
     ):
         WorkspaceStructure.__init__(self)
         self.object_from_initial = object_from_initial
@@ -141,7 +145,9 @@ class Correspondence(WorkspaceStructure):
         else:
             internal_coherence_factor = 1.0
         internal_strength = (
-            average_strength * internal_coherence_factor * number_of_concept_mappings_factor
+            average_strength
+            * internal_coherence_factor
+            * number_of_concept_mappings_factor
         )
         self.internal_strength = min(internal_strength, 100.0)
 

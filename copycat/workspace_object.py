@@ -54,7 +54,9 @@ class WorkspaceObject(WorkspaceStructure):
         for description in copy:
             logging.info(f"might add: {description}")
             if not self.contains_description(description):
-                self.add_description(description.description_type, description.descriptor)
+                self.add_description(
+                    description.description_type, description.descriptor
+                )
             else:
                 logging.info("Won't add it")
         from .workspace import workspace
@@ -115,14 +117,19 @@ class WorkspaceObject(WorkspaceStructure):
             self.inter_string_salience = weighted_average(
                 ((self.relative_importance, 0.8), (self.inter_string_unhappiness, 0.2))
             )
-        self.total_salience = (self.intra_string_salience + self.inter_string_salience) / 2.0
+        self.total_salience = (
+            self.intra_string_salience + self.inter_string_salience
+        ) / 2.0
         logging.info(
             f"Set salience of {self} to {self.total_salience}"
             f" = ({self.intra_string_salience} + {self.inter_string_salience}) / 2"
         )
 
     def is_within(self, other):
-        return self.left_index >= other.left_index and self.right_index <= other.right_index
+        return (
+            self.left_index >= other.left_index
+            and self.right_index <= other.right_index
+        )
 
     def relevant_descriptions(self):
         return [d for d in self.descriptions if d.description_type.fully_active()]

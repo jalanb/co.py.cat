@@ -16,6 +16,7 @@ class Description(WorkspaceStructure):
 
     def __str__(self):
         from .workspace import workspace
+
         descriptor = self.descriptor.get_name()
         container = "initial" if self.object.string == workspace.initial else "target"
         return f"description({descriptor}) of {self.object} in {container} string"

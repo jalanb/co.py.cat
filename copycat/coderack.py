@@ -76,9 +76,7 @@ class CodeRack(object):
                     )
                     codelet = Codelet(codelet_name, urgency, self.codelets_run)
                     codelet.arguments += [node]
-                    logging.info(
-                        f"Post top down: {codelet}, with urgency: {urgency}"
-                    )
+                    logging.info(f"Post top down: {codelet}, with urgency: {urgency}")
                     self.post(codelet)
 
     def post_bottom_up_codelets(self):
@@ -145,7 +143,12 @@ class CodeRack(object):
         self.new_codelet("rule-strength-tester", old_codelet, urgency, rule)
 
     def propose_correspondence(
-        self, initial_object, target_object, concept_mappings, flip_target_object, old_codelet
+        self,
+        initial_object,
+        target_object,
+        concept_mappings,
+        flip_target_object,
+        old_codelet,
     ):
         from .correspondence import Correspondence
 
@@ -163,9 +166,7 @@ class CodeRack(object):
         if urgency:
             urgency /= number_of_mappings
         binn = get_urgency_bin(urgency)
-        logging.info(
-            f"urgency: {urgency}, number: {number_of_mappings}, bin: {binn}"
-        )
+        logging.info(f"urgency: {urgency}, number: {number_of_mappings}, bin: {binn}")
         self.new_codelet(
             "correspondence-strength-tester", old_codelet, urgency, correspondence
         )
@@ -176,7 +177,9 @@ class CodeRack(object):
         description = Description(objekt, type_, descriptor)
         descriptor.buffer = 100.0
         urgency = type_.activation
-        self.new_codelet("description-strength-tester", old_codelet, urgency, description)
+        self.new_codelet(
+            "description-strength-tester", old_codelet, urgency, description
+        )
 
     def propose_single_letter_group(self, source, codelet):
         self.propose_group(
@@ -184,7 +187,13 @@ class CodeRack(object):
         )
 
     def propose_group(
-        self, objects, bond_list, group_category, direction_category, bond_facet, old_codelet
+        self,
+        objects,
+        bond_list,
+        group_category,
+        direction_category,
+        bond_facet,
+        old_codelet,
     ):
         from .group import Group
 

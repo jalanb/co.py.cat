@@ -15,7 +15,8 @@ class ConceptMapping(object):
     ):
         # pylint: disable=too-many-arguments
         logging.info(
-            f"make a map: {initial_description_type.get_name()}-{target_description_type.get_name()}"
+            f"make a map: {initial_description_type.get_name()}-"
+            f"{target_description_type.get_name()}"
         )
         self.initial_description_type = initial_description_type
         self.target_description_type = target_description_type
@@ -26,7 +27,10 @@ class ConceptMapping(object):
         self.label = initial_descriptor.get_bond_category(target_descriptor)
 
     def __repr__(self):
-        return f"<ConceptMapping: {self} from {self.initial_descriptor} to {self.target_descriptor}>"
+        return (
+            f"<ConceptMapping: {self} from {self.initial_descriptor} "
+            f"to {self.target_descriptor}>"
+        )
 
     def __str__(self):
         return self.label and self.label.name or "anonymous"

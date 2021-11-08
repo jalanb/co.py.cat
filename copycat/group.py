@@ -46,7 +46,9 @@ class Group(WorkspaceObject):
 
         if self.bond_list and len(self.bond_list):
             first_facet = self.bond_list[0].facet
-            self.add_bond_description(Description(self, slipnet.bond_facet, first_facet))
+            self.add_bond_description(
+                Description(self, slipnet.bond_facet, first_facet)
+            )
         self.add_bond_description(
             Description(self, slipnet.bond_category, self.bond_category)
         )

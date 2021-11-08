@@ -2,7 +2,7 @@ class Codelet(object):
     def __init__(self, name: str, urgency, timestamp):
         self.name = name
         self.urgency = urgency
-        self.arguments = []
+        self.arguments: list = []
         self.pressure = None
         self.timestamp = timestamp
 

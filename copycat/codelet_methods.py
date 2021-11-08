@@ -349,7 +349,9 @@ def replacement_finder():
 def top_down_bond_scout__category(codelet):
     logging.info("top_down_bond_scout__category")
     category = codelet.arguments[0]
-    source = __get_scout_source(category, formulas.local_bond_category_relevance, "bond")
+    source = __get_scout_source(
+        category, formulas.local_bond_category_relevance, "bond"
+    )
     destination = choose_neighbour(source)
     logging.info(f"source: {source}, destination: {destination}")
     assert destination
@@ -471,7 +473,9 @@ def top_down_group_scout__category(codelet):
     group_category = codelet.arguments[0]
     category = group_category.get_related_node(slipnet.bond_category)
     assert category
-    source = __get_scout_source(category, formulas.local_bond_category_relevance, "group")
+    source = __get_scout_source(
+        category, formulas.local_bond_category_relevance, "group"
+    )
     assert source
     assert not source.spans_string()
     if source.leftmost:
@@ -551,7 +555,9 @@ def top_down_group_scout__category(codelet):
         bonds += [source.right_bond]
         objects += [source.right_bond.right_object]
         source = source.right_bond.right_object
-    coderack.propose_group(objects, bonds, group_category, direction, bond_facet, codelet)
+    coderack.propose_group(
+        objects, bonds, group_category, direction, bond_facet, codelet
+    )
 
 
 def top_down_group_scout__direction(codelet):
@@ -641,7 +647,9 @@ def top_down_group_scout__direction(codelet):
         bonds += [source.right_bond]
         objects += [source.right_bond.right_object]
         source = source.right_bond.right_object
-    coderack.propose_group(objects, bonds, group_category, direction, bond_facet, codelet)
+    coderack.propose_group(
+        objects, bonds, group_category, direction, bond_facet, codelet
+    )
 
 
 # noinspection PyStringFormat
@@ -881,7 +889,11 @@ def bottom_up_correspondence_scout(codelet):
         )
         flip_target_object = True
     coderack.propose_correspondence(
-        object_from_initial, object_from_target, concept_mappings, flip_target_object, codelet
+        object_from_initial,
+        object_from_target,
+        concept_mappings,
+        flip_target_object,
+        codelet,
     )
 
 
@@ -902,7 +914,9 @@ def important_object_correspondence_scout(codelet):
             if description.descriptor == initial_descriptor:
                 target_candidates += [objekt]
     assert target_candidates
-    object_from_target = choose_unmodified_object("inter_string_salience", target_candidates)
+    object_from_target = choose_unmodified_object(
+        "inter_string_salience", target_candidates
+    )
     assert object_from_initial.spans_string() == object_from_target.spans_string()
     # get the posible concept mappings
     concept_mappings = formulas.get_mappings(
@@ -942,7 +956,11 @@ def important_object_correspondence_scout(codelet):
         )
         flip_target_object = True
     coderack.propose_correspondence(
-        object_from_initial, object_from_target, concept_mappings, flip_target_object, codelet
+        object_from_initial,
+        object_from_target,
+        concept_mappings,
+        flip_target_object,
+        codelet,
     )
 
 
@@ -1019,7 +1037,9 @@ def correspondence_builder(codelet):
         incompatible_bond = correspondence.get_incompatible_bond()
         if incompatible_bond:
             # bond found - fight against it
-            assert __structure_versus_structure(correspondence, 3.0, incompatible_bond, 2.0)
+            assert __structure_versus_structure(
+                correspondence, 3.0, incompatible_bond, 2.0
+            )
             # won against incompatible bond
             incompatible_group = target.group
             if incompatible_group:
@@ -1031,7 +1051,9 @@ def correspondence_builder(codelet):
     if workspace.rule:
         if workspace.rule.incompatible_rule_correspondence(correspondence):
             incompatible_rule = workspace.rule
-            assert __structure_versus_structure(correspondence, 1.0, incompatible_rule, 1.0)
+            assert __structure_versus_structure(
+                correspondence, 1.0, incompatible_rule, 1.0
+            )
     for incompatible in incompatibles:
         incompatible.break_the_structure()
     # break incompatible group and bond if they exist

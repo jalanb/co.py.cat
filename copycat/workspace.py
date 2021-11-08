@@ -58,12 +58,16 @@ class Workspace(object):
         self.calculate_total_unhappiness()
 
     def calculate_intra_string_unhappiness(self):
-        values = [o.relative_importance * o.intra_string_unhappiness for o in self.objects]
+        values = [
+            o.relative_importance * o.intra_string_unhappiness for o in self.objects
+        ]
         value = sum(values) / 2.0
         self.intra_string_unhappiness = min(value, 100.0)
 
     def calculate_inter_string_unhappiness(self):
-        values = [o.relative_importance * o.inter_string_unhappiness for o in self.objects]
+        values = [
+            o.relative_importance * o.inter_string_unhappiness for o in self.objects
+        ]
         value = sum(values) / 2.0
         self.inter_string_unhappiness = min(value, 100.0)
 

@@ -49,7 +49,10 @@ class Bond(WorkspaceStructure):
         return f"<{self.__class__.__name__}: {self}>"
 
     def __str__(self):
-        return f"{self.category.name} bond between {self.left_object} and {self.right_object}"
+        return (
+            f"{self.category.name} bond between "
+            f"{self.left_object} and {self.right_object}"
+        )
 
     def build_bond(self):
         workspace.structures += [self]
@@ -123,7 +126,9 @@ class Bond(WorkspaceStructure):
             facet_factor = 0.7
         strength = min(
             100.0,
-            member_compatibility * facet_factor * self.category.bond_degree_of_association(),
+            member_compatibility
+            * facet_factor
+            * self.category.bond_degree_of_association(),
         )
         self.internal_strength = strength
 
