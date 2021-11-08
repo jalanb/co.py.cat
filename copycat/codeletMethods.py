@@ -1,23 +1,22 @@
-import random
 import logging
+import random
 
-
-from .slipnet import slipnet
-from . import temperature
 from . import formulas
-from .workspaceFormulas import chooseDirectedNeighbor
-from .workspaceFormulas import chooseNeighbour
-from .coderack import coderack
-from .workspaceObject import WorkspaceObject
-from .letter import Letter
-from .replacement import Replacement
-from .workspaceFormulas import workspace
-from .group import Group
+from . import temperature
 from .bond import Bond
 from .bond import possibleGroupBonds
+from .coderack import coderack
 from .correspondence import Correspondence
-from .workspaceFormulas import chooseUnmodifiedObject
+from .group import Group
+from .letter import Letter
+from .replacement import Replacement
+from .slipnet import slipnet
 from .workspaceFormulas import chooseBondFacet
+from .workspaceFormulas import chooseDirectedNeighbor
+from .workspaceFormulas import chooseNeighbour
+from .workspaceFormulas import chooseUnmodifiedObject
+from .workspaceFormulas import workspace
+from .workspaceObject import WorkspaceObject
 
 
 # some methods common to the codelets

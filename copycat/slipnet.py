@@ -1,7 +1,7 @@
 import logging
 
-from .slipnode import Slipnode
 from .sliplink import Sliplink
+from .slipnode import Slipnode
 
 
 def distinguishingDescriptor(descriptor):

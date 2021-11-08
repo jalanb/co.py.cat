@@ -1,5 +1,5 @@
-import math
 import logging
+import math
 import random
 
 from .temperature import temperature

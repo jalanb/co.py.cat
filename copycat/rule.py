@@ -1,10 +1,9 @@
 import logging
 
-
+from .formulas import weightedAverage
 from .slipnet import slipnet
 from .workspace import workspace
 from .workspaceStructure import WorkspaceStructure
-from .formulas import weightedAverage
 
 
 class Rule(WorkspaceStructure):

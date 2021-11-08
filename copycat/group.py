@@ -2,9 +2,9 @@ import logging
 import random
 
 from . import formulas
+from .slipnet import slipnet
 from .workspace import workspace
 from .workspaceObject import WorkspaceObject
-from .slipnet import slipnet
 
 
 class Group(WorkspaceObject):

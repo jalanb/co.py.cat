@@ -1,14 +1,14 @@
-import re
 import inspect
-import math
 import logging
+import math
 import random
+import re
 
 from . import formulas
 from . import workspaceFormulas
-from .slipnet import slipnet
 from .codelet import Codelet
 from .coderackPressure import CoderackPressures
+from .slipnet import slipnet
 
 NUMBER_OF_BINS = 7
 MAX_NUMBER_OF_CODELETS = 100

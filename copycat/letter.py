@@ -1,5 +1,5 @@
-from .workspaceObject import WorkspaceObject
 from .slipnet import slipnet
+from .workspaceObject import WorkspaceObject
 
 
 class Letter(WorkspaceObject):

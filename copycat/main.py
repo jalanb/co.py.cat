@@ -1,5 +1,4 @@
 """Run the copycat program"""
-
 import logging
 import sys
 

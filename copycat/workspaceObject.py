@@ -1,7 +1,8 @@
 import logging
 
 from .description import Description
-from .slipnet import slipnet, distinguishingDescriptor
+from .slipnet import distinguishingDescriptor
+from .slipnet import slipnet
 from .workspaceStructure import WorkspaceStructure
 
 

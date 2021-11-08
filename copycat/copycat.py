@@ -1,11 +1,11 @@
 import logging
 
-from .workspace import workspace
-from .workspaceFormulas import workspaceFormulas
-from .slipnet import slipnet
-from .temperature import temperature
 from .coderack import coderack
 from .coderackPressure import coderackPressures
+from .slipnet import slipnet
+from .temperature import temperature
+from .workspace import workspace
+from .workspaceFormulas import workspaceFormulas
 
 
 def updateEverything():
