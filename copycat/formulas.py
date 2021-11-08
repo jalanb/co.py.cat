@@ -1,8 +1,10 @@
 import logging
 import math
 import random
+from typing import List
 
 from .temperature import temperature
+from .concept_mapping import ConceptMapping
 
 actual_temperature = Temperature = 100.0
 
@@ -161,9 +163,8 @@ def local_direction_category_relevance(string, direction):
 
 def get_mappings(
     object_from_initial, object_from_target, initial_descriptions, target_descriptions
-):
+) -> List[ConceptMapping]:
     mappings = []
-    from .concept_mapping import ConceptMapping
 
     for initial in initial_descriptions:
         for target in target_descriptions:
