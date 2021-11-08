@@ -297,7 +297,7 @@ class CodeRack(object):
             method_name = re.sub("[ -]", "_", codelet_name)
             if method_name not in self.codelet_methods_dir:
                 raise NotImplementedError(
-                    "Cannot find %s in codelet_methods" % method_name
+                    f"Cannot find {method_name} in codelet_methods"
                 )
             method = getattr(codelet_methods, method_name)
             self.methods[method_name] = method
@@ -361,10 +361,10 @@ class CodeRack(object):
         method = self.methods[method_name]
         if not method:
             raise ValueError(
-                "Found %s in codelet_methods, but cannot get it", method_name
+                f"Found {method_name} in codelet_methods, but cannot get it"
             )
         if not callable(method):
-            raise RuntimeError("Cannot call %s()" % method_name)
+            raise RuntimeError(f"Cannot call {method_name}()")
         args, _varargs, _varkw, _defaults = inspect.getargspec(method)
         try:
             if "codelet" in args:

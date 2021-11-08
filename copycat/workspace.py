@@ -21,10 +21,9 @@ class Workspace(object):
         self.inter_string_unhappiness = 0.0
 
     def __repr__(self):
-        return "<Workspace trying %s:%s::%s:?>" % (
-            self.initial_string,
-            self.modified_string,
-            self.target_string,
+        return (
+            f"<Workspace trying {self.initial_string}:{self.modified_string}"
+            f"::{self.target_string}:?>"
         )
 
     def set_strings(self, initial, modified, target):

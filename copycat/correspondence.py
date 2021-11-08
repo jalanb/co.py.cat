@@ -15,12 +15,12 @@ class Correspondence(WorkspaceStructure):
         self.accessory_concept_mappings = []
 
     def __repr__(self):
-        return "<%s>" % self.__str__()
+        return f"<{self.__class__.__name__} {self}>"
 
     def __str__(self):
-        return "Correspondence between %s and %s" % (
-            self.object_from_initial,
-            self.object_from_target,
+        return (
+            f"Correspondence between {self.object_from_initial} "
+            f "and {self.object_from_target}"
         )
 
     def distinguishing_concept_mappings(self):

@@ -40,7 +40,7 @@ class Slipnode(object):
         self.clamp_bond_degree_of_association = False
 
     def __repr__(self):
-        return "<Slipnode: %s>" % self.name
+        return f"<{self.__class__.__name__}: {self.name}>"
 
     def reset(self):
         self.buffer = 0.0

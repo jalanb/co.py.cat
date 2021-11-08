@@ -3,7 +3,7 @@ from . import formulas
 
 def abstract_call(objekt, name):
     raise NotImplementedError(
-        "call of abstract method: %s.%s()" % (objekt.__class__.__name__, name)
+        f"call of abstract method: {objekt.__class__.__name__}.{name}()"
     )
 
 

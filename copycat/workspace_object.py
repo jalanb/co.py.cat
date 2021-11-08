@@ -149,10 +149,7 @@ class WorkspaceObject(WorkspaceStructure):
                 i += 1
             if node == slipnet.middle and self.middle_object():
                 descriptions += [node]
-        s = ""
-        for d in descriptions:
-            s = "%s, %s" % (s, d.get_name())
-        logging.info(s)
+        logging.info(", ".join(_.get_name() for _ in descriptions))
         return descriptions
 
     def contains_description(self, sought):

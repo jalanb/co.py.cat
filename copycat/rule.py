@@ -17,11 +17,9 @@ class Rule(WorkspaceStructure):
     def __str__(self):
         if not self.facet:
             return "Empty rule"
-        return "replace %s of %s %s by %s" % (
-            self.facet.name,
-            self.descriptor.name,
-            self.category.name,
-            self.relation.name,
+        return (
+            f"Replace {self.facet.name} of {self.descriptor.name} "
+            f"{self.category.name} by {self.relation.name}"
         )
 
     def update_external_strength(self):

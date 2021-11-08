@@ -29,28 +29,19 @@ class WorkspaceString(object):
             position += 1
 
     def __repr__(self):
-        return "<WorkspaceString: %s>" % self.string
+        return f"<WorkspaceString: {self.string}>"
 
     def __str__(self):
-        return "%s with %d letters, %d objects, %d bonds" % (
-            self.string,
-            len(self.letters),
-            len(self.objects),
-            len(self.bonds),
+        return (
+            f"{self.string} with {len(self.letters)} letters, "
+            f"{len(self.objects)} objects, {len(self.bonds)} bonds"
         )
 
     def log(self, heading):
-        s = "%s: %s - " % (heading, self)
-        for letter in self.letters:
-            s += " %s" % letter
-        s += "; "
-        for o in self.objects:
-            s += " %s" % o
-        s += "; "
-        for b in self.bonds:
-            s += " %s" % b
-        s += "."
-        logging.info(s)
+        letters = " ".join(str(_) for _ in self.letters)
+        objects = " ".join(str(_) for _ in self.objects)
+        bonds = " ".join(str(_) for _ in self.bonds)
+        logging.info(f"{heading}: {self} - {letters}, {objects}, {bonds}.")
 
     def __len__(self):
         return len(self.string)

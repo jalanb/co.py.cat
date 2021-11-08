@@ -12,17 +12,13 @@ class Description(WorkspaceStructure):
         self.descriptor = descriptor
 
     def __repr__(self):
-        return "<Description: %s>" % self.__str__()
+        return f"<Description: {self}>"
 
     def __str__(self):
-        s = "description(%s) of %s" % (self.descriptor.get_name(), self.object)
         from .workspace import workspace
-
-        if self.object.string == workspace.initial:
-            s += " in initial string"
-        else:
-            s += " in target string"
-        return s
+        descriptor = self.descriptor.get_name()
+        container = "initial" if self.object.string == workspace.initial else "target"
+        return f"description({descriptor}) of {self.object} in {container} string"
 
     def update_internal_strength(self):
         self.internal_strength = self.descriptor.conceptual_depth

@@ -28,11 +28,7 @@ class ConceptMapping(object):
         self.label = initial_descriptor.get_bond_category(target_descriptor)
 
     def __repr__(self):
-        return "<ConceptMapping: %s from %s to %s>" % (
-            self.__str__(),
-            self.initial_descriptor,
-            self.target_descriptor,
-        )
+        return f"<ConceptMapping: {self} from {self.initial_descriptor} to {self.target_descriptor}>"
 
     def __str__(self):
         return self.label and self.label.name or "anonymous"

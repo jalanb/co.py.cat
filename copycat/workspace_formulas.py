@@ -75,11 +75,11 @@ def __choose_left_neighbor(source):
     for o in workspace.objects:
         if o.string == source.string:
             if source.left_index == o.right_index + 1:
-                logging.info("%s is on left of %s", o, source)
+                logging.info(f"{o} is on left of {source}")
                 objects += [o]
             else:
-                logging.info("%s is not on left of %s", o, source)
-    logging.info("Number of left objects: %s", len(objects))
+                logging.info("{o} is not on left of {source}")
+    logging.info(f"Number of left objects: {len(objects)}")
     return formulas.choose_object_from_list(objects, "intra_string_salience")
 
 

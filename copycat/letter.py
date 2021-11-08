@@ -25,7 +25,7 @@ class Letter(WorkspaceObject):
             self.add_description(slipnet.string_position_category, slipnet.middle)
 
     def __repr__(self):
-        return "<Letter: %s>" % self.__str__()
+        return f"<Letter: {self}>"
 
     def __str__(self):
         if not self.string:
@@ -33,9 +33,8 @@ class Letter(WorkspaceObject):
         i = self.left_index - 1
         if len(self.string) <= i:
             raise ValueError(
-                "len(self.string) <= self.left_index :: %d <= %d",
-                len(self.string),
-                self.left_index,
+                "len(self.string) <= self.left_index ::"
+                f" {len(self.string)} <= {self.left_index}"
             )
         return self.string[i]
 

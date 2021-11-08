@@ -46,14 +46,10 @@ class Bond(WorkspaceStructure):
         )
 
     def __repr__(self):
-        return "<Bond: %s>" % self.__str__()
+        return f"<{self.__class__.__name__}: {self}>"
 
     def __str__(self):
-        return "%s bond between %s and %s" % (
-            self.category.name,
-            self.left_object,
-            self.right_object,
-        )
+        return f"{self.category.name} bond between {self.left_object} and {self.right_object}"
 
     def build_bond(self):
         workspace.structures += [self]
