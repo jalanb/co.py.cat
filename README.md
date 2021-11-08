@@ -23,19 +23,23 @@ $ python3 -m copycat abc abd ijk
 Running
 -------
 
-The script takes three arguments.
-    The first two are a pair of triplets with some change, for example "ABC" and "ABD".
-    The third is a triplet which the script should try to change analogously
+The script takes 3 or 4 arguments.
 
-The script takes 3 or 4 arguments. The first two are a pair of strings with some change. The third is a string which the script should try to change analogously. 
+- The first two are a pair of strings with some change, for example "ABC" and "ABD".
+- The third is a triplet which the script should try to change analogously
+- The fourth is the number of iterations that will be attempted.
+  - If left out then it defaults to `1`
+  - A higher number of iterations will produce more answers
+ 
 
-For example the following run will probably display "PQS"
+For example the following run uses a single iteration to give the answer `PQS`
 
 ```sh
 $ python3 -m copycat ABC ABD PQR
+PQS: 1 (average time 0.3 seconds, average temperature 14.43)
 ```
 
-If a fourth argument is given then it should be a number, and the program will try that number of iterations (more iterations amounts to "looking deeper"), e.g. trying 10 iterations can produce output like
+And an example of trying 10 iterations can produce output like
 
 ```sh
 $ python3 -m copycat ABC ABD PQQRRR 10
@@ -62,6 +66,19 @@ This example output emphasizes that Copycat is not intended to produce a single 
 
 Note that there is no "correct" answer to an analogy problem - there are arguments to be made for each of `PQQRRRR`, `PQQRRS` and `PQQSSS` above, and only one's own preferences can decide that one of them is "best".
 
+Importing
+---------
+The script can also be imported and run from within Python, e.g.
+
+```python
+>>> from copycat import copycat
+>>> answers = copycat.run("abc", "abd", "pqqrrr", 10)
+>>> print(answers)
+{'pqqrrrr': {'avgtemp': 18.320790853668182, 'avgtime': 759.0, 'count': 1},
+ 'pqqrrs': {'avgtemp': 38.58653638621074, 'avgtime': 1294.1666666666667, 'count': 6},
+ 'pqqsss': {'avgtemp': 37.86964564086443, 'avgtime': 1642.6666666666667, 'count': 3}}
+```
+
 Thanks
 ======
 A big "Thank You" for
@@ -72,8 +89,8 @@ Curation
 
 Contributions
 -------------
-* @[Quuxplusone](https://github.com/jalanb/co.py.cat/pull/8) for reducing spew
-* @[jtauber](https://github.com/jalanb/co.py.cat/pull/3) for cleaning up
+* @[Quuxplusone](https://github.com/Quuxplusone) for [reducing spew](https://github.com/jalanb/co.py.cat/pull/8)
+* @[jtauber](https://github.com/jtauber) for [cleaning up](https://github.com/jalanb/co.py.cat/pull/3)
 
 Forks
 -----
