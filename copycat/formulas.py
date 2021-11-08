@@ -42,7 +42,7 @@ def log_actual_temperature():
     logging.info(f"actual_temperature: {actual_temperature}")
 
 
-def clamp_actual_temperature(values):
+def clamp_actual_temperature():
     global actual_temperature
     actual_temperature = 100.0
     log_actual_temperature()

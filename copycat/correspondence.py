@@ -20,7 +20,7 @@ class Correspondence(WorkspaceStructure):
     def __str__(self):
         return (
             f"Correspondence between {self.object_from_initial} "
-            f "and {self.object_from_target}"
+            f"and {self.object_from_target}"
         )
 
     def distinguishing_concept_mappings(self):
