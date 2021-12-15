@@ -1,13 +1,15 @@
 co.py.cat
 =========
 
-An implementation of [Douglas Hofstadter](http://prelectur.stanford.edu/lecturers/hofstadter/)'s copycat algorithm. The copycat algorithm is explained [on Wikipedia](https://en.wikipedia.org/wiki/Copycat_%28software%29), and is one of a group of algorithms including [metacat, musicat, seqsee, ...](https://github.com/Alex-Linhares/FARGonautica)
+This repository hols an implementation of [Douglas Hofstadter](http://prelectur.stanford.edu/lecturers/hofstadter/)'s copycat algorithm in Python. 
 
-This implementation is a copycat of Scott Boland's [Java implementation](http://itee.uq.edu.au/~scottb/_Copycat/), but re-written into Python. It's not a direct translation, more "based on a true story". I did not carry over the GUI, as GUIs restrict the platform too much and this version can more usefully be imported for use by other Python scripts or run from command line.
+It is an alogising algortithm, and explained [on Wikipedia](https://en.wikipedia.org/wiki/Copycat_%28software%29). It is the foundation of a group of similar algorithms [metacat, musicat, seqsee, ...](https://github.com/Alex-Linhares/FARGonautica).
+
+This implementation is a copycat of Scott Boland's [Java implementation](http://itee.uq.edu.au/~scottb/_Copycat/), but re-written into Python3. It's not a direct translation, more like "based on a true story". I did not carry over the GUI, as [GUIs restrict the platform](https://www.slant.co/topics/983/~best-cross-platform-gui-toolkits) too much, and thought that this code could more usefully be imported to other Python scripts.
 
 In cases where I could not grok the Java implementation easily I took ideas from the [LISP implementation](http://web.cecs.pdx.edu/~mm/how-to-get-copycat.html), or directly from [Melanie Mitchell](https://en.wikipedia.org/wiki/Melanie_Mitchell)'s "[Analogy-Making as Perception](http://www.amazon.com/Analogy-Making-Perception-Computer-Melanie-Mitchell/dp/0262132893/ref=tmm_hrd_title_0?ie=UTF8&qid=1351269085&sr=1-3)"
 
-I also tried to make the code "more pythonic".
+I keep trying to make the code "more pythonic".
 
 Installation
 ------------
@@ -23,52 +25,60 @@ $ python3 -m copycat abc abd ijk
 Running
 -------
 
-The script takes 3 or 4 arguments.
+The program takes two arguments
 
-- The first two are a pair of strings with some change, for example "ABC" and "ABD".
-- The third is a triplet which the script should try to change analogously
-- The fourth is the number of iterations that will be attempted.
-  - If left out then it defaults to `1`
-  - A higher number of iterations will produce more answers
+- A pair of words with some change
+  - for example "ABC ABD".
+- A word to be changed
+  - for example "PQR"
+
+And one option
+
+- How many solutions to evaluate
+  - for example
+    - `--solutions 10` means "try 10 solutions"
+    - if it's missing then the default is "try 1 solution"
  
 
-For example the following run uses a single iteration to give the answer `PQS`
+So, to find a single x for the analogy `ABC:ABD::PQR:x`
 
 ```sh
 $ python3 -m copycat ABC ABD PQR
 PQS: 1 (average time 0.3 seconds, average temperature 14.43)
 ```
 
-And an example of trying 10 iterations can produce output like
+Evaluating more solutions can produce output like
 
 ```sh
-$ python3 -m copycat ABC ABD PQQRRR 10
+$ python3 -m copycat ABC ABD PQQRRR --solutions 10
 PQQRRRR: 2 (average time 0.65 seconds, average temperature 17.1)
 PQQRRS: 5 (average time 0.82 seconds, average temperature 17.38)
 PQQSSS: 3 (average time 1.29 seconds, average temperature 24.83)
 ```
-This shows that the program considered the solution as
+
+In that run the program considered three solutions:
 
 - `PQQRRRR` 2 times
 - `PQQRRS` 5 times
 - `PQQSSS` 3 times 
 
-Of these `PQQRRRR` might be considered the "best" answer because
+From that one might say "copycat liked `PQQRRRR` best" because:
 
-1. The average temperature is lowest (i.e. this is the "most obvious" answer)
-2. The average time is also lowest (i.e. needed the least amount of "extra work")
+1. The average temperature is lowest (looks like the "most obvious" solution)
+2. The average time is also lowest (looks like it did the least work)
 
-On the other hand `PQQRRS` might be considered "best" because it was the accepted solution most often.
+On the other hand `PQQRRS` might be considered best because:
+1. it was the accepted solution most often.
 
-For me: `PQQRRRR` is the "best" answer, because increasing the number of `Q`s from 3 to 4 is the "best" analogy to increasing the 3rd letter (`C`) to the 4th letter (`D`). However the other 2 answers also seem "quite good" because `PQQRRS` is the most direct (just increase the last letter), and `PQQSSS` is also fairly direct (increase letter in the last group).
+For me: `PQQRRRR` is the "best" solution, because increasing the number of `Q`s from 3 to 4 is the "best" analogy to increasing the 3rd letter (`C`) to the 4th letter (`D`). However the other 2 answers also seem "quite good" because `PQQRRS` is the most direct (just increase the last letter), and `PQQSSS` is also fairly direct (increase letter in the last group).
 
-This example output emphasizes that Copycat is not intended to produce a single definitive answer to an analogy problem, but to explore solutions, and try different strategies to find them. It also shows the different "levels" that Copycat considered in this problem: changing letters, or groups of letters, or both.
+This example output emphasizes that Copycat is not intended to produce a single definitive solution to an analogy problem, but to explore solutions, and try different strategies to find them. It also shows the different "levels" that Copycat considered in this problem: changing letters, or groups of letters, or both.
 
-Note that there is no "correct" answer to an analogy problem - there are arguments to be made for each of `PQQRRRR`, `PQQRRS` and `PQQSSS` above, and only one's own preferences can decide that one of them is "best".
+Note that there is no "correct" solution to an analogy problem - there are arguments to be made for each of `PQQRRRR`, `PQQRRS` and `PQQSSS` above, and only one's own preferences can decide that one of them is "best".
 
 Importing
 ---------
-The script can also be imported and run from within Python, e.g.
+The program can also be imported and run from within Python, e.g.
 
 ```python
 >>> from copycat import copycat
