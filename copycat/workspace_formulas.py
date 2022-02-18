@@ -6,7 +6,7 @@ from .temperature import temperature
 from .workspace import workspace
 
 
-class WorkspaceFormulas(object):
+class WorkspaceFormulas:
     def __init__(self):
         self.clamp_temperature = False
 
@@ -41,7 +41,7 @@ def number_of_objects():
 
 
 def choose_unmodified_object(attribute, in_objects):
-    objects = [o for o in in_objects if o.string != workspace.modified]
+    objects = [_ for _ in in_objects if _.string != workspace.modified]
     if not len(objects):
         logging.error("no objects available in initial or target strings")
     return formulas.choose_object_from_list(objects, attribute)
@@ -49,13 +49,13 @@ def choose_unmodified_object(attribute, in_objects):
 
 def choose_neighbour(source):
     objects = []
-    for objekt in workspace.objects:
-        if objekt.string != source.string:
+    for object_ in workspace.objects:
+        if object_.string != source.string:
             continue
-        if objekt.left_index == source.right_index + 1:
-            objects += [objekt]
-        elif source.left_index == objekt.right_index + 1:
-            objects += [objekt]
+        if object_.left_index == source.right_index + 1:
+            objects += [object_]
+        elif source.left_index == object_.right_index + 1:
+            objects += [object_]
     return formulas.choose_object_from_list(objects, "intra_string_salience")
 
 
@@ -69,42 +69,42 @@ def choose_directed_neighbor(source, direction):
 
 def __choose_left_neighbor(source):
     objects = []
-    for o in workspace.objects:
-        if o.string == source.string:
-            if source.left_index == o.right_index + 1:
-                logging.info(f"{o} is on left of {source}")
-                objects += [o]
+    for object_ in workspace.objects:
+        if object_.string == source.string:
+            if source.left_index == object_.right_index + 1:
+                logging.info(f"{object_} is on left of {source}")
+                objects += [object_]
             else:
-                logging.info("{o} is not on left of {source}")
+                logging.info("{object_} is not on left of {source}")
     logging.info(f"Number of left objects: {len(objects)}")
     return formulas.choose_object_from_list(objects, "intra_string_salience")
 
 
 def __choose_right_neighbor(source):
     objects = [
-        o
-        for o in workspace.objects
-        if o.string == source.string and o.left_index == source.right_index + 1
+        _
+        for _ in workspace.objects
+        if _.string == source.string and _.left_index == source.right_index + 1
     ]
     return formulas.choose_object_from_list(objects, "intra_string_salience")
 
 
 def choose_bond_facet(source, destination):
     source_facets = [
-        d.description_type
-        for d in source.descriptions
-        if d.description_type in slipnet.bond_facets
+        _.description_type
+        for _ in source.descriptions
+        if _.description_type in slipnet.bond_facets
     ]
     bond_facets = [
-        d.description_type
-        for d in destination.descriptions
-        if d.description_type in source_facets
+        _.description_type
+        for _ in destination.descriptions
+        if _.description_type in source_facets
     ]
     if not bond_facets:
         return None
-    supports = [__support_for_description_type(f, source.string) for f in bond_facets]
-    i = formulas.select_list_position(supports)
-    return bond_facets[i]
+    supports = [__support_for_description_type(_, source.string) for _ in bond_facets]
+    index = formulas.select_list_position(supports)
+    return bond_facets[index]
 
 
 def __support_for_description_type(description_type, string):
@@ -115,10 +115,10 @@ def __support_for_description_type(description_type, string):
 def __description_type_support(description_type, string):
     """The proportion of objects in the string with this description_type"""
     described_count = total = 0
-    for objekt in workspace.objects:
-        if objekt.string == string:
+    for object_ in workspace.objects:
+        if object_.string == string:
             total += 1
-            for description in objekt.descriptions:
+            for description in object_.descriptions:
                 if description.description_type == description_type:
                     described_count += 1
     return described_count / float(total)

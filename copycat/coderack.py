@@ -15,13 +15,13 @@ MAX_NUMBER_OF_CODELETS = 100
 
 
 def get_urgency_bin(urgency):
-    i = int(urgency) * NUMBER_OF_BINS / 100
-    if i >= NUMBER_OF_BINS:
+    index = int(urgency) * NUMBER_OF_BINS / 100
+    if index >= NUMBER_OF_BINS:
         return NUMBER_OF_BINS
-    return i + 1
+    return index + 1
 
 
-class CodeRack(object):
+class CodeRack:
     def __init__(self):
         self.speed_up_bonds = False
         self.remove_breaker_codelets = False
@@ -123,7 +123,6 @@ class CodeRack(object):
         new_codelet.pressure = old_codelet.pressure
         self.try_run(new_codelet)
 
-    # pylint: disable=too-many-arguments
     def propose_rule(self, facet, description, category, relation, old_codelet):
         """Creates a proposed rule, and posts a rule-strength-tester codelet.
 
@@ -171,10 +170,10 @@ class CodeRack(object):
             "correspondence-strength-tester", old_codelet, urgency, correspondence
         )
 
-    def propose_description(self, objekt, type_, descriptor, old_codelet):
+    def propose_description(self, object_, type_, descriptor, old_codelet):
         from .description import Description
 
-        description = Description(objekt, type_, descriptor)
+        description = Description(object_, type_, descriptor)
         descriptor.buffer = 100.0
         urgency = type_.activation
         self.new_codelet(
@@ -251,10 +250,10 @@ class CodeRack(object):
             urgencies += [urgency]
         threshold = random.random() * sum(urgencies)
         sum_of_urgencies = 0.0
-        for i in range(0, len(self.codelets)):
-            sum_of_urgencies += urgencies[i]
+        for index in range(0, len(self.codelets)):
+            sum_of_urgencies += urgencies[index]
             if sum_of_urgencies > threshold:
-                return self.codelets[i]
+                return self.codelets[index]
         return self.codelets[0]
 
     def post_initial_codelets(self):
@@ -325,10 +324,9 @@ class CodeRack(object):
         scale = (100.0 - temp + 10.0) / 15.0
         urgsum = 0.0
         for codelet in self.codelets:
-            urg = codelet.urgency ** scale
+            urg = codelet.urgency**scale
             urgsum += urg
-        r = random.random()
-        threshold = r * urgsum
+        threshold = urgsum * random.random()
         chosen = None
         urgency_sum = 0.0
         formulas.log_temperature()
@@ -347,7 +345,7 @@ class CodeRack(object):
         workspace.initial.log("Initial: ")
         workspace.target.log("Target: ")
         for codelet in self.codelets:
-            urgency_sum += codelet.urgency ** scale
+            urgency_sum += codelet.urgency**scale
             if not chosen and urgency_sum > threshold:
                 chosen = codelet
                 break

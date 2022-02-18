@@ -4,7 +4,7 @@ from .formulas import Temperature
 from .slipnet import slipnet
 
 
-class CoderackPressure(object):
+class CoderackPressure:
     def __init__(self, name):
         self.name = name
 
@@ -45,18 +45,18 @@ def _codelet_index(codelet):
         "important-object-correspondence-scout": 16,
         "breaker": 17,
     }
-    i = name_indices.get(codelet.name, -1)
+    name_index = name_indices.get(codelet.name, -1)
     try:
-        return int(i)
+        return int(name_index)
     except (TypeError, ValueError):
         try:
             node = codelet.arguments[0]
-            return i[node]
+            return name_index[node]
         except KeyError:
-            return i[None]
+            return name_index[None]
 
 
-class CoderackPressures(object):
+class CoderackPressures:
     def __init__(self):
         self.initialise_pressures()
         self.reset()
@@ -86,7 +86,7 @@ class CoderackPressures(object):
         scale = (100.0 - Temperature + 10.0) / 15.0
         values = []
         for pressure in self.pressures:
-            value = sum(c.urgency ** scale for c in pressure.codelets)
+            value = sum(_.urgency**scale for _ in pressure.codelets)
             values += [value]
         total_value = sum(values)
         if not total_value:
@@ -108,14 +108,14 @@ class CoderackPressures(object):
 
     def add_codelet(self, codelet):
         node = None
-        i = _codelet_index(codelet)
-        if i >= 0:
-            self.pressures[i].codelets += [codelet]
+        index = _codelet_index(codelet)
+        if index >= 0:
+            self.pressures[index].codelets += [codelet]
         if codelet.pressure:
             codelet.pressure.codelets += [codelet]
-        if i >= 0:
-            codelet.pressure = self.pressures[i]
-        logging.info(f"Add {codelet.name}: {i}")
+        if index >= 0:
+            codelet.pressure = self.pressures[index]
+        logging.info(f"Add {codelet.name}: {index}")
         if node:
             logging.info(f"Node: {node.name}")
 

@@ -1,13 +1,13 @@
 from . import formulas
 
 
-def abstract_call(objekt, name):
+def abstract_call(object_, name):
     raise NotImplementedError(
-        f"call of abstract method: {objekt.__class__.__name__}.{name}()"
+        f"call of abstract method: {object_.__class__.__name__}.{name}()"
     )
 
 
-class WorkspaceStructure(object):
+class WorkspaceStructure:
     def __init__(self):
         self.string = None
         self.internal_strength = 0.0
@@ -30,7 +30,7 @@ class WorkspaceStructure(object):
 
     def total_weakness(self):
         """The total weakness is derived from total strength"""
-        return 100 - self.total_strength ** 0.95
+        return 100 - self.total_strength**0.95
 
     def update_internal_strength(self):
         """How internally cohesive the structure is"""

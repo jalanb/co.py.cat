@@ -36,7 +36,7 @@ class Rule(WorkspaceStructure):
         # see if the object corresponds to an object
         # if so, see if the descriptor is present (modulo slippages) in the
         # corresponding object
-        changed_objects = [o for o in workspace.initial.objects if o.changed]
+        changed_objects = [_ for _ in workspace.initial.objects if _.changed]
         changed = changed_objects[0]
         shared_descriptor_term = 0.0
         if changed and changed.correspondence:
@@ -48,7 +48,7 @@ class Rule(WorkspaceStructure):
                 return
             shared_descriptor_term = 100.0
         conceptual_height = (100.0 - self.descriptor.conceptual_depth) / 10.0
-        shared_descriptor_weight = conceptual_height ** 1.4
+        shared_descriptor_weight = conceptual_height**1.4
         depth_difference = 100.0 - abs(
             self.descriptor.conceptual_depth - self.relation.conceptual_depth
         )
@@ -88,7 +88,7 @@ class Rule(WorkspaceStructure):
         if not correspondence:
             return False
         # find changed object
-        changeds = [o for o in workspace.initial.objects if o.changed]
+        changeds = [_ for _ in workspace.initial.objects if _.changed]
         if not changeds:
             return False
         changed = changeds[0]
@@ -96,9 +96,9 @@ class Rule(WorkspaceStructure):
             return False
         # it is incompatible if the rule descriptor is not in the mapping list
         return bool(
-            m
-            for m in correspondence.concept_mappings
-            if m.initial_descriptor == self.descriptor
+            _
+            for _ in correspondence.concept_mappings
+            if _.initial_descriptor == self.descriptor
         )
 
     def __change_string(self, string):
@@ -113,11 +113,11 @@ class Rule(WorkspaceStructure):
         if self.relation == slipnet.predecessor:
             if "a" in string:
                 return None
-            return "".join(chr(ord(c) - 1) for c in string)
+            return "".join(chr(ord(_) - 1) for _ in string)
         elif self.relation == slipnet.successor:
             if "z" in string:
                 return None
-            return "".join(chr(ord(c) + 1) for c in string)
+            return "".join(chr(ord(_) + 1) for _ in string)
         else:
             return self.relation.name.lower()
 
@@ -130,9 +130,9 @@ class Rule(WorkspaceStructure):
         # generate the final string
         self.final_answer = workspace.target_string
         changeds = [
-            o
-            for o in workspace.target.objects
-            if o.described(self.descriptor) and o.described(self.category)
+            _
+            for _ in workspace.target.objects
+            if _.described(self.descriptor) and _.described(self.category)
         ]
         changed = changeds and changeds[0] or None
         logging.debug(f"changed object = {changed}")

@@ -16,8 +16,7 @@ def distinguishing_descriptor(descriptor):
     return True
 
 
-class SlipNet(object):
-    # pylint: disable=too-many-instance-attributes
+class SlipNet:
     def __init__(self):
         logging.debug("SlipNet.__init__()")
         self.initially_clamped_slipnodes = []
@@ -60,10 +59,9 @@ class SlipNet(object):
         _ = [_update(node) for node in self.slipnodes]
 
     def __add_initial_nodes(self):
-        # pylint: disable=too-many-statements
         self.slipnodes = []
-        self.letters = [self.__add_node(c, 10.0) for c in "abcdefghijklmnopqrstuvwxyz"]
-        self.numbers = [self.__add_node(c, 30.0) for c in "12345"]
+        self.letters = [self.__add_node(_, 10.0) for _ in "abcdefghijklmnopqrstuvwxyz"]
+        self.numbers = [self.__add_node(_, 30.0) for _ in "12345"]
 
         # string positions
         self.leftmost = self.__add_node("leftmost", 40.0)
@@ -155,8 +153,8 @@ class SlipNet(object):
             (self.successor, self.predecessor),
             (self.successor_group, self.predecessor_group),
         ]
-        for a, b in opposites:
-            self.__add_opposite_link(a, b)
+        for one, two in opposites:
+            self.__add_opposite_link(one, two)
         # properties
         self.__add_property_link(self.letters[0], self.first, 75.0)
         self.__add_property_link(self.letters[-1], self.last, 75.0)
@@ -188,8 +186,8 @@ class SlipNet(object):
             (self.bond_facet, self.letter_category),
             (self.bond_facet, self.length),
         ]
-        for a, b in links:
-            self.__add_instance_link(a, b)
+        for one, two in links:
+            self.__add_instance_link(one, two)
         # link bonds to their groups
         self.__add_non_slip_link(
             self.sameness, self.sameness_group, label=self.group_category, length=30.0

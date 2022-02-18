@@ -3,16 +3,13 @@ import random
 
 from . import formulas
 from .slipnet import slipnet
-from .workspace import workspace
 from .workspace_object import WorkspaceObject
 
 
 class Group(WorkspaceObject):
-    # pylint: disable=too-many-instance-attributes
     def __init__(
         self, string, group_category, direction_category, facet, object_list, bond_list
     ):
-        # pylint: disable=too-many-arguments
         WorkspaceObject.__init__(self, string)
         self.group_category = group_category
         self.direction_category = direction_category
@@ -87,10 +84,10 @@ class Group(WorkspaceObject):
 
     def get_incompatible_groups(self):
         result = []
-        for objekt in self.object_list:
-            while objekt.group:
-                result += [objekt.group]
-                objekt = objekt.group
+        for object_ in self.object_list:
+            while object_.group:
+                result += [object_.group]
+                object_ = object_.group
         return result
 
     def add_bond_description(self, description):
@@ -112,7 +109,7 @@ class Group(WorkspaceObject):
         return formulas.temperature_adjusted_probability(supported_activation)
 
     def flipped_version(self):
-        flipped_bonds = [b.flippedversion() for b in self.bond_list]
+        flipped_bonds = [_.flippedversion() for _ in self.bond_list]
         flipped_group = self.group_category.get_related_node(slipnet.flipped)
         flipped_direction = self.direction_category.get_related_node(slipnet.flipped)
         return Group(
@@ -125,11 +122,13 @@ class Group(WorkspaceObject):
         )
 
     def build_group(self):
+        from .workspace import workspace
+
         workspace.objects += [self]
         workspace.structures += [self]
         self.string.objects += [self]
-        for objekt in self.object_list:
-            objekt.group = self
+        for object_ in self.object_list:
+            object_.group = self
         workspace.build_descriptions(self)
         self.activate_descriptions()
 
@@ -142,9 +141,9 @@ class Group(WorkspaceObject):
         length = len(self.object_list)
         if length > 5:
             return 0.0
-        cubedlength = length ** 3
+        cubedlength = length**3
         fred = cubedlength * (100.0 - slipnet.length.activation) / 100.0
-        probability = 0.5 ** fred
+        probability = 0.5**fred
         value = formulas.temperature_adjusted_probability(probability)
         if value < 0.06:
             value = 0.0  # otherwise 1/20 chance always
@@ -157,10 +156,12 @@ class Group(WorkspaceObject):
         while len(self.descriptions):
             description = self.descriptions[-1]
             description.break_description()
-        for objekt in self.object_list:
-            objekt.group = None
+        for object_ in self.object_list:
+            object_.group = None
         if self.group:
             self.group.break_group()
+        from .workspace import workspace
+
         if self in workspace.structures:
             workspace.structures.remove(self)
         if self in workspace.objects:
@@ -178,7 +179,7 @@ class Group(WorkspaceObject):
         related_bond_association = self.group_category.get_related_node(
             slipnet.bond_category
         ).degree_of_association()
-        bond_weight = related_bond_association ** 0.98
+        bond_weight = related_bond_association**0.98
         length = len(self.object_list)
         if length == 1:
             length_factor = 5.0
@@ -205,19 +206,19 @@ class Group(WorkspaceObject):
         number_of_supporters = self.number_of_local_supporting_groups()
         if number_of_supporters == 0.0:
             return 0.0
-        support_factor = min(1.0, 0.6 ** (1 / (number_of_supporters ** 3)))
+        support_factor = min(1.0, 0.6 ** (1 / (number_of_supporters**3)))
         density_factor = 100.0 * ((self.local_density() / 100.0) ** 0.5)
         return density_factor * support_factor
 
     def number_of_local_supporting_groups(self):
         count = 0
-        for objekt in self.string.objects:
-            if isinstance(objekt, Group):
+        for object_ in self.string.objects:
+            if isinstance(object_, Group):
                 if (
-                    objekt.right_index < self.left_index
-                    or objekt.left_index > self.right_index
-                    and objekt.group_category == self.group_category
-                    and objekt.direction_category == self.direction_category
+                    object_.right_index < self.left_index
+                    or object_.left_index > self.right_index
+                    and object_.group_category == self.group_category
+                    and object_.direction_category == self.direction_category
                 ):
                     count += 1
         return count
@@ -242,22 +243,22 @@ class Group(WorkspaceObject):
 
     def more_possible_descriptions(self, node):
         result = []
-        i = 1
+        index = 1
         for number in slipnet.numbers:
-            if node == number and len(self.objects) == i:
+            if node == number and len(self.objects) == index:
                 result += [node]
-            i += 1
+            index += 1
         return result
 
     def distinguishing_descriptor(self, descriptor):
         """Whether no other object of the same type has the same descriptor"""
         if not WorkspaceObject.distinguishing_descriptor(descriptor):
             return False
-        for objekt in self.string.objects:
+        for object_ in self.string.objects:
             # check to see if they are of the same type
-            if isinstance(objekt, Group) and objekt != self:
+            if isinstance(object_, Group) and object_ != self:
                 # check all descriptions for the descriptor
-                for description in objekt.descriptions:
+                for description in object_.descriptions:
                     if description.descriptor == descriptor:
                         return False
         return True

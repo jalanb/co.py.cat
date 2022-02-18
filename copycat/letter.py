@@ -30,23 +30,23 @@ class Letter(WorkspaceObject):
     def __str__(self):
         if not self.string:
             return ""
-        i = self.left_index - 1
-        if len(self.string) <= i:
+        index = self.left_index - 1
+        if len(self.string) <= index:
             raise ValueError(
                 "len(self.string) <= self.left_index ::"
                 f" {len(self.string)} <= {self.left_index}"
             )
-        return self.string[i]
+        return self.string[index]
 
     def distinguishing_descriptor(self, descriptor):
         """Whether no other object of the same type has the same descriptor"""
         if not WorkspaceObject.distinguishing_descriptor(descriptor):
             return False
-        for objekt in self.string.objects:
+        for object_ in self.string.objects:
             # check to see if they are of the same type
-            if isinstance(objekt, Letter) and objekt != self:
+            if isinstance(object_, Letter) and object_ != self:
                 # check all descriptions for the descriptor
-                for description in objekt.descriptions:
+                for description in object_.descriptions:
                     if description.descriptor == descriptor:
                         return False
         return True

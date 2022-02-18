@@ -4,7 +4,6 @@ from .workspace_structure import WorkspaceStructure
 
 
 class Bond(WorkspaceStructure):
-    # pylint: disable=too-many-arguments
     def __init__(
         self,
         source,
@@ -87,25 +86,25 @@ class Bond(WorkspaceStructure):
         if self.left_object.leftmost and self.left_object.correspondence:
             correspondence = self.left_object.correspondence
             if self.string == workspace.initial:
-                objekt = self.left_object.correspondence.object_from_target
+                object_ = self.left_object.correspondence.object_from_target
             else:
-                objekt = self.left_object.correspondence.object_from_initial
-            if objekt.leftmost and objekt.right_bond:
+                object_ = self.left_object.correspondence.object_from_initial
+            if object_.leftmost and object_.right_bond:
                 if (
-                    objekt.right_bond.direction_category
-                    and objekt.right_bond.direction_category != self.direction_category
+                    object_.right_bond.direction_category
+                    and object_.right_bond.direction_category != self.direction_category
                 ):
                     incompatibles += [correspondence]
         if self.right_object.rightmost and self.right_object.correspondence:
             correspondence = self.right_object.correspondence
             if self.string == workspace.initial:
-                objekt = self.right_object.correspondence.object_from_target
+                object_ = self.right_object.correspondence.object_from_target
             else:
-                objekt = self.right_object.correspondence.object_from_initial
-            if objekt.rightmost and objekt.left_bond:
+                object_ = self.right_object.correspondence.object_from_initial
+            if object_.rightmost and object_.left_bond:
                 if (
-                    objekt.left_bond.direction_category
-                    and objekt.left_bond.direction_category != self.direction_category
+                    object_.left_bond.direction_category
+                    and object_.left_bond.direction_category != self.direction_category
                 ):
                     incompatibles += [correspondence]
         return incompatibles
@@ -137,8 +136,8 @@ class Bond(WorkspaceStructure):
         supporters = self.number_of_local_supporting_bonds()
         if supporters > 0.0:
             density = self.local_density() / 100.0
-            density = density ** 0.5 * 100.0
-            support_factor = 0.6 ** (1.0 / supporters ** 3)
+            density = density**0.5 * 100.0
+            support_factor = 0.6 ** (1.0 / supporters**3)
             support_factor = max(1.0, support_factor)
             strength = support_factor * density
             self.external_strength = strength
@@ -146,13 +145,13 @@ class Bond(WorkspaceStructure):
     def number_of_local_supporting_bonds(self):
         return len(
             [
-                b
-                for b in self.string.bonds
-                if b.string == self.source.string
-                and self.left_object.letter_distance(b.left_object) != 0
-                and self.right_object.letter_distance(b.right_object) != 0
-                and self.category == b.category
-                and self.direction_category == b.direction_category
+                _
+                for _ in self.string.bonds
+                if _.string == self.source.string
+                and self.left_object.letter_distance(_.left_object) != 0
+                and self.right_object.letter_distance(_.right_object) != 0
+                and self.category == _.category
+                and self.direction_category == _.direction_category
             ]
         )
 
@@ -195,7 +194,7 @@ class Bond(WorkspaceStructure):
         return self.right_object == other.right_object
 
     def get_incompatible_bonds(self):
-        return [b for b in self.string.bonds if self.same_neighbours(b)]
+        return [_ for _ in self.string.bonds if self.same_neighbours(_)]
 
 
 def possible_group_bonds(bond_category, direction_category, bond_facet, bonds):

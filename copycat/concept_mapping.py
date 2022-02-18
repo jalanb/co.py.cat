@@ -1,9 +1,12 @@
+from __future__ import annotations
+
 import logging
+from typing import List
 
 from .slipnet import slipnet
 
 
-class ConceptMapping(object):
+class ConceptMapping:
     def __init__(
         self,
         initial_description_type,
@@ -13,7 +16,6 @@ class ConceptMapping(object):
         initial_object,
         target_object,
     ):
-        # pylint: disable=too-many-arguments
         logging.info(
             f"make a map: {initial_description_type.get_name()}-"
             f"{target_description_type.get_name()}"
@@ -87,20 +89,21 @@ class ConceptMapping(object):
     def same_target_descriptor(self, other):
         return self.target_descriptor == other.target_descriptor
 
-    def same_descriptors(self, other):
+    def same_descriptors(self, other) -> bool:
         if self.same_initial_descriptor(other):
             return self.same_target_descriptor(other)
+        return False
 
-    def same_kind(self, other):
-        return self.same_types(other) and self.same_descriptors(other)
+    def same_kind(self, mapping: ConceptMapping) -> bool:
+        return self.same_types(mapping) and self.same_descriptors(mapping)
 
-    def nearly_same_kind(self, other):
-        return self.same_types(other) and self.same_initial_descriptor(other)
+    def nearly_same_kind(self, mapping: ConceptMapping) -> bool:
+        return self.same_types(mapping) and self.same_initial_descriptor(mapping)
 
-    def is_contained_by(self, mappings):
+    def is_contained_by(self, mappings: List[ConceptMapping]) -> bool:
         return any(self.same_kind(mapping) for mapping in mappings)
 
-    def is_nearly_contained_by(self, mappings):
+    def is_nearly_contained_by(self, mappings: List[ConceptMapping]) -> bool:
         return any(self.nearly_same_kind(mapping) for mapping in mappings)
 
     def related(self, other):

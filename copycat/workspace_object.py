@@ -7,7 +7,6 @@ from .workspace_structure import WorkspaceStructure
 
 
 class WorkspaceObject(WorkspaceStructure):
-    # pylint: disable=too-many-instance-attributes
     def __init__(self, workspace_string):
         WorkspaceStructure.__init__(self)
         self.string = workspace_string
@@ -132,7 +131,7 @@ class WorkspaceObject(WorkspaceStructure):
         )
 
     def relevant_descriptions(self):
-        return [d for d in self.descriptions if d.description_type.fully_active()]
+        return [_ for _ in self.descriptions if _.description_type.fully_active()]
 
     def get_possible_descriptions(self, description_type):
         logging.info(f"getting possible descriptions for {self}")
@@ -145,12 +144,12 @@ class WorkspaceObject(WorkspaceStructure):
                 descriptions += [node]
             if node == slipnet.last and self.described(slipnet.letters[-1]):
                 descriptions += [node]
-            i = 1
+            index = 1
             for number in slipnet.numbers:
                 if node == number and isinstance(self, Group):
-                    if len(self.object_list) == i:
+                    if len(self.object_list) == index:
                         descriptions += [node]
-                i += 1
+                index += 1
             if node == slipnet.middle and self.middle_object():
                 descriptions += [node]
         logging.info(", ".join(_.get_name() for _ in descriptions))
@@ -159,23 +158,23 @@ class WorkspaceObject(WorkspaceStructure):
     def contains_description(self, sought):
         sought_type = sought.description_type
         sought_descriptor = sought.descriptor
-        for d in self.descriptions:
-            if sought_type == d.description_type:
-                if sought_descriptor == d.descriptor:
+        for description in self.descriptions:
+            if sought_type == description.description_type:
+                if sought_descriptor == description.descriptor:
                     return True
         return False
 
     def described(self, slipnode):
-        return bool(d for d in self.descriptions if d.descriptor == slipnode)
+        return any(_.descriptor == slipnode for _ in self.descriptions)
 
     def middle_object(self):
         # only works if string is 3 chars long
         # as we have access to the string, why not just " == len / 2" ?
         object_on_my_right_is_rightmost = object_on_my_left_is_leftmost = False
-        for objekt in self.string.objects:
-            if objekt.leftmost and objekt.right_index == self.left_index - 1:
+        for object_ in self.string.objects:
+            if object_.leftmost and object_.right_index == self.left_index - 1:
                 object_on_my_left_is_leftmost = True
-            if objekt.rightmost and objekt.left_index == self.right_index + 1:
+            if object_.rightmost and object_.left_index == self.right_index + 1:
                 object_on_my_right_is_rightmost = True
         return object_on_my_right_is_rightmost and object_on_my_left_is_leftmost
 
@@ -185,9 +184,9 @@ class WorkspaceObject(WorkspaceStructure):
 
     def relevant_distinguishing_descriptors(self):
         return [
-            d.descriptor
-            for d in self.relevant_descriptions()
-            if distinguishing_descriptor(d.descriptor)
+            _.descriptor
+            for _ in self.relevant_descriptions()
+            if distinguishing_descriptor(_.descriptor)
         ]
 
     def get_descriptor(self, description_type):
@@ -210,7 +209,7 @@ class WorkspaceObject(WorkspaceStructure):
 
     def get_common_groups(self, other):
         return [
-            o for o in self.string.objects if self.is_within(o) and other.is_within(o)
+            _ for _ in self.string.objects if self.is_within(_) and other.is_within(_)
         ]
 
     def letter_distance(self, other):
