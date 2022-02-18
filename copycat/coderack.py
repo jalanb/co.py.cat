@@ -324,7 +324,7 @@ class CodeRack:
         scale = (100.0 - temp + 10.0) / 15.0
         urgsum = 0.0
         for codelet in self.codelets:
-            urg = codelet.urgency ** scale
+            urg = codelet.urgency**scale
             urgsum += urg
         threshold = urgsum * random.random()
         chosen = None
@@ -345,7 +345,7 @@ class CodeRack:
         workspace.initial.log("Initial: ")
         workspace.target.log("Target: ")
         for codelet in self.codelets:
-            urgency_sum += codelet.urgency ** scale
+            urgency_sum += codelet.urgency**scale
             if not chosen and urgency_sum > threshold:
                 chosen = codelet
                 break

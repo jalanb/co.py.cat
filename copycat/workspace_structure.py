@@ -30,7 +30,7 @@ class WorkspaceStructure:
 
     def total_weakness(self):
         """The total weakness is derived from total strength"""
-        return 100 - self.total_strength ** 0.95
+        return 100 - self.total_strength**0.95
 
     def update_internal_strength(self):
         """How internally cohesive the structure is"""

@@ -86,7 +86,7 @@ class CoderackPressures:
         scale = (100.0 - Temperature + 10.0) / 15.0
         values = []
         for pressure in self.pressures:
-            value = sum(_.urgency ** scale for _ in pressure.codelets)
+            value = sum(_.urgency**scale for _ in pressure.codelets)
             values += [value]
         total_value = sum(values)
         if not total_value:

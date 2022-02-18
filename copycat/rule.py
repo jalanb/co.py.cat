@@ -48,7 +48,7 @@ class Rule(WorkspaceStructure):
                 return
             shared_descriptor_term = 100.0
         conceptual_height = (100.0 - self.descriptor.conceptual_depth) / 10.0
-        shared_descriptor_weight = conceptual_height ** 1.4
+        shared_descriptor_weight = conceptual_height**1.4
         depth_difference = 100.0 - abs(
             self.descriptor.conceptual_depth - self.relation.conceptual_depth
         )

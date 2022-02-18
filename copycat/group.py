@@ -141,9 +141,9 @@ class Group(WorkspaceObject):
         length = len(self.object_list)
         if length > 5:
             return 0.0
-        cubedlength = length ** 3
+        cubedlength = length**3
         fred = cubedlength * (100.0 - slipnet.length.activation) / 100.0
-        probability = 0.5 ** fred
+        probability = 0.5**fred
         value = formulas.temperature_adjusted_probability(probability)
         if value < 0.06:
             value = 0.0  # otherwise 1/20 chance always
@@ -179,7 +179,7 @@ class Group(WorkspaceObject):
         related_bond_association = self.group_category.get_related_node(
             slipnet.bond_category
         ).degree_of_association()
-        bond_weight = related_bond_association ** 0.98
+        bond_weight = related_bond_association**0.98
         length = len(self.object_list)
         if length == 1:
             length_factor = 5.0
@@ -206,7 +206,7 @@ class Group(WorkspaceObject):
         number_of_supporters = self.number_of_local_supporting_groups()
         if number_of_supporters == 0.0:
             return 0.0
-        support_factor = min(1.0, 0.6 ** (1 / (number_of_supporters ** 3)))
+        support_factor = min(1.0, 0.6 ** (1 / (number_of_supporters**3)))
         density_factor = 100.0 * ((self.local_density() / 100.0) ** 0.5)
         return density_factor * support_factor
 

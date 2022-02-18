@@ -21,11 +21,12 @@ def main():
             iterations = 1
         answers = copycat.run(initial, modified, target, iterations)
         for answer, values in sorted(answers.items(), key=lambda kv: kv[1]["avgtemp"]):
-            average_time = round(values['avgtime'] / 1000.0, 2)
-            average_temperature = round(values['avgtemp'], 2)
+            average_time = round(values["avgtime"] / 1000.0, 2)
+            average_temperature = round(values["avgtemp"], 2)
             print(
                 f"{answer}: {values['count']} "
-                f"(average time {average_time} seconds, average temperature {average_temperature})"
+                f"(average time {average_time} seconds, "
+                f"average temperature {average_temperature})"
             )
         return 0
     except ValueError:

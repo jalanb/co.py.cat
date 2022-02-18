@@ -136,8 +136,8 @@ class Bond(WorkspaceStructure):
         supporters = self.number_of_local_supporting_bonds()
         if supporters > 0.0:
             density = self.local_density() / 100.0
-            density = density ** 0.5 * 100.0
-            support_factor = 0.6 ** (1.0 / supporters ** 3)
+            density = density**0.5 * 100.0
+            support_factor = 0.6 ** (1.0 / supporters**3)
             support_factor = max(1.0, support_factor)
             strength = support_factor * density
             self.external_strength = strength

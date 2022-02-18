@@ -65,7 +65,8 @@ class WorkspaceString:
         else:
             for object_ in self.objects:
                 logging.info(
-                    f"object: {object_}, relative: {object_.relative_importance * 1000} = "
+                    f"object: {object_}, "
+                    f"relative: {object_.relative_importance * 1000} = "
                     f"raw: {object_.raw_importance} / total: {total}"
                 )
                 object_.relative_importance = object_.raw_importance / total
