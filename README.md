@@ -1,7 +1,7 @@
 co.py.cat
 =========
 
-This repository hols an implementation of [Douglas Hofstadter](http://prelectur.stanford.edu/lecturers/hofstadter/)'s copycat algorithm in Python. 
+This repository has an implementation of [Douglas Hofstadter](http://prelectur.stanford.edu/lecturers/hofstadter/)'s copycat algorithm in Python. 
 
 It is an alogising algortithm, and explained [on Wikipedia](https://en.wikipedia.org/wiki/Copycat_%28software%29). It is the foundation of a group of similar algorithms [metacat, musicat, seqsee, ...](https://github.com/Alex-Linhares/FARGonautica).
 
@@ -137,3 +137,5 @@ Badges
 ======
 [![Build Status](https://travis-ci.org/jalanb/co.py.cat.svg?branch=master)](https://travis-ci.org/jalanb/co.py.cat)
 
+[Send Coffee](https://ko-fi.com/jalanb)
+===========
