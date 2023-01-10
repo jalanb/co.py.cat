@@ -127,17 +127,17 @@ Douglas Hofstadter's group's research in Fluid Concepts & Creative Analogies.
 
 They've got Lisp (lotsa (Lisp)), Python, C++, Java, even Perl. If you know one of those languages, then you too can be a FARGonaut. 
 
+[Send Coffee](https://ko-fi.com/jalanb)
+===========
+
+    Programmers are machines for turning coffee into code
+    
 See Also
 --------
 1. "[The Copycat Project: An Experiment in Nondeterminism and Creative Analogies](http://dspace.mit.edu/handle/1721.1/5648)" by [Hofstadter, Douglas](https://en.wikipedia.org/wiki/Douglas_Hofstadter#Academic_career)
 1. "[Analogy-Making as Perception](http://www.amazon.com/Analogy-Making-Perception-Computer-Melanie-Mitchell/dp/0262132893/ref=tmm_hrd_title_0?ie=UTF8&qid=1351269085&sr=1-3)" by [Mitchell, Melanie](https://en.wikipedia.org/wiki/Melanie_Mitchell)
 1. Arthur O'Dwyer ([Quuxplusone on GitHub]()) has further cleaned and extended this code (including a GUI) in a fork available [here](https://github.com/Quuxplusone/co.py.cat).
 
-[Send Coffee](https://ko-fi.com/jalanb)
-===========
-
-    Programmers are machines for turning coffee into code
-    
 Badges
 ======
 [![Build Status](https://travis-ci.org/jalanb/co.py.cat.svg?branch=master)](https://travis-ci.org/jalanb/co.py.cat)
