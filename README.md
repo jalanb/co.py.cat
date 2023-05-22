@@ -3,7 +3,7 @@ co.py.cat
 
 This repository has an implementation of [Douglas Hofstadter](http://prelectur.stanford.edu/lecturers/hofstadter/)'s copycat algorithm in Python. 
 
-It is an analogising algorithm, and explained [on Wikipedia](https://en.wikipedia.org/wiki/Copycat_%28software%29). It is the foundation of a group of similar algorithms [metacat, musicat, seqsee, ...](https://github.com/Alex-Linhares/FARGonautica).
+It is an [analogising](https://www.wordnik.com/words/analogize) [algorithm](https://www.al-got-rhythm.net), and explained [on Wikipedia](https://en.wikipedia.org/wiki/Copycat_%28software%29). It is the foundation of a group of similar algorithms [metacat, musicat, seqsee, ...](https://github.com/Alex-Linhares/FARGonautica).
 
 This implementation is a copycat of Scott Boland's [Java implementation](http://itee.uq.edu.au/~scottb/_Copycat/), but re-written into Python3. It's not a direct translation, more like "based on a true story". I did not carry over the GUI, as [GUIs restrict the platform](https://www.slant.co/topics/983/~best-cross-platform-gui-toolkits) too much, and thought that this code could more usefully be imported by other Python packages.
 
